@@ -1,84 +1,20 @@
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import "./App.css";
 
-const products = [
-  {
-    id: 1,
-    name: "Vitamina C",
-    description: "Suplemento vitamínico",
-    category: "Vitaminas",
-    price: 28500,
-    color: "orange",
-    symbol: "C",
-    label: "Bienestar",
-  },
-  {
-    id: 2,
-    name: "Protector solar",
-    description: "Protección para la piel",
-    category: "Cuidado personal",
-    price: 42000,
-    color: "blue",
-    symbol: "SPF",
-    label: "Cuidado diario",
-  },
-  {
-    id: 3,
-    name: "Gel antibacterial",
-    description: "Higiene para tus manos",
-    category: "Cuidado personal",
-    price: 12500,
-    color: "mint",
-    symbol: "+",
-    label: "Esencial",
-  },
-  {
-    id: 4,
-    name: "Multivitamínico",
-    description: "Complemento alimenticio",
-    category: "Vitaminas",
-    price: 36500,
-    color: "purple",
-    symbol: "V",
-    label: "Bienestar",
-  },
-  {
-    id: 5,
-    name: "Crema hidratante",
-    description: "Hidratación para la piel",
-    category: "Cuidado personal",
-    price: 31900,
-    color: "pink",
-    symbol: "H",
-    label: "Favorito",
-  },
-  {
-    id: 6,
-    name: "Botiquín básico",
-    description: "Elementos para primeros auxilios",
-    category: "Primeros auxilios",
-    price: 48000,
-    color: "green",
-    symbol: "+",
-    label: "Esencial",
-  },
-];
+const categoryVisuals = {
+  "Medicamentos": { symbol: "+", style: "medicines" },
+  "Cuidado personal": { symbol: "◇", style: "care" },
+  "Vitaminas y suplementos": { symbol: "✳", style: "vitamins" },
+  "Primeros auxilios": { symbol: "+", style: "first-aid" },
+};
 
-const categories = [
-  { name: "Todos", symbol: "▦", description: "Todo el catálogo" },
-  { name: "Vitaminas", symbol: "✳", description: "Vitaminas y bienestar" },
-  {
-    name: "Cuidado personal",
-    symbol: "◇",
-    description: "Cuida de ti cada día",
-  },
-  {
-    name: "Primeros auxilios",
-    symbol: "+",
-    description: "Elementos esenciales",
-  },
-];
+const productVisuals = {
+  1: { color: "blue", symbol: "+" },
+  2: { color: "mint", symbol: "◇" },
+  3: { color: "orange", symbol: "C" },
+  4: { color: "green", symbol: "+" },
+};
 
 const formatPrice = (price) =>
   new Intl.NumberFormat("es-CO", {
@@ -88,8 +24,97 @@ const formatPrice = (price) =>
   }).format(price);
 
 function App() {
+  const [products, setProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [search, setSearch] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Todos");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const loadCatalog = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        const [productsResponse, categoriesResponse] = await Promise.all([
+          fetch("/api/productos"),
+          fetch("/api/categorias"),
+        ]);
+
+        if (!productsResponse.ok || !categoriesResponse.ok) {
+          throw new Error(
+            "El servidor no pudo cargar los productos y las categorías."
+          );
+        }
+
+        const productsData = await productsResponse.json();
+        const categoriesData = await categoriesResponse.json();
+
+        if (!Array.isArray(productsData) || !Array.isArray(categoriesData)) {
+          throw new Error("El servidor devolvió una respuesta inesperada.");
+        }
+
+        const normalizedProducts = productsData.map((product) => {
+          const categoryId = Number(product.categoria_id);
+          const visual = productVisuals[categoryId] || {
+            color: "green",
+            symbol: "+",
+          };
+
+          return {
+            id: product.id,
+            name: product.nombre,
+            description: product.descripcion || "Sin descripción disponible",
+            category: product.categoria || "Sin categoría",
+            categoryId,
+            price: Number(product.precio),
+            stock: Number(product.stock),
+            color: visual.color,
+            symbol: visual.symbol,
+            label: product.requiere_formula ? "Con fórmula" : "Disponible",
+            requiereFormula: Boolean(product.requiere_formula),
+          };
+        });
+
+        const normalizedCategories = [
+          {
+            id: "Todos",
+            name: "Todos",
+            symbol: "▦",
+            description: "Todo el catálogo",
+          },
+          ...categoriesData.map((category) => {
+            const visual = categoryVisuals[category.nombre] || {
+              symbol: "+",
+              style: "care",
+            };
+
+            return {
+              id: category.id,
+              name: category.nombre,
+              symbol: visual.symbol,
+              style: visual.style,
+              description:
+                category.descripcion || "Descubre nuestros productos",
+            };
+          }),
+        ];
+
+        setProducts(normalizedProducts);
+        setCategories(normalizedCategories);
+      } catch (err) {
+        console.error("Error al cargar el catálogo:", err);
+        setError(
+          "No fue posible conectar con el catálogo. Comprueba que el backend y MySQL estén funcionando e inténtalo de nuevo."
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadCatalog();
+  }, []);
 
   const filteredProducts = useMemo(() => {
     const query = search.trim().toLocaleLowerCase("es");
@@ -106,7 +131,7 @@ function App() {
 
       return matchesSearch && matchesCategory;
     });
-  }, [search, selectedCategory]);
+  }, [products, search, selectedCategory]);
 
   return (
     <div className="app-shell">
@@ -119,7 +144,7 @@ function App() {
       </div>
 
       <header className="site-header">
-        <a className="brand" href="#" aria-label="FarmaUIS, inicio">
+        <a className="brand" href="#inicio" aria-label="FarmaUIS, inicio">
           <span className="brand-mark">
             <span className="brand-cross">+</span>
           </span>
@@ -130,15 +155,9 @@ function App() {
         </a>
 
         <nav className="main-nav" aria-label="Navegación principal">
-          <a className="nav-link active" href="#inicio">
-            Inicio
-          </a>
-          <a className="nav-link" href="#categorias">
-            Categorías
-          </a>
-          <a className="nav-link" href="#productos">
-            Productos
-          </a>
+          <a className="nav-link active" href="#inicio">Inicio</a>
+          <a className="nav-link" href="#categorias">Categorías</a>
+          <a className="nav-link" href="#productos">Productos</a>
         </nav>
 
         <a className="header-action" href="#productos">
@@ -235,14 +254,20 @@ function App() {
             {categories.map((category) => (
               <button
                 type="button"
-                key={category.name}
+                key={category.id}
                 className={`category-card ${
                   selectedCategory === category.name ? "selected" : ""
                 }`}
                 onClick={() => setSelectedCategory(category.name)}
                 aria-pressed={selectedCategory === category.name}
               >
-                <span className={`category-symbol symbol-${category.name === "Todos" ? "all" : category.name === "Vitaminas" ? "vitamins" : category.name === "Cuidado personal" ? "care" : "first-aid"}`}>
+                <span
+                  className={`category-symbol symbol-${
+                    category.name === "Todos"
+                      ? "all"
+                      : category.style || "care"
+                  }`}
+                >
                   {category.symbol}
                 </span>
                 <span className="category-copy">
@@ -263,8 +288,11 @@ function App() {
               <p>Descubre opciones para acompañar tu rutina de cuidado.</p>
             </div>
             <span className="results-count">
-              {filteredProducts.length}{" "}
-              {filteredProducts.length === 1 ? "producto" : "productos"}
+              {loading
+                ? "Cargando..."
+                : `${filteredProducts.length} ${
+                    filteredProducts.length === 1 ? "producto" : "productos"
+                  }`}
             </span>
           </div>
 
@@ -273,7 +301,7 @@ function App() {
               <span className="search-icon" aria-hidden="true">⌕</span>
               <input
                 type="search"
-                placeholder="Busca vitaminas, cuidado personal..."
+                placeholder="Busca medicamentos, vitaminas..."
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
                 aria-label="Buscar productos"
@@ -298,7 +326,7 @@ function App() {
                 aria-label="Filtrar por categoría"
               >
                 {categories.map((category) => (
-                  <option key={category.name} value={category.name}>
+                  <option key={category.id} value={category.name}>
                     {category.name}
                   </option>
                 ))}
@@ -306,7 +334,24 @@ function App() {
             </label>
           </div>
 
-          {filteredProducts.length > 0 ? (
+          {loading ? (
+            <div className="empty-state" role="status">
+              <h3>Cargando catálogo...</h3>
+              <p>Estamos consultando los productos de FarmaUIS.</p>
+            </div>
+          ) : error ? (
+            <div className="empty-state" role="alert">
+              <h3>No se pudo cargar el catálogo</h3>
+              <p>{error}</p>
+              <button
+                className="primary-button"
+                type="button"
+                onClick={() => window.location.reload()}
+              >
+                Volver a intentar
+              </button>
+            </div>
+          ) : filteredProducts.length > 0 ? (
             <div className="product-grid">
               {filteredProducts.map((product) => (
                 <article className="product-card" key={product.id}>
@@ -332,7 +377,11 @@ function App() {
                         type="button"
                         onClick={() =>
                           window.alert(
-                            `${product.name}\n${product.description}\nPrecio de demostración: ${formatPrice(product.price)}`
+                            `${product.name}\n${product.description}\nPrecio: ${formatPrice(product.price)}\nStock disponible: ${product.stock}\n${
+                              product.requiereFormula
+                                ? "Requiere fórmula médica."
+                                : "Consulta las indicaciones de uso."
+                            }`
                           )
                         }
                         aria-label={`Ver ${product.name}`}
@@ -348,7 +397,9 @@ function App() {
             <div className="empty-state">
               <span className="empty-state-icon">⌕</span>
               <h3>No encontramos productos</h3>
-              <p>Prueba con otro nombre o selecciona una categoría diferente.</p>
+              <p>
+                Prueba con otro nombre o selecciona una categoría diferente.
+              </p>
               <button
                 className="primary-button"
                 type="button"
@@ -369,8 +420,7 @@ function App() {
             <span className="section-kicker">FARMAUIS</span>
             <h2>Tu bienestar comienza con pequeños cuidados.</h2>
             <p>
-              Explora nuestro catálogo de demostración y descubre opciones
-              para tu rutina diaria.
+              Explora nuestro catálogo y descubre opciones para tu rutina diaria.
             </p>
           </div>
           <a className="secondary-button" href="#productos">
