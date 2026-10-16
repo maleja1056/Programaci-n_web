@@ -5,8 +5,8 @@
 import { useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useAuth } from "../context/auth-context.js";
-import LoginModal from "./LoginModal.jsx";
+import { useAuth } from "../../context/auth-context.js";
+import LoginModal from "../auth/LoginModal.jsx";
 
 // Rutas privadas que aparecen en el menú cuando hay sesión.
 const privateRoutes = [

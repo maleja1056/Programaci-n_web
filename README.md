@@ -16,3 +16,32 @@
    `docker compose exec -T mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD"' < database/schema.sql`
 3. Crea el administrador con `cd backend && npm run crear-admin`. Usa `ADMIN_USUARIO`, `ADMIN_CORREO` y `ADMIN_PASSWORD` del `.env` y, si la tabla `usuarios` no tiene la columna `usuario`, la añade.
 4. Inicia el backend (`npm run dev` en `backend/`) y el frontend (`npm run dev` en `frontend/`), y entra en `http://localhost:5173/login`.
+
+## Estructura del frontend
+
+```
+frontend/src/
+├── main.jsx                 Punto de entrada: Bootstrap, estilos globales, router y sesión
+├── App.jsx                  Rutas públicas y privadas
+├── api/                     Comunicación con el backend (fetch a /api)
+├── context/                 Estado global de la sesión (AuthContext)
+├── hooks/
+│   └── useCatalog.js        Carga, búsqueda y filtro del catálogo
+├── utils/
+│   └── format.js            Formato de precios
+├── components/
+│   ├── auth/                Login (modal y formulario) y protección de rutas
+│   ├── layout/              Cabecera y pie de página
+│   └── home/                Secciones de la portada (hero, categorías, catálogo, banner)
+├── pages/                   Páginas: inicio, login, panel, perfil y 404
+└── styles/                  Hojas de estilo (app, index, bootstrap, cabecera, auth)
+```
+
+Archivos de cada integrante, para no editar los mismos a la vez:
+
+| Integrante | Archivos principales |
+|---|---|
+| 1. Usuarios y sesión | `components/auth/`, `context/`, `api/auth.js`, `pages/LoginPage.jsx`, `PanelPage.jsx`, `ProfilePage.jsx` |
+| 2. Catálogo y búsqueda | `hooks/useCatalog.js`, `components/home/CategoriesSection.jsx`, `CatalogSection.jsx` |
+| 3. Detalle de producto | `components/home/ProductCard.jsx` y los componentes nuevos de detalle |
+| 4. Diseño e integración | `components/layout/`, `components/home/HeroSection.jsx`, `CareBanner.jsx`, las secciones nuevas de la portada y `styles/` |

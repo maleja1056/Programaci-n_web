@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import SiteHeader from "../components/SiteHeader.jsx";
+import SiteHeader from "../components/layout/SiteHeader.jsx";
 import { getPanelSummary } from "../api/auth.js";
 import { useAuth } from "../context/auth-context.js";
 

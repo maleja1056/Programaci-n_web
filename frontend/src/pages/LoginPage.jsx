@@ -2,8 +2,8 @@
 // intenta abrir una ruta privada sin sesión; usa el mismo formulario que el
 // modal de la cabecera.
 import { Link, Navigate, useLocation } from "react-router-dom";
-import LoginForm from "../components/LoginForm.jsx";
-import SiteHeader from "../components/SiteHeader.jsx";
+import LoginForm from "../components/auth/LoginForm.jsx";
+import SiteHeader from "../components/layout/SiteHeader.jsx";
 import { useAuth } from "../context/auth-context.js";
 
 function LoginPage() {

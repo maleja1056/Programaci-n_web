@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom";
-import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 import HomePage from "./pages/HomePage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 import PanelPage from "./pages/PanelPage.jsx";
 import ProfilePage from "./pages/ProfilePage.jsx";
-import "./App.css";
+import "./styles/app.css";
 import "./styles/header.css";
 import "./styles/auth.css";
 
