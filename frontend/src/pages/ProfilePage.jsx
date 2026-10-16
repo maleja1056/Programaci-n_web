@@ -1,7 +1,7 @@
 // Página privada /perfil: datos públicos del usuario con sesión iniciada.
 // Los datos vienen de la sesión del servidor (GET /api/auth/me), nunca del
 // almacenamiento del navegador.
-import SiteHeader from "../components/SiteHeader.jsx";
+import SiteHeader from "../components/layout/SiteHeader.jsx";
 import { useAuth } from "../context/auth-context.js";
 
 const roleLabels = {

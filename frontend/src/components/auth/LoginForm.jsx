@@ -8,7 +8,7 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Spinner from "react-bootstrap/Spinner";
-import { useAuth } from "../context/auth-context.js";
+import { useAuth } from "../../context/auth-context.js";
 
 const validate = (usuario, password) => {
   const errors = {};
