@@ -1,11 +1,24 @@
+// Cabecera del sitio: marca, navegación pública y acciones de sesión.
+// Sin sesión muestra el botón que abre el modal de login; con sesión muestra
+// el menú desplegable de rutas privadas. Ocultar el menú no protege nada por
+// sí solo: las rutas usan ProtectedRoute y el backend exige sesión.
 import { useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import Dropdown from "react-bootstrap/Dropdown";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/auth-context.js";
+import LoginModal from "./LoginModal.jsx";
+
+// Rutas privadas que aparecen en el menú cuando hay sesión.
+const privateRoutes = [
+  { to: "/panel", label: "Panel" },
+  { to: "/perfil", label: "Mi perfil" },
+];
 
 function SiteHeader() {
   const { user, status, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const [showLogin, setShowLogin] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const [logoutError, setLogoutError] = useState("");
 
@@ -14,8 +27,11 @@ function SiteHeader() {
     setLogoutError("");
 
     try {
-      await logout();
+      // Primero se navega al inicio: si se esperara al cambio de estado,
+      // ProtectedRoute redirigiría a /login antes (React Router procesa la
+      // navegación como una transición de menor prioridad).
       navigate("/", { replace: true });
+      await logout();
     } catch (error) {
       setLogoutError(error.message);
     } finally {
@@ -53,27 +69,39 @@ function SiteHeader() {
         </a>
 
         {status === "authenticated" ? (
-          <>
-            <Link
-              className="header-action"
-              to="/panel"
-              title={`Sesión iniciada como ${user.correo}`}
-            >
-              Mi panel
-            </Link>
-            <button
-              type="button"
-              className="header-action header-logout"
-              onClick={handleLogout}
+          <Dropdown align="end">
+            <Dropdown.Toggle
+              className="header-action header-user"
+              id="private-menu"
               disabled={loggingOut}
             >
-              {loggingOut ? "Saliendo..." : "Cerrar sesión"}
-            </button>
-          </>
+              <span className="header-user-avatar" aria-hidden="true">
+                {user.nombre.charAt(0).toUpperCase()}
+              </span>
+              {loggingOut ? "Saliendo..." : user.usuario || user.nombre}
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu className="private-menu">
+              <Dropdown.Header>Rutas privadas</Dropdown.Header>
+              {privateRoutes.map((route) => (
+                <Dropdown.Item key={route.to} as={NavLink} to={route.to}>
+                  {route.label}
+                </Dropdown.Item>
+              ))}
+              <Dropdown.Divider />
+              <Dropdown.Item as="button" onClick={handleLogout}>
+                Cerrar sesión
+              </Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
         ) : status === "anonymous" ? (
-          <Link className="header-action header-login" to="/login">
+          <button
+            type="button"
+            className="header-action header-login"
+            onClick={() => setShowLogin(true)}
+          >
             Iniciar sesión
-          </Link>
+          </button>
         ) : null}
 
         {logoutError && (
@@ -82,6 +110,8 @@ function SiteHeader() {
           </p>
         )}
       </div>
+
+      <LoginModal show={showLogin} onHide={() => setShowLogin(false)} />
     </header>
   );
 }

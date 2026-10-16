@@ -4,8 +4,10 @@ import HomePage from "./pages/HomePage.jsx";
 import LoginPage from "./pages/LoginPage.jsx";
 import NotFoundPage from "./pages/NotFoundPage.jsx";
 import PanelPage from "./pages/PanelPage.jsx";
+import ProfilePage from "./pages/ProfilePage.jsx";
 import "./App.css";
-import "./Auth.css";
+import "./styles/header.css";
+import "./styles/auth.css";
 
 function App() {
   return (
@@ -17,6 +19,14 @@ function App() {
         element={
           <ProtectedRoute>
             <PanelPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/perfil"
+        element={
+          <ProtectedRoute>
+            <ProfilePage />
           </ProtectedRoute>
         }
       />

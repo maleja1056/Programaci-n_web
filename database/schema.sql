@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS usuarios (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100) NOT NULL,
+    usuario VARCHAR(50) NULL UNIQUE,
     correo VARCHAR(190) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL,
     rol ENUM('cliente', 'administrador')

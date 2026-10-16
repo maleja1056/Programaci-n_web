@@ -1,0 +1,448 @@
+/* Estilos del módulo de usuarios, inicio de sesión y navegación protegida.
+   Reutilizan la paleta verde y blanca de App.css y adaptan los componentes
+   de React-Bootstrap (Modal, Form, Dropdown) al diseño de FarmaUIS. */
+
+/* ---------- Cabecera: acciones de sesión ---------- */
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+button.header-action {
+  background: #fff;
+  cursor: pointer;
+}
+
+button.header-action:disabled {
+  cursor: progress;
+  opacity: 0.7;
+}
+
+/* Botón "Iniciar sesión" (abre el modal) */
+button.header-login {
+  border-color: #208551;
+  background: #208551;
+  color: #fff;
+}
+
+button.header-login:hover {
+  border-color: #166d40;
+  background: #166d40;
+}
+
+/* Botón del menú de rutas privadas (Dropdown.Toggle) */
+.header-user.dropdown-toggle {
+  gap: 8px;
+  border-color: #dce9df;
+  background: #fff;
+  color: #246545;
+}
+
+.header-user.dropdown-toggle:hover,
+.header-user.dropdown-toggle:focus-visible,
+.header-user.dropdown-toggle.show {
+  border-color: #b9dfc5;
+  background: #f0faf3;
+  color: #246545;
+}
+
+.header-user-avatar {
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border-radius: 50%;
+  background: #208551;
+  color: #fff;
+  font-size: 11px;
+  line-height: 1;
+}
+
+/* Menú desplegable de rutas privadas */
+.private-menu {
+  --bs-dropdown-link-active-bg: #208551;
+  --bs-dropdown-link-hover-bg: #f0faf3;
+  --bs-dropdown-link-hover-color: #16834f;
+  --bs-dropdown-header-color: #89958e;
+  min-width: 200px;
+  padding: 8px;
+  border-color: #e1eee2;
+  border-radius: 12px;
+  box-shadow: 0 14px 35px rgba(23, 78, 59, 0.12);
+  font-size: 13px;
+}
+
+.private-menu .dropdown-header {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.private-menu .dropdown-item {
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.header-error {
+  width: 100%;
+  margin: 0;
+  color: #b42318;
+  font-size: 11px;
+  text-align: right;
+}
+
+/* ---------- Modal de inicio de sesión ---------- */
+
+.login-modal .modal-content {
+  border: 1px solid #e1eee2;
+  border-radius: 18px;
+  box-shadow: 0 18px 45px rgba(23, 78, 59, 0.15);
+}
+
+.login-modal .modal-header {
+  align-items: flex-start;
+  padding: 26px 28px 6px;
+  border-bottom: 0;
+}
+
+.login-modal .modal-title {
+  margin-top: 6px;
+  color: #183c2e;
+  font-family: "Manrope", sans-serif;
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: -0.8px;
+}
+
+.login-modal .modal-body {
+  padding: 4px 28px 28px;
+}
+
+/* ---------- Página /login ---------- */
+
+.auth-page {
+  display: flex;
+  width: min(1180px, calc(100% - 64px));
+  min-height: calc(100vh - 82px);
+  align-items: flex-start;
+  justify-content: center;
+  margin: auto;
+  padding: 56px 0 72px;
+  background:
+    radial-gradient(circle at 15% 10%, #eaf7ee 0, transparent 40%),
+    radial-gradient(circle at 85% 80%, #f1f9f1 0, transparent 45%);
+}
+
+.auth-card {
+  display: flex;
+  width: min(420px, 100%);
+  flex-direction: column;
+  padding: 36px 34px 30px;
+  border: 1px solid #e1eee2;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: 0 18px 45px rgba(23, 78, 59, 0.08);
+}
+
+.auth-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  place-items: center;
+  margin-bottom: 18px;
+  border-radius: 14px;
+  background: #e1f5e7;
+  color: #16834f;
+  font-family: "Manrope", sans-serif;
+  font-size: 34px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.auth-card h1,
+.panel-heading h1 {
+  margin: 8px 0 6px;
+  color: #183c2e;
+  font-family: "Manrope", sans-serif;
+  font-size: 28px;
+  letter-spacing: -0.8px;
+}
+
+.auth-subtitle {
+  margin: 0 0 20px;
+  color: #7c8b80;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.auth-notice {
+  margin: 0 0 16px;
+  padding: 11px 14px;
+  border: 1px solid #cfe4d2;
+  border-radius: 10px;
+  background: #f0faf3;
+  color: #246545;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.auth-back {
+  align-self: center;
+  margin-top: 20px;
+  color: #65766d;
+  font-size: 12px;
+}
+
+.auth-back:hover {
+  color: #16834f;
+}
+
+/* ---------- Formulario (React-Bootstrap Form) ---------- */
+
+.auth-form .auth-alert {
+  padding: 11px 14px;
+  border-radius: 10px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.auth-form .form-label {
+  margin-bottom: 6px;
+  color: #294c36;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.auth-form .form-control {
+  min-height: 44px;
+  border-color: #dce9df;
+  background-color: #fbfdfb;
+  color: #19372d;
+  font-size: 14px;
+}
+
+.auth-form .form-control:focus {
+  border-color: #21945b;
+  background-color: #fff;
+  box-shadow: 0 0 0 0.2rem rgba(139, 217, 174, 0.45);
+}
+
+.auth-form .form-control.is-invalid {
+  border-color: #e0786d;
+}
+
+.auth-form .invalid-feedback {
+  font-size: 11px;
+}
+
+/* Botón para ver u ocultar la contraseña */
+.auth-form .auth-toggle {
+  --bs-btn-color: #246545;
+  --bs-btn-border-color: #dce9df;
+  --bs-btn-hover-color: #16834f;
+  --bs-btn-hover-bg: #e5f4e7;
+  --bs-btn-hover-border-color: #b9dfc5;
+  --bs-btn-active-color: #16834f;
+  --bs-btn-active-bg: #d9f1df;
+  --bs-btn-active-border-color: #b9dfc5;
+  min-width: 82px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* Botón principal: verde FarmaUIS */
+.auth-form .auth-submit {
+  --bs-btn-bg: #208551;
+  --bs-btn-border-color: #208551;
+  --bs-btn-hover-bg: #166d40;
+  --bs-btn-hover-border-color: #166d40;
+  --bs-btn-active-bg: #145f38;
+  --bs-btn-active-border-color: #145f38;
+  --bs-btn-disabled-bg: #208551;
+  --bs-btn-disabled-border-color: #208551;
+  display: inline-flex;
+  width: 100%;
+  min-height: 46px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+/* ---------- Indicadores de carga ---------- */
+
+.auth-loading {
+  display: flex;
+  min-height: 220px;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  color: #65766d;
+  font-size: 13px;
+}
+
+.auth-spinner {
+  width: 22px;
+  height: 22px;
+  border: 3px solid #d9f1df;
+  border-top-color: #208551;
+  border-radius: 50%;
+  animation: auth-spin 800ms linear infinite;
+}
+
+@keyframes auth-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ---------- Páginas privadas: panel y perfil ---------- */
+
+.panel-page {
+  width: min(1180px, calc(100% - 64px));
+  min-height: calc(100vh - 82px);
+  margin: auto;
+  padding: 48px 0 72px;
+}
+
+.panel-heading {
+  margin-bottom: 28px;
+}
+
+.panel-heading p {
+  margin: 0;
+  color: #7c8b80;
+  font-size: 13px;
+}
+
+.panel-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+}
+
+.panel-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px 24px;
+  border: 1px solid #e1eee2;
+  border-radius: 14px;
+  background: linear-gradient(110deg, #f0f9f0, #f8fbf6);
+}
+
+.panel-stat span {
+  color: #65766d;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.panel-stat strong {
+  color: #183c2e;
+  font-family: "Manrope", sans-serif;
+  font-size: 32px;
+}
+
+.profile-card {
+  max-width: 560px;
+  margin: 0;
+  border: 1px solid #e1eee2;
+  border-radius: 14px;
+  background: #fff;
+}
+
+.profile-row {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 12px;
+  padding: 16px 22px;
+  border-bottom: 1px solid #edf1ee;
+}
+
+.profile-row:last-child {
+  border-bottom: 0;
+}
+
+.profile-row dt {
+  color: #65766d;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.profile-row dd {
+  margin: 0;
+  color: #183c2e;
+  font-size: 14px;
+  font-weight: 600;
+  word-break: break-word;
+}
+
+/* ---------- Página no encontrada ---------- */
+
+.not-found {
+  width: min(520px, 100%);
+}
+
+.not-found h1 {
+  margin: 12px 0 5px;
+  color: #294c36;
+  font-family: "Manrope", sans-serif;
+  font-size: 22px;
+}
+
+/* ---------- Adaptación a tabletas y móviles ---------- */
+
+@media (max-width: 1000px) {
+  .auth-page,
+  .panel-page {
+    width: calc(100% - 40px);
+  }
+}
+
+@media (max-width: 650px) {
+  .header-explore {
+    display: none;
+  }
+
+  .auth-page,
+  .panel-page {
+    width: calc(100% - 32px);
+    padding-top: 28px;
+  }
+
+  .auth-card {
+    padding: 28px 20px 24px;
+  }
+
+  .auth-card h1,
+  .panel-heading h1 {
+    font-size: 24px;
+  }
+
+  .login-modal .modal-header {
+    padding: 22px 20px 6px;
+  }
+
+  .login-modal .modal-body {
+    padding: 4px 20px 22px;
+  }
+
+  .profile-row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-spinner {
+    animation-duration: 2400ms;
+  }
+}

@@ -32,8 +32,8 @@ export function AuthProvider({ children }) {
     };
   }, []);
 
-  const login = useCallback(async (correo, password) => {
-    const data = await authApi.login(correo, password);
+  const login = useCallback(async (usuario, password) => {
+    const data = await authApi.login(usuario, password);
     setUser(data.user);
     setStatus("authenticated");
     setSessionError("");

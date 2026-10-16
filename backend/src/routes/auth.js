@@ -7,50 +7,52 @@ const { SESSION_COOKIE_NAME } = require('../config/session');
 
 const router = express.Router();
 
-// Hash de relleno para que un correo inexistente tarde lo mismo que una
-// contraseña incorrecta y no revele qué correos están registrados.
+// Hash de relleno para que un usuario inexistente tarde lo mismo que una
+// contraseña incorrecta y no revele qué usuarios están registrados.
 const HASH_FALSO = bcrypt.hashSync('farmauis-hash-de-relleno', 10);
 
-const CREDENCIALES_INCORRECTAS = 'Correo o contraseña incorrectos';
+const CREDENCIALES_INCORRECTAS = 'Usuario o contraseña incorrectos';
 
 // Datos públicos que se guardan en la sesión y se envían al frontend.
 const usuarioPublico = (usuario) => ({
   id: usuario.id,
   nombre: usuario.nombre,
   apellido: usuario.apellido,
+  usuario: usuario.usuario,
   correo: usuario.correo,
   rol: usuario.rol,
 });
 
+// "usuario" admite el nombre de usuario (por ejemplo Admin) o el correo.
 router.post('/login', async (req, res) => {
-  const { correo, password } = req.body || {};
+  const { usuario: identificador, password } = req.body || {};
 
   if (
-    typeof correo !== 'string' ||
+    typeof identificador !== 'string' ||
     typeof password !== 'string' ||
-    !correo.trim() ||
+    !identificador.trim() ||
     !password
   ) {
     return res.status(400).json({
       success: false,
-      message: 'El correo y la contraseña son obligatorios',
+      message: 'El usuario y la contraseña son obligatorios',
     });
   }
 
-  if (correo.length > 190 || password.length > 128) {
+  if (identificador.length > 190 || password.length > 128) {
     return res.status(400).json({
       success: false,
-      message: 'El correo o la contraseña superan la longitud permitida',
+      message: 'El usuario o la contraseña superan la longitud permitida',
     });
   }
 
   try {
     const [rows] = await pool.query(
-      `SELECT id, nombre, apellido, correo, password_hash, rol, activo
+      `SELECT id, nombre, apellido, usuario, correo, password_hash, rol, activo
        FROM usuarios
-       WHERE correo = ?
+       WHERE usuario = ? OR correo = ?
        LIMIT 1`,
-      [correo.trim()]
+      [identificador.trim(), identificador.trim()]
     );
 
     const usuario = rows[0];

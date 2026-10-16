@@ -3,10 +3,10 @@
 
 > Implementación académica: no está pensada para producción.
 
-- El backend valida el correo y la contraseña contra la tabla `usuarios` (contraseñas con hash bcrypt).
+- El backend valida el usuario (o el correo) y la contraseña contra la tabla `usuarios` (contraseñas con hash bcrypt).
 - La sesión se guarda en el servidor con `express-session` y viaja en la cookie `farmauis.sid` (`HttpOnly`, `SameSite=Lax`). Las sesiones se guardan en memoria, así que se pierden al reiniciar el backend.
 - Rutas: `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout` y la ruta privada `GET /api/panel/resumen` (responde 401 sin sesión).
-- En el frontend: `/login` es público y `/panel` está protegido con `ProtectedRoute`.
+- En el frontend, el botón "Iniciar sesión" de la cabecera abre un modal de React-Bootstrap (`LoginModal` + `LoginForm` con `react-bootstrap/Form`). Con sesión iniciada aparece el menú desplegable de rutas privadas: `/panel` y `/perfil`, protegidas con `ProtectedRoute`. La página `/login` usa el mismo formulario y es el destino al intentar abrir una ruta privada sin sesión.
 
 ### Primer uso
 
@@ -14,5 +14,5 @@
 2. Levanta MySQL con `docker compose up -d`. La primera vez que se crea el volumen, Docker ejecuta `database/schema.sql` y crea todas las tablas.
    Si tu volumen ya existía antes de este cambio, crea las tablas que falten (el script no borra datos):
    `docker compose exec -T mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD"' < database/schema.sql`
-3. Crea el administrador con `cd backend && npm run crear-admin`.
+3. Crea el administrador con `cd backend && npm run crear-admin`. Usa `ADMIN_USUARIO`, `ADMIN_CORREO` y `ADMIN_PASSWORD` del `.env` y, si la tabla `usuarios` no tiene la columna `usuario`, la añade.
 4. Inicia el backend (`npm run dev` en `backend/`) y el frontend (`npm run dev` en `frontend/`), y entra en `http://localhost:5173/login`.

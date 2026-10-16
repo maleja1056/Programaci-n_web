@@ -1,0 +1,40 @@
+// Modal de inicio de sesión (React-Bootstrap Modal) que se abre desde la
+// cabecera. Si el servidor confirma el acceso, se cierra y lleva al panel.
+import Modal from "react-bootstrap/Modal";
+import { useNavigate } from "react-router-dom";
+import LoginForm from "./LoginForm.jsx";
+
+function LoginModal({ show, onHide }) {
+  const navigate = useNavigate();
+
+  const handleSuccess = () => {
+    onHide();
+    navigate("/panel");
+  };
+
+  return (
+    <Modal
+      show={show}
+      onHide={onHide}
+      centered
+      dialogClassName="login-modal"
+      aria-labelledby="login-modal-title"
+    >
+      <Modal.Header closeButton>
+        <div>
+          <span className="section-kicker">ACCESO FARMAUIS</span>
+          <Modal.Title id="login-modal-title">Inicia sesión</Modal.Title>
+        </div>
+      </Modal.Header>
+      <Modal.Body>
+        <p className="auth-subtitle">
+          Ingresa con tu cuenta para acceder a las páginas privadas.
+        </p>
+        {/* Se monta de nuevo en cada apertura, así el formulario empieza vacío */}
+        {show && <LoginForm onSuccess={handleSuccess} autoFocus />}
+      </Modal.Body>
+    </Modal>
+  );
+}
+
+export default LoginModal;

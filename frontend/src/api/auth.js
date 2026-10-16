@@ -1,9 +1,9 @@
 import { apiRequest } from "./client.js";
 
-export const login = (correo, password) =>
+export const login = (usuario, password) =>
   apiRequest("/api/auth/login", {
     method: "POST",
-    body: { correo, password },
+    body: { usuario, password },
   });
 
 export const getSession = () => apiRequest("/api/auth/me");
