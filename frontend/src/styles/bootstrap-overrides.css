@@ -1,0 +1,59 @@
+/* Ajustes de Bootstrap para FarmaUIS.
+   Se carga justo después de bootstrap.min.css y antes de los estilos del
+   proyecto, para que los componentes de React-Bootstrap (Modal, Form,
+   Dropdown) usen la paleta verde y blanca sin alterar el diseño existente. */
+
+:root {
+  /* Tipografía y colores base del sitio */
+  --bs-body-font-family: "DM Sans", sans-serif;
+  --bs-body-color: #19372d;
+  --bs-body-bg: #fff;
+  --bs-body-line-height: normal;
+  --bs-heading-color: inherit;
+
+  /* Color principal: verde FarmaUIS */
+  --bs-primary: #208551;
+  --bs-primary-rgb: 32, 133, 81;
+  --bs-link-color: #16834f;
+  --bs-link-color-rgb: 22, 131, 79;
+  --bs-link-hover-color: #166d40;
+  --bs-link-hover-color-rgb: 22, 109, 64;
+  --bs-border-color: #dce9df;
+  --bs-border-radius: 10px;
+  --bs-focus-ring-color: rgba(139, 217, 174, 0.45);
+}
+
+/* Bootstrap redefine los estilos base de títulos, párrafos y listas
+   ("reboot"). El diseño de FarmaUIS se creó sobre los valores por defecto del
+   navegador, así que se restauran con "revert". Las clases del proyecto
+   (App.css) siguen teniendo prioridad sobre estas reglas. */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: revert;
+  font-size: revert;
+  font-weight: revert;
+  line-height: revert;
+}
+
+p,
+ul,
+ol {
+  margin: revert;
+  padding: revert;
+}
+
+small {
+  font-size: revert;
+}
+
+label {
+  display: revert;
+}
+
+button {
+  border-radius: revert;
+}

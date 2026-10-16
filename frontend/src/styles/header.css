@@ -1,0 +1,39 @@
+/* Cabecera fija: la barra de menú permanece visible al desplazarse y en
+   todas las páginas (inicio, login, panel, perfil, 404). */
+
+/* .app-shell usa overflow: hidden para recortar los adornos del hero, pero
+   eso impide que position: sticky funcione. "clip" recorta igual sin
+   crear un contenedor de desplazamiento. */
+.app-shell {
+  overflow: clip;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1020; /* por encima del contenido; el modal (1055) queda encima */
+}
+
+/* La cabecera tiene un ancho máximo: este fondo blanco se extiende a todo el
+   ancho de la ventana para que el contenido no se vea por los lados. No se
+   usa clip-path porque recortaría el menú desplegable de rutas privadas. */
+.site-header::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0 -100vmax;
+  background: #fff;
+  content: "";
+}
+
+/* Los enlaces a secciones (#categorias, #productos) se detienen debajo de la
+   cabecera en lugar de quedar ocultos por ella. */
+html {
+  scroll-padding-top: 96px;
+}
+
+@media (max-width: 650px) {
+  /* En móvil la navegación pasa a una segunda fila: la cabecera es más alta */
+  html {
+    scroll-padding-top: 136px;
+  }
+}
