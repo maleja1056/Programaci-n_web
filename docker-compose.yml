@@ -13,6 +13,8 @@ services:
       - "3306:3306"
     volumes:
       - farmauis_mysql_data:/var/lib/mysql
+      # Crea las tablas automáticamente la primera vez que se inicia el volumen.
+      - ./database:/docker-entrypoint-initdb.d:ro
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$${MYSQL_ROOT_PASSWORD}"]
       interval: 10s

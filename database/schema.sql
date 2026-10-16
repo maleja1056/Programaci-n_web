@@ -1,10 +1,13 @@
+-- Fuerza UTF-8 aunque el cliente mysql use otra codificación por defecto.
+SET NAMES utf8mb4;
+
 CREATE DATABASE IF NOT EXISTS farmauis
  CHARACTER SET utf8mb4
  COLLATE utf8mb4_unicode_ci;
 
 USE farmauis;
 
-CREATE TABLE categorias (
+CREATE TABLE IF NOT EXISTS categorias (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL UNIQUE,
     descripcion VARCHAR(255),
@@ -12,7 +15,7 @@ CREATE TABLE categorias (
     creado_en TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
-CREATE TABLE productos (
+CREATE TABLE IF NOT EXISTS productos (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     categoria_id INT UNSIGNED NULL,
     nombre VARCHAR(150) NOT NULL,
@@ -40,7 +43,7 @@ CREATE TABLE productos (
     INDEX idx_producto_activo (activo)
 ) ENGINE=InnoDB;
 
-CREATE TABLE usuarios (
+CREATE TABLE IF NOT EXISTS usuarios (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
     apellido VARCHAR(100) NOT NULL,
@@ -52,7 +55,7 @@ CREATE TABLE usuarios (
     creado_en TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB;
 
-CREATE TABLE pedidos (
+CREATE TABLE IF NOT EXISTS pedidos (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     usuario_id INT UNSIGNED NOT NULL,
     estado ENUM(
@@ -78,7 +81,7 @@ CREATE TABLE pedidos (
     INDEX idx_pedido_estado (estado)
 ) ENGINE=InnoDB;
 
-CREATE TABLE detalle_pedidos (
+CREATE TABLE IF NOT EXISTS detalle_pedidos (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     pedido_id INT UNSIGNED NOT NULL,
     producto_id INT UNSIGNED NOT NULL,
