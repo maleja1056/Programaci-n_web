@@ -3,7 +3,9 @@
 // el menú desplegable de rutas privadas. Ocultar el menú no protege nada por
 // sí solo: las rutas usan ProtectedRoute y el backend exige sesión.
 import { useState } from "react";
+import Collapse from "react-bootstrap/Collapse";
 import Dropdown from "react-bootstrap/Dropdown";
+import { FaBars, FaXmark } from "react-icons/fa6";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth-context.js";
 import useActiveSection from "../../hooks/useActiveSection.js";
@@ -30,6 +32,8 @@ function SiteHeader() {
   // Enlace marcado según la sección visible (solo en la portada)
   const activeSection = useActiveSection(sectionIds, location.pathname === "/");
   const [showLogin, setShowLogin] = useState(false);
+  // Menú de navegación desplegable en móvil (en escritorio siempre visible)
+  const [menuOpen, setMenuOpen] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const [logoutError, setLogoutError] = useState("");
 
@@ -62,21 +66,27 @@ function SiteHeader() {
         </span>
       </Link>
 
-      <nav className="main-nav" aria-label="Navegación principal">
-        {navSections.map((section) => {
-          const isActive = activeSection === section.id;
-          return (
-            <a
-              key={section.id}
-              className={isActive ? "nav-link active" : "nav-link"}
-              href={`/#${section.id}`}
-              aria-current={isActive ? "location" : undefined}
-            >
-              {section.label}
-            </a>
-          );
-        })}
-      </nav>
+      {/* En móvil, Collapse muestra u oculta la navegación con animación */}
+      <Collapse in={menuOpen}>
+        <div id="main-nav-collapse" className="main-nav-collapse">
+          <nav className="main-nav" aria-label="Navegación principal">
+            {navSections.map((section) => {
+              const isActive = activeSection === section.id;
+              return (
+                <a
+                  key={section.id}
+                  className={isActive ? "nav-link active" : "nav-link"}
+                  href={`/#${section.id}`}
+                  aria-current={isActive ? "location" : undefined}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  {section.label}
+                </a>
+              );
+            })}
+          </nav>
+        </div>
+      </Collapse>
 
       <div className="header-actions">
         <a className="header-action header-explore" href="/#productos">
@@ -119,6 +129,18 @@ function SiteHeader() {
             Iniciar sesión
           </button>
         ) : null}
+
+        {/* Botón de menú (hamburguesa), solo visible en móvil */}
+        <button
+          type="button"
+          className="nav-toggle"
+          aria-controls="main-nav-collapse"
+          aria-expanded={menuOpen}
+          aria-label={menuOpen ? "Cerrar menú" : "Abrir menú"}
+          onClick={() => setMenuOpen((open) => !open)}
+        >
+          {menuOpen ? <FaXmark aria-hidden="true" /> : <FaBars aria-hidden="true" />}
+        </button>
 
         {logoutError && (
           <p className="header-error" role="alert">

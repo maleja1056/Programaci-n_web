@@ -3,6 +3,7 @@
 // modal de la cabecera.
 import { Link, Navigate, useLocation } from "react-router-dom";
 import LoginForm from "../components/auth/LoginForm.jsx";
+import SiteFooter from "../components/layout/SiteFooter.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";
 import { useAuth } from "../context/auth-context.js";
 
@@ -42,6 +43,8 @@ function LoginPage() {
           </Link>
         </section>
       </main>
+
+      <SiteFooter />
     </div>
   );
 }

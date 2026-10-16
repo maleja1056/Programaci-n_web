@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import SiteFooter from "../components/layout/SiteFooter.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";
 
 function NotFoundPage() {
@@ -16,6 +17,8 @@ function NotFoundPage() {
           </Link>
         </div>
       </main>
+
+      <SiteFooter />
     </div>
   );
 }
