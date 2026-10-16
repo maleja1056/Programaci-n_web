@@ -6,7 +6,16 @@ import { useState } from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/auth-context.js";
+import useActiveSection from "../../hooks/useActiveSection.js";
 import LoginModal from "../auth/LoginModal.jsx";
+
+// Secciones de la portada enlazadas desde la navegación principal
+const navSections = [
+  { id: "inicio", label: "Inicio" },
+  { id: "categorias", label: "Categorías" },
+  { id: "productos", label: "Productos" },
+];
+const sectionIds = navSections.map((section) => section.id);
 
 // Rutas privadas que aparecen en el menú cuando hay sesión.
 const privateRoutes = [
@@ -18,6 +27,8 @@ function SiteHeader() {
   const { user, status, logout } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  // Enlace marcado según la sección visible (solo en la portada)
+  const activeSection = useActiveSection(sectionIds, location.pathname === "/");
   const [showLogin, setShowLogin] = useState(false);
   const [loggingOut, setLoggingOut] = useState(false);
   const [logoutError, setLogoutError] = useState("");
@@ -52,14 +63,19 @@ function SiteHeader() {
       </Link>
 
       <nav className="main-nav" aria-label="Navegación principal">
-        <a
-          className={`nav-link ${location.pathname === "/" ? "active" : ""}`}
-          href="/#inicio"
-        >
-          Inicio
-        </a>
-        <a className="nav-link" href="/#categorias">Categorías</a>
-        <a className="nav-link" href="/#productos">Productos</a>
+        {navSections.map((section) => {
+          const isActive = activeSection === section.id;
+          return (
+            <a
+              key={section.id}
+              className={isActive ? "nav-link active" : "nav-link"}
+              href={`/#${section.id}`}
+              aria-current={isActive ? "location" : undefined}
+            >
+              {section.label}
+            </a>
+          );
+        })}
       </nav>
 
       <div className="header-actions">
