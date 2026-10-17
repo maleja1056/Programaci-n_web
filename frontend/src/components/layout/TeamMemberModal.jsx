@@ -43,10 +43,6 @@ function TeamMemberModal({ member, onHide }) {
                 <dt>Programa</dt>
                 <dd>{member.programa}</dd>
               </div>
-              <div>
-                <dt>Correo</dt>
-                <dd>{member.correo}</dd>
-              </div>
             </dl>
           </Modal.Body>
         </>

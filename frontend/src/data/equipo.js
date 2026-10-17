@@ -1,11 +1,10 @@
 // Integrantes del equipo que aparecen en el pie de página. Al pulsar cada uno
-// se abre un modal con sus datos básicos (rol, programa y correo).
+// se abre un modal con sus datos básicos (foto, nombre, rol y programa).
 //
 // Campos de cada integrante:
 //   nombre       nombre completo (también genera las iniciales del avatar)
 //   rol          rol en el proyecto (se muestra en el footer y en el modal)
 //   programa     programa académico
-//   correo       correo de contacto ("Por completar" mientras no se tenga)
 //   archivoFoto  nombre del archivo de la foto SIN la extensión
 //
 // CÓMO AGREGAR O CAMBIAR UNA FOTO (no hay que tocar el código):
@@ -38,7 +37,6 @@ const integrantes = [
     nombre: "María Alejandra Fajardo Fajardo",
     rol: "Scrum Master",
     programa: "Ingeniería de Sistemas",
-    correo: "Por completar",
     archivoFoto: "maria-fajardo",
   },
   {
@@ -46,7 +44,6 @@ const integrantes = [
     nombre: "Sebastián Andrés Gómez Argüello",
     rol: "Development Team: Frontend",
     programa: "Ingeniería de Sistemas",
-    correo: "Por completar",
     archivoFoto: "sebastian-gomez",
   },
   {
@@ -54,7 +51,6 @@ const integrantes = [
     nombre: "Juan José Parra Viviescas",
     rol: "Product Owner",
     programa: "Ingeniería de Sistemas",
-    correo: "Por completar",
     archivoFoto: "juan-parra",
   },
   {
@@ -62,7 +58,6 @@ const integrantes = [
     nombre: "Juan Diego Rodríguez Uribe",
     rol: "Development Team: Backend y base de datos",
     programa: "Ingeniería de Sistemas",
-    correo: "Por completar",
     archivoFoto: "juan-rodriguez",
   },
 ];
