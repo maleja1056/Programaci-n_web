@@ -1,3 +1,4 @@
+// Página 404: se muestra para cualquier ruta que no exista (path="*").
 import { Link } from "react-router-dom";
 import SiteFooter from "../components/layout/SiteFooter.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";

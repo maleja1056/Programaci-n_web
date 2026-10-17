@@ -37,7 +37,7 @@ function HeroSection() {
       </div>
 
       {/* Ilustración decorativa: frasco y caja de producto */}
-      <div className="hero-visual" aria-label="Ilustración de bienestar">
+      <div className="hero-visual" aria-hidden="true">
         <div className="hero-orbit orbit-one" />
         <div className="hero-orbit orbit-two" />
         <div className="hero-leaf leaf-one" />

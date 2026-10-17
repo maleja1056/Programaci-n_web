@@ -1,4 +1,5 @@
-
+// Rutas de autenticación: POST /api/auth/login, GET /api/auth/me y
+// POST /api/auth/logout. Las contraseñas se comparan con bcrypt.
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const pool = require('../config/db');

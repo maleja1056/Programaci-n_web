@@ -1,5 +1,8 @@
 // Sección "Explora por categorías" (#categorias): una tarjeta por categoría
-// que filtra el catálogo al pulsarla.
+// que filtra el catálogo al pulsarla. La tarjeta elegida se marca con la
+// clase "selected" y aria-pressed (para lectores de pantalla).
+import { ALL_CATEGORIES } from "../../hooks/useCatalog.js";
+
 function CategoriesSection({ categories, selectedCategory, onSelectCategory }) {
   return (
     <section className="categories-section" id="categorias">
@@ -24,7 +27,7 @@ function CategoriesSection({ categories, selectedCategory, onSelectCategory }) {
           >
             <span
               className={`category-symbol symbol-${
-                category.name === "Todos"
+                category.name === ALL_CATEGORIES
                   ? "all"
                   : category.style || "care"
               }`}

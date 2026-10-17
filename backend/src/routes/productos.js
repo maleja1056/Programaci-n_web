@@ -1,4 +1,6 @@
-
+// GET /api/productos: lista los productos activos con el nombre de su
+// categoría. Filtros opcionales: ?categoria=<id> y ?buscar=<texto en el nombre>.
+// Las consultas usan "?" (parámetros) para evitar inyección SQL.
 const express = require('express');
 const pool = require('../config/db');
 

@@ -1,4 +1,3 @@
-
 // Crea (o actualiza) el usuario administrador a partir de las variables
 // ADMIN_* del archivo .env de la raíz del proyecto.
 // Uso: npm run crear-admin

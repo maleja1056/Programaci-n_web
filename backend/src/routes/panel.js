@@ -1,4 +1,4 @@
-
+// GET /api/panel/resumen: totales para la página privada /panel.
 const express = require('express');
 const pool = require('../config/db');
 const requireAuth = require('../middleware/requireAuth');

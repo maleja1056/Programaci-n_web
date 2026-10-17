@@ -1,23 +1,8 @@
-
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
-
-:root {
-  font-family: "DM Sans", sans-serif;
-  color: #19372d;
-  background: #ffffff;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-* {
-  box-sizing: border-box;
-}
+/* Reglas globales mínimas que se cargan antes que el resto (main.jsx).
+   La fuente, los colores base y el resto de la base están en app.css. */
 
 html {
   min-width: 320px;
-  scroll-behavior: smooth;
 }
 
 body {
