@@ -28,8 +28,8 @@
 .promo-caption {
   right: auto;
   bottom: 50%;
-  left: 7%;
-  max-width: 430px;
+  left: 11%;
+  max-width: 400px;
   padding: 0;
   transform: translateY(50%);
   text-align: left;
@@ -57,6 +57,11 @@
 .promo-carousel .carousel-control-prev-icon,
 .promo-carousel .carousel-control-next-icon {
   filter: invert(1) grayscale(1);
+}
+
+.promo-carousel .carousel-control-prev,
+.promo-carousel .carousel-control-next {
+  width: 8%;
 }
 
 .promo-carousel .carousel-indicators [data-bs-target] {
@@ -226,6 +231,24 @@
 
 /* ---------- Adaptable ---------- */
 @media (max-width: 900px) {
+  /* En tableta y móvil la ilustración va arriba y el texto debajo, sin superponerse */
+  .promo-image {
+    height: 220px;
+    object-position: 80% center;
+  }
+
+  .promo-carousel .carousel-control-prev,
+  .promo-carousel .carousel-control-next {
+    height: 220px;
+  }
+
+  .promo-caption {
+    position: static;
+    max-width: none;
+    padding: 18px 56px 44px;
+    transform: none;
+  }
+
   .features-grid {
     grid-template-columns: 1fr;
   }
@@ -241,23 +264,21 @@
     margin-top: 48px;
   }
 
-  .promo-image {
-    height: 300px;
-    object-position: 80% center;
-  }
-
-  .promo-caption {
-    left: 6%;
-    right: 6%;
-    max-width: none;
+  .promo-image,
+  .promo-carousel .carousel-control-prev,
+  .promo-carousel .carousel-control-next {
+    height: 190px;
   }
 
   .promo-caption h3 {
     font-size: 21px;
   }
 
-  .promo-caption p {
-    display: none;
+  /* Las flechas quedan sobre la imagen, no sobre el texto */
+  .promo-carousel .carousel-control-prev,
+  .promo-carousel .carousel-control-next {
+    height: 190px;
+    width: 12%;
   }
 }
 
