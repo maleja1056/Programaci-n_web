@@ -1,5 +1,19 @@
 // Tarjeta de un producto del catálogo. El botón "→" muestra el detalle.
+import OverlayTrigger from "react-bootstrap/OverlayTrigger";
+import Popover from "react-bootstrap/Popover";
 import { formatPrice } from "../../utils/format.js";
+
+// Popover que explica la etiqueta "Con fórmula" al pasar el mouse, tocarla
+// o enfocarla con el teclado.
+const formulaPopover = (
+  <Popover id="popover-formula" className="formula-popover">
+    <Popover.Header as="h4">Requiere fórmula médica</Popover.Header>
+    <Popover.Body>
+      Este producto solo se entrega con la fórmula de tu médico. Ten el
+      documento a la mano al hacer tu pedido.
+    </Popover.Body>
+  </Popover>
+);
 
 function ProductCard({ product }) {
   // Detalle provisional con window.alert (el Integrante 3 lo cambiará por un
@@ -16,7 +30,19 @@ function ProductCard({ product }) {
   return (
     <article className="product-card">
       <div className={`product-art art-${product.color}`}>
-        <span className="product-label">{product.label}</span>
+        {product.requiereFormula ? (
+          <OverlayTrigger
+            trigger={["hover", "focus"]}
+            placement="bottom"
+            overlay={formulaPopover}
+          >
+            <button type="button" className="product-label product-label-button">
+              {product.label}
+            </button>
+          </OverlayTrigger>
+        ) : (
+          <span className="product-label">{product.label}</span>
+        )}
         <span className="product-symbol">{product.symbol}</span>
         <span className="product-art-brand">FARMAUIS</span>
         <span className="product-art-caption">

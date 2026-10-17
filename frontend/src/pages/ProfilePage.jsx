@@ -1,6 +1,7 @@
 // Página privada /perfil: datos públicos del usuario con sesión iniciada.
 // Los datos vienen de la sesión del servidor (GET /api/auth/me), nunca del
 // almacenamiento del navegador.
+import SiteFooter from "../components/layout/SiteFooter.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";
 import { useAuth } from "../context/auth-context.js";
 
@@ -39,6 +40,8 @@ function ProfilePage() {
           ))}
         </dl>
       </main>
+
+      <SiteFooter />
     </div>
   );
 }

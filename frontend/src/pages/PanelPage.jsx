@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import SiteFooter from "../components/layout/SiteFooter.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";
 import { getPanelSummary } from "../api/auth.js";
 import { useAuth } from "../context/auth-context.js";
@@ -77,6 +78,8 @@ function PanelPage() {
           </div>
         )}
       </main>
+
+      <SiteFooter />
     </div>
   );
 }

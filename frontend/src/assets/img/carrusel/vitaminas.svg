@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420">
+  <!-- Diapositiva del carrusel: vitaminas y suplementos (ilustración a la derecha) -->
+  <defs>
+    <linearGradient id="fondo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#fffaf3"/>
+      <stop offset="1" stop-color="#ffe6cc"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="420" fill="url(#fondo)"/>
+  <circle cx="910" cy="215" r="175" fill="#fff" opacity="0.6"/>
+  <circle cx="910" cy="215" r="125" fill="none" stroke="#f3cfa6" stroke-width="2"/>
+  <!-- Hojas -->
+  <ellipse cx="790" cy="150" rx="22" ry="58" transform="rotate(-38 790 150)" fill="#9fd8b0"/>
+  <ellipse cx="1035" cy="300" rx="18" ry="50" transform="rotate(48 1035 300)" fill="#9fd8b0"/>
+  <path d="M790 150 L760 190M1035 300 L1068 330" stroke="#5fb37c" stroke-width="3" stroke-linecap="round"/>
+  <!-- Frasco de vitamina C -->
+  <rect x="868" y="92" width="86" height="40" rx="10" fill="#d9822b"/>
+  <rect x="845" y="125" width="132" height="215" rx="30" fill="#fff" stroke="#e7a564" stroke-width="5"/>
+  <rect x="862" y="182" width="98" height="110" rx="14" fill="#fff1e2"/>
+  <path d="M930 214 A30 30 0 1 0 930 262" fill="none" stroke="#d9822b" stroke-width="11" stroke-linecap="round"/>
+  <!-- Cápsulas -->
+  <g transform="rotate(-30 735 290)">
+    <rect x="700" y="276" width="70" height="28" rx="14" fill="#fff" stroke="#e7a564" stroke-width="4"/>
+    <path d="M735 278 V302" stroke="#e7a564" stroke-width="4"/>
+    <rect x="702" y="278" width="33" height="24" rx="12" fill="#f6b26b"/>
+  </g>
+  <g transform="rotate(25 1060 130)">
+    <rect x="1030" y="118" width="60" height="24" rx="12" fill="#fff" stroke="#e7a564" stroke-width="4"/>
+    <rect x="1032" y="120" width="28" height="20" rx="10" fill="#f6b26b"/>
+  </g>
+  <!-- Adornos -->
+  <path d="M1110 220v24M1098 232h24M760 80v20M750 90h20" stroke="#f3b97c" stroke-width="5" stroke-linecap="round"/>
+</svg>

@@ -25,16 +25,18 @@ frontend/src/
 ├── App.jsx                  Rutas públicas y privadas
 ├── api/                     Comunicación con el backend (fetch a /api)
 ├── context/                 Estado global de la sesión (AuthContext)
+├── data/                    Integrantes del equipo, contacto y redes sociales (editar aquí)
 ├── hooks/
+│   ├── useActiveSection.js  Sección visible de la portada (enlace activo de la cabecera)
 │   └── useCatalog.js        Carga, búsqueda y filtro del catálogo
 ├── utils/
 │   └── format.js            Formato de precios
 ├── components/
 │   ├── auth/                Login (modal y formulario) y protección de rutas
-│   ├── layout/              Cabecera y pie de página
+│   ├── layout/              Cabecera (con menú Collapse en móvil), pie de página y modal del equipo
 │   └── home/                Secciones de la portada (hero, categorías, catálogo, banner)
 ├── pages/                   Páginas: inicio, login, panel, perfil y 404
-└── styles/                  Hojas de estilo (app, index, bootstrap, cabecera, auth)
+└── styles/                  Hojas de estilo (app, index, bootstrap, cabecera, pie, auth)
 ```
 
 Archivos de cada integrante, para no editar los mismos a la vez:
@@ -44,4 +46,4 @@ Archivos de cada integrante, para no editar los mismos a la vez:
 | 1. Usuarios y sesión | `components/auth/`, `context/`, `api/auth.js`, `pages/LoginPage.jsx`, `PanelPage.jsx`, `ProfilePage.jsx` |
 | 2. Catálogo y búsqueda | `hooks/useCatalog.js`, `components/home/CategoriesSection.jsx`, `CatalogSection.jsx` |
 | 3. Detalle de producto | `components/home/ProductCard.jsx` y los componentes nuevos de detalle |
-| 4. Diseño e integración | `components/layout/`, `components/home/HeroSection.jsx`, `CareBanner.jsx`, las secciones nuevas de la portada y `styles/` |
+| 4. Diseño e integración | `components/layout/`, `data/`, `components/home/HeroSection.jsx`, `CareBanner.jsx`, las secciones nuevas de la portada y `styles/` |

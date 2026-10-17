@@ -1,0 +1,276 @@
+/* Secciones de la portada añadidas en la segunda entrega: carrusel, tres
+   columnas, sobre nosotros (letra capital, audio y video), preguntas
+   frecuentes y popover de las tarjetas. Los colores siguen la paleta verde
+   de app.css; los textos usan tonos con contraste mínimo de 4,5:1. */
+
+/* ---------- Contenedor común ---------- */
+.home-section {
+  width: min(1180px, calc(100% - 64px));
+  margin: 68px auto 0;
+}
+
+/* ---------- Carrusel de promociones ---------- */
+.promo-carousel {
+  overflow: hidden;
+  border-radius: 16px;
+  background: #e7f6e8;
+}
+
+.promo-image {
+  display: block;
+  width: 100%;
+  height: 340px;
+  object-fit: cover;
+  object-position: right center;
+}
+
+/* El texto va a la izquierda y la ilustración queda a la derecha */
+.promo-caption {
+  right: auto;
+  bottom: 50%;
+  left: 7%;
+  max-width: 430px;
+  padding: 0;
+  transform: translateY(50%);
+  text-align: left;
+}
+
+.promo-caption .section-kicker {
+  color: #1d6b43;
+}
+
+.promo-caption h3 {
+  margin: 8px 0;
+  color: #183c2e;
+  font-family: "Manrope", sans-serif;
+  font-size: 28px;
+  line-height: 1.2;
+}
+
+.promo-caption p {
+  margin: 0 0 18px;
+  color: #3d5547;
+  font-size: 14px;
+}
+
+/* Flechas e indicadores oscuros para verse sobre el fondo claro */
+.promo-carousel .carousel-control-prev-icon,
+.promo-carousel .carousel-control-next-icon {
+  filter: invert(1) grayscale(1);
+}
+
+.promo-carousel .carousel-indicators [data-bs-target] {
+  background-color: #1d6b43;
+}
+
+/* ---------- Tres columnas ---------- */
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 21px;
+  margin-top: 26px;
+}
+
+.feature-card {
+  padding: 26px 22px;
+  border: 1px solid #e8eee9;
+  border-radius: 13px;
+  background: #fff;
+}
+
+.feature-icon {
+  display: grid;
+  width: 48px;
+  height: 48px;
+  margin-bottom: 14px;
+  place-items: center;
+  border-radius: 14px;
+  background: #dff2e2;
+  color: #1d6b43;
+  font-size: 22px;
+}
+
+.feature-card h3 {
+  margin: 0 0 6px;
+  color: #183c2e;
+  font-size: 17px;
+}
+
+.feature-card p {
+  margin: 0;
+  color: #4a5f53;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+/* ---------- Sobre nosotros ---------- */
+.about-section {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: center;
+}
+
+.about-text h2 {
+  margin: 8px 0 14px;
+  color: #183c2e;
+  font-family: "Manrope", sans-serif;
+}
+
+.about-text p {
+  color: #3d5547;
+  font-size: 14px;
+  line-height: 1.7;
+}
+
+/* Letra capital: primera letra grande y de color */
+.drop-cap::first-letter {
+  float: left;
+  margin: 4px 10px 0 0;
+  color: #1d6b43;
+  font-family: "Manrope", sans-serif;
+  font-size: 58px;
+  font-weight: 800;
+  line-height: 0.85;
+}
+
+.audio-card {
+  display: grid;
+  gap: 6px;
+  margin-top: 20px;
+  padding: 16px;
+  border: 1px solid #dce9df;
+  border-radius: 12px;
+  background: #f0faf3;
+  color: #3d5547;
+  font-size: 13px;
+}
+
+.audio-card strong {
+  color: #183c2e;
+}
+
+.audio-card audio {
+  width: 100%;
+}
+
+.audio-card small,
+.video-card small {
+  display: block;
+  color: #566b5e;
+  font-size: 11px;
+}
+
+.video-card {
+  margin: 0;
+}
+
+.video-card video {
+  display: block;
+  width: 100%;
+  border-radius: 14px;
+  background: #000;
+}
+
+.video-card figcaption {
+  margin-top: 10px;
+  color: #3d5547;
+  font-size: 13px;
+}
+
+/* ---------- Preguntas frecuentes ---------- */
+.faq-accordion {
+  margin-top: 24px;
+  --bs-accordion-active-bg: #f0faf3;
+  --bs-accordion-active-color: #183c2e;
+  --bs-accordion-btn-focus-box-shadow: 0 0 0 3px #8bd9ae;
+  --bs-accordion-border-color: #e1eae2;
+}
+
+.faq-accordion .accordion-button {
+  font-weight: 600;
+}
+
+.faq-accordion .accordion-body {
+  color: #3d5547;
+  font-size: 14px;
+}
+
+/* ---------- Popover "Con fórmula" y ordenar ---------- */
+.product-label-button {
+  cursor: help;
+}
+
+.sort-select-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #566b5e;
+  font-size: 12px;
+}
+
+.sort-select-label select {
+  min-height: 42px;
+  padding: 0 30px 0 12px;
+  border: 1px solid #e1eae2;
+  border-radius: 9px;
+  background: white;
+  color: #294a35;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.formula-popover {
+  font-size: 12px;
+}
+
+/* ---------- Adaptable ---------- */
+@media (max-width: 900px) {
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .about-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .home-section {
+    width: calc(100% - 32px);
+    margin-top: 48px;
+  }
+
+  .promo-image {
+    height: 300px;
+    object-position: 80% center;
+  }
+
+  .promo-caption {
+    left: 6%;
+    right: 6%;
+    max-width: none;
+  }
+
+  .promo-caption h3 {
+    font-size: 21px;
+  }
+
+  .promo-caption p {
+    display: none;
+  }
+}
+
+.catalog-filters {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+@media (max-width: 640px) {
+  .catalog-filters {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+}
