@@ -8,6 +8,7 @@ import ProfilePage from "./pages/ProfilePage.jsx";
 import "./styles/app.css";
 import "./styles/header.css";
 import "./styles/footer.css";
+import "./styles/home.css";
 import "./styles/auth.css";
 
 function App() {

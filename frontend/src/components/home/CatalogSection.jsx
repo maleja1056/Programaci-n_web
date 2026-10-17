@@ -1,5 +1,7 @@
 // Sección "Productos para ti" (#productos): buscador, filtro por categoría y
-// cuadrícula de productos, con los estados de carga, error y sin resultados.
+// cuadrícula de productos, con el menú "Ordenar por" (visible sin iniciar sesión) y los estados de carga, error y sin resultados.
+import Dropdown from "react-bootstrap/Dropdown";
+import { SORT_OPTIONS } from "../../hooks/useCatalog.js";
 import ProductCard from "./ProductCard.jsx";
 
 function CatalogSection({
@@ -11,6 +13,8 @@ function CatalogSection({
   onSearchChange,
   selectedCategory,
   onSelectCategory,
+  sortBy,
+  onSortChange,
   onResetFilters,
 }) {
   return (
@@ -52,6 +56,23 @@ function CatalogSection({
           )}
         </label>
 
+        <div className="catalog-filters">
+        <div className="sort-select-label">
+          <span>Ordenar por:</span>
+          <Dropdown onSelect={onSortChange}>
+            <Dropdown.Toggle variant="outline-success" size="sm">
+              {SORT_OPTIONS[sortBy].label}
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              {Object.entries(SORT_OPTIONS).map(([key, option]) => (
+                <Dropdown.Item key={key} eventKey={key} active={key === sortBy}>
+                  {option.label}
+                </Dropdown.Item>
+              ))}
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+
         <label className="category-select-label">
           <span>Filtrar:</span>
           <select
@@ -66,6 +87,7 @@ function CatalogSection({
             ))}
           </select>
         </label>
+        </div>
       </div>
 
       {loading ? (

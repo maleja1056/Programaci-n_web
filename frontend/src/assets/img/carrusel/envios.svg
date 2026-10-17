@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="420" viewBox="0 0 1200 420">
+  <!-- Diapositiva del carrusel: envíos a domicilio (ilustración a la derecha) -->
+  <defs>
+    <linearGradient id="fondo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f4fbf6"/>
+      <stop offset="1" stop-color="#d8f0e0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="420" fill="url(#fondo)"/>
+  <circle cx="905" cy="215" r="175" fill="#fff" opacity="0.6"/>
+  <circle cx="905" cy="215" r="125" fill="none" stroke="#b9dfc5" stroke-width="2"/>
+  <!-- Ruta punteada hasta la ubicación -->
+  <path d="M700 345 C780 300 860 380 960 330 S1040 250 1050 240" fill="none" stroke="#8bd9ae" stroke-width="5" stroke-dasharray="2 14" stroke-linecap="round"/>
+  <!-- Líneas de velocidad -->
+  <path d="M705 190h70M725 222h50M695 254h62" stroke="#208551" stroke-width="6" stroke-linecap="round" opacity="0.3"/>
+  <!-- Caja del pedido -->
+  <g transform="translate(815 125)" stroke="#208551" stroke-width="5" stroke-linejoin="round">
+    <path d="M0 45 L90 0 L180 45 L90 90 Z" fill="#eaf8ef"/>
+    <path d="M0 45 V145 L90 190 V90 Z" fill="#fff"/>
+    <path d="M180 45 V145 L90 190 V90 Z" fill="#cdeed8"/>
+    <path d="M45 22 L135 67 V104" fill="none" stroke-linecap="round"/>
+    <circle cx="45" cy="118" r="21" fill="#208551" stroke="none"/>
+    <path d="M45 106v24M33 118h24" stroke="#fff" stroke-width="6" stroke-linecap="round"/>
+  </g>
+  <!-- Marcador de ubicación -->
+  <path d="M1050 95c-25 0-45 20-45 45 0 34 45 80 45 80s45-46 45-80c0-25-20-45-45-45z" fill="#208551"/>
+  <circle cx="1050" cy="140" r="16" fill="#fff"/>
+  <!-- Adornos -->
+  <path d="M770 95v26M757 108h26M1120 300v20M1110 310h20" stroke="#8bd9ae" stroke-width="5" stroke-linecap="round"/>
+</svg>

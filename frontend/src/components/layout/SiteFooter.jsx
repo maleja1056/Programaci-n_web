@@ -61,6 +61,8 @@ function SiteFooter() {
             <li><a href="/#inicio">Inicio</a></li>
             <li><a href="/#categorias">Categorías</a></li>
             <li><a href="/#productos">Productos</a></li>
+            <li><a href="/#nosotros">Nosotros</a></li>
+            <li><a href="/#preguntas">Preguntas frecuentes</a></li>
           </ul>
         </nav>
 
