@@ -1,8 +1,11 @@
-// Estado y lógica del catálogo: carga productos y categorías desde el backend,
+// Estado y lógica del catálogo: carga productos y categorías (api/catalog.js:
+// del backend o, en el modo demostración, de data/productos.js),
 // los adapta para la vista y aplica la búsqueda, el filtro por categoría y el orden.
 // Lo usa HomePage para compartir el estado entre CategoriesSection y
 // CatalogSection.
 import { useEffect, useMemo, useState } from "react";
+import { getCatalog } from "../api/catalog.js";
+import { USAR_BACKEND } from "../api/config.js";
 
 // Símbolo y estilo de cada categoría en las tarjetas de categorías
 const categoryVisuals = {
@@ -45,23 +48,8 @@ function useCatalog() {
         setLoading(true);
         setError("");
 
-        const [productsResponse, categoriesResponse] = await Promise.all([
-          fetch("/api/productos"),
-          fetch("/api/categorias"),
-        ]);
-
-        if (!productsResponse.ok || !categoriesResponse.ok) {
-          throw new Error(
-            "El servidor no pudo cargar los productos y las categorías."
-          );
-        }
-
-        const productsData = await productsResponse.json();
-        const categoriesData = await categoriesResponse.json();
-
-        if (!Array.isArray(productsData) || !Array.isArray(categoriesData)) {
-          throw new Error("El servidor devolvió una respuesta inesperada.");
-        }
+        const { productos: productsData, categorias: categoriesData } =
+          await getCatalog();
 
         const normalizedProducts = productsData.map((product) => {
           const categoryId = Number(product.categoria_id);
@@ -114,7 +102,9 @@ function useCatalog() {
       } catch (err) {
         console.error("Error al cargar el catálogo:", err);
         setError(
-          "No fue posible conectar con el catálogo. Comprueba que el backend y MySQL estén funcionando e inténtalo de nuevo."
+          USAR_BACKEND
+            ? "No fue posible conectar con el catálogo. Comprueba que el backend y MySQL estén funcionando e inténtalo de nuevo."
+            : "No fue posible cargar el catálogo. Recarga la página e inténtalo de nuevo."
         );
       } finally {
         setLoading(false);

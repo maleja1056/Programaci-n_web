@@ -1,7 +1,7 @@
 // Cabecera del sitio: marca, navegación pública y acciones de sesión.
 // Sin sesión muestra el botón que abre el modal de login; con sesión muestra
 // el menú desplegable de rutas privadas. Ocultar el menú no protege nada por
-// sí solo: las rutas usan ProtectedRoute y el backend exige sesión.
+// sí solo: las rutas usan ProtectedRoute y, con backend, el servidor exige sesión.
 import { useState } from "react";
 import Collapse from "react-bootstrap/Collapse";
 import Dropdown from "react-bootstrap/Dropdown";

@@ -1,6 +1,6 @@
 // Página privada /perfil: datos públicos del usuario con sesión iniciada.
-// Los datos vienen de la sesión del servidor (GET /api/auth/me), nunca del
-// almacenamiento del navegador.
+// Los datos vienen de la sesión del servidor (GET /api/auth/me) o, en el modo
+// demostración, del usuario simulado de api/demo.js.
 import SiteFooter from "../components/layout/SiteFooter.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";
 import { useAuth } from "../context/auth-context.js";

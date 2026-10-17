@@ -211,6 +211,13 @@ button.header-login:hover {
   line-height: 1.5;
 }
 
+/* Aviso con las credenciales del modo demostración */
+.auth-form .auth-demo-hint {
+  border-color: #b9dfc5;
+  background-color: #e5f4e7;
+  color: #1d5a3a;
+}
+
 .auth-form .form-label {
   margin-bottom: 6px;
   color: #294c36;
