@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="FarmaUIS">
+  <defs>
+    <linearGradient id="fondo" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2aa566"/>
+      <stop offset="1" stop-color="#136f43"/>
+    </linearGradient>
+  </defs>
+  <!-- Fondo verde con esquinas redondeadas -->
+  <rect width="64" height="64" rx="18" fill="url(#fondo)"/>
+  <!-- Cruz de farmacia -->
+  <path fill="#fff" d="M25 11h14v14h14v14H39v14H25V39H11V25h14z"/>
+  <!-- Hoja: bienestar y cuidado natural -->
+  <path fill="#bff0cf" d="M43 55c0-7 4-11 11-11 0 7-4 11-11 11z"/>
+</svg>

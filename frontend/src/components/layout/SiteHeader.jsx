@@ -7,6 +7,7 @@ import Collapse from "react-bootstrap/Collapse";
 import Dropdown from "react-bootstrap/Dropdown";
 import { FaBars, FaXmark } from "react-icons/fa6";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import logo from "../../assets/img/logo.svg";
 import { useAuth } from "../../context/auth-context.js";
 import useActiveSection from "../../hooks/useActiveSection.js";
 import LoginModal from "../auth/LoginModal.jsx";
@@ -57,9 +58,8 @@ function SiteHeader() {
   return (
     <header className="site-header">
       <Link className="brand" to="/" aria-label="FarmaUIS, inicio">
-        <span className="brand-mark">
-          <span className="brand-cross">+</span>
-        </span>
+        {/* Logo: imagen en src/assets/img/logo.svg (el nombre del sitio va en el texto) */}
+        <img className="brand-mark" src={logo} alt="" />
         <span className="brand-name">
           Farma<span>UIS</span>
           <small>Tu farmacia de confianza</small>
