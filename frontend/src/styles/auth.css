@@ -77,7 +77,7 @@ button.header-login:hover {
 }
 
 .private-menu .dropdown-header {
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 1px;
   text-transform: uppercase;
@@ -175,7 +175,7 @@ button.header-login:hover {
 
 .auth-subtitle {
   margin: 0 0 20px;
-  color: #7c8b80;
+  color: #5c6a61;
   font-size: 13px;
   line-height: 1.6;
 }
@@ -319,7 +319,7 @@ button.header-login:hover {
 
 .panel-heading p {
   margin: 0;
-  color: #7c8b80;
+  color: #5c6a61;
   font-size: 13px;
 }
 

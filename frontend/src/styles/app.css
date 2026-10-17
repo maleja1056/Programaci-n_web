@@ -1,3 +1,9 @@
+/* Estilos generales de FarmaUIS: base, anuncio, cabecera, hero, categorías,
+   catálogo y banner de cuidado. Cada sección empieza con un comentario
+   "---------- NOMBRE ----------". Los estilos de otras partes están en:
+   header.css (menú fijo y móvil), footer.css (pie de página), home.css
+   (carrusel, tres columnas, nosotros y preguntas) y auth.css (login y panel).
+   Los textos usan colores con contraste mínimo de 4,5:1 sobre el fondo. */
 
 @import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap");
 
@@ -14,6 +20,7 @@
   scroll-behavior: smooth;
 }
 
+/* ---------- BASE: reglas generales (caja, cuerpo, botones, enlaces y foco de teclado) ---------- */
 * {
   box-sizing: border-box;
 }
@@ -48,6 +55,7 @@ select:focus-visible {
   outline-offset: 3px;
 }
 
+/* ---------- CONTENEDOR Y BARRA DE ANUNCIO: franja verde superior ---------- */
 .app-shell {
   width: 100%;
   overflow: hidden;
@@ -79,6 +87,7 @@ select:focus-visible {
   color: #9bd6b1;
 }
 
+/* ---------- CABECERA: logo, menú de navegación y botón "Explorar tienda" ---------- */
 .site-header {
   width: min(1180px, calc(100% - 64px));
   min-height: 82px;
@@ -128,14 +137,14 @@ select:focus-visible {
 
 .brand-name > span {
   display: inline;
-  color: #279b60;
+  color: #1d7a4a;
 }
 
 .brand-name small {
   margin-top: 5px;
-  color: #89958e;
+  color: #5f6c64;
   font-family: "DM Sans", sans-serif;
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 500;
   letter-spacing: 0;
 }
@@ -196,6 +205,7 @@ select:focus-visible {
   line-height: 1;
 }
 
+/* ---------- HERO (PORTADA): título, descripción y etiquetas de bienvenida ---------- */
 .hero {
   position: relative;
   display: grid;
@@ -221,7 +231,7 @@ select:focus-visible {
 .eyebrow,
 .section-kicker {
   color: #258153;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 1.4px;
 }
@@ -253,17 +263,18 @@ select:focus-visible {
 }
 
 .hero h1 span {
-  color: #27945a;
+  color: #1d7a4a;
 }
 
 .hero-description {
   max-width: 390px;
   margin: 0;
-  color: #6c7d72;
+  color: #58695e;
   font-size: 13px;
   line-height: 1.9;
 }
 
+/* ---------- BOTÓN PRINCIPAL ---------- */
 .primary-button {
   display: inline-flex;
   min-height: 46px;
@@ -291,6 +302,7 @@ select:focus-visible {
   font-size: 17px;
 }
 
+/* ---------- BENEFICIOS DEL HERO: "Compra sencilla" y "Bienestar para todos" ---------- */
 .hero-benefits {
   display: flex;
   flex-wrap: wrap;
@@ -303,7 +315,7 @@ select:focus-visible {
   align-items: center;
   gap: 7px;
   color: #63786a;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 500;
 }
 
@@ -319,6 +331,7 @@ select:focus-visible {
   font-weight: 700;
 }
 
+/* ---------- ILUSTRACIÓN DEL HERO: frasco, caja, nota flotante, hojas y adornos (decorativo) ---------- */
 .hero-visual {
   position: relative;
   display: grid;
@@ -481,12 +494,12 @@ select:focus-visible {
 
 .floating-note strong {
   color: #2b4c35;
-  font-size: 10px;
+  font-size: 12px;
 }
 
 .floating-note small {
-  color: #87968a;
-  font-size: 9px;
+  color: #5f6d63;
+  font-size: 11px;
 }
 
 .hero-leaf {
@@ -529,22 +542,25 @@ select:focus-visible {
   font-size: 20px;
 }
 
+/* ---------- ETIQUETA INFERIOR DEL HERO ---------- */
 .hero-bottom-label {
   position: absolute;
   bottom: 18px;
   left: 68px;
-  color: #92a398;
-  font-size: 7px;
+  color: #5f6f65;
+  font-size: 11px;
   font-weight: 700;
   letter-spacing: 1.6px;
 }
 
 .hero-bottom-label span {
   padding: 0 5px;
-  color: #60a879;
+  color: #3f7d58;
 }
 
 .categories-section,
+
+/* ---------- ENCABEZADOS DE SECCIÓN: categorías y catálogo ---------- */
 .products-section {
   width: min(1180px, calc(100% - 64px));
   margin: 68px auto 0;
@@ -571,11 +587,12 @@ select:focus-visible {
 .section-heading p,
 .products-heading p {
   margin: 0;
-  color: #7d8b81;
+  color: #5c6a61;
   font-size: 12px;
   line-height: 1.8;
 }
 
+/* ---------- CATEGORÍAS: tarjetas para filtrar el catálogo ---------- */
 .category-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -652,8 +669,8 @@ select:focus-visible {
 }
 
 .category-copy small {
-  color: #8a978d;
-  font-size: 9px;
+  color: #5e6c62;
+  font-size: 12px;
   line-height: 1.5;
 }
 
@@ -676,11 +693,12 @@ select:focus-visible {
   border-radius: 7px;
   background: #eff8f0;
   color: #34784b;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   white-space: nowrap;
 }
 
+/* ---------- BARRA DEL CATÁLOGO: contador, buscador y filtro ---------- */
 .catalog-toolbar {
   display: flex;
   align-items: center;
@@ -724,7 +742,7 @@ select:focus-visible {
 }
 
 .search-box input::placeholder {
-  color: #9aa79d;
+  color: #6b786f;
 }
 
 .search-box input:focus-visible {
@@ -743,7 +761,7 @@ select:focus-visible {
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #7a897e;
+  color: #5a695f;
   font-size: 11px;
 }
 
@@ -759,6 +777,7 @@ select:focus-visible {
   cursor: pointer;
 }
 
+/* ---------- TARJETAS DE PRODUCTO: cuadrícula, ilustración, etiqueta y precio ---------- */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -848,7 +867,7 @@ select:focus-visible {
   border-radius: 6px;
   background: rgba(255, 255, 255, 0.65);
   color: #597563;
-  font-size: 8px;
+  font-size: 11px;
   font-weight: 600;
 }
 
@@ -896,8 +915,8 @@ select:focus-visible {
 }
 
 .product-category {
-  color: #4e9165;
-  font-size: 9px;
+  color: #33704a;
+  font-size: 11px;
   font-weight: 600;
 }
 
@@ -912,8 +931,8 @@ select:focus-visible {
 
 .product-info p {
   margin: 0;
-  color: #8b978e;
-  font-size: 10px;
+  color: #5c6a61;
+  font-size: 12px;
   line-height: 1.7;
 }
 
@@ -952,6 +971,7 @@ select:focus-visible {
   color: white;
 }
 
+/* ---------- ESTADO VACÍO: sin resultados o error de carga ---------- */
 .empty-state {
   display: flex;
   min-height: 260px;
@@ -978,7 +998,7 @@ select:focus-visible {
 }
 
 .empty-state p {
-  color: #829087;
+  color: #5c6a61;
   font-size: 12px;
   line-height: 1.7;
 }
@@ -987,6 +1007,7 @@ select:focus-visible {
   margin-top: 10px;
 }
 
+/* ---------- BANNER DE CUIDADO Y BOTÓN SECUNDARIO ---------- */
 .care-banner {
   display: flex;
   width: min(1180px, calc(100% - 64px));
@@ -1026,7 +1047,7 @@ select:focus-visible {
 
 .care-banner p {
   margin: 0;
-  color: #7c8b80;
+  color: #5c6a61;
   font-size: 11px;
   line-height: 1.8;
 }
@@ -1051,6 +1072,7 @@ select:focus-visible {
   background: #e5f4e7;
 }
 
+/* ---------- ADAPTABLE: pantallas grandes (1400 px), tabletas (1000 px) y celulares (650 px) ---------- */
 @media (min-width: 1400px) {
   .hero {
     min-height: 455px;
@@ -1102,7 +1124,7 @@ select:focus-visible {
 
 @media (max-width: 650px) {
   .announcement {
-    font-size: 9px;
+    font-size: 11px;
   }
 
   .site-header {
@@ -1139,7 +1161,7 @@ select:focus-visible {
   .header-action {
     min-height: 35px;
     padding: 0 10px;
-    font-size: 10px;
+    font-size: 11px;
   }
 
   .hero {
@@ -1174,7 +1196,7 @@ select:focus-visible {
   .hero-bottom-label {
     bottom: 15px;
     left: 25px;
-    font-size: 6px;
+    font-size: 11px;
   }
 
   .categories-section,
@@ -1212,11 +1234,11 @@ select:focus-visible {
   }
 
   .category-copy strong {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .category-copy small {
-    font-size: 8px;
+    font-size: 12px;
   }
 
   .category-arrow {
@@ -1229,7 +1251,7 @@ select:focus-visible {
 
   .results-count {
     padding: 7px 8px;
-    font-size: 9px;
+    font-size: 11px;
   }
 
   .catalog-toolbar {
@@ -1278,7 +1300,7 @@ select:focus-visible {
 
   .product-info p {
     min-height: 28px;
-    font-size: 9px;
+    font-size: 12px;
   }
 
   .product-price {
@@ -1299,7 +1321,7 @@ select:focus-visible {
     top: 9px;
     left: 8px;
     padding: 5px 6px;
-    font-size: 7px;
+    font-size: 11px;
   }
 
   .care-banner {
@@ -1326,7 +1348,7 @@ select:focus-visible {
   }
 
   .care-banner p {
-    font-size: 10px;
+    font-size: 12px;
   }
 
   .secondary-button {
@@ -1334,6 +1356,7 @@ select:focus-visible {
   }
 }
 
+/* ---------- ACCESIBILIDAD: desactiva animaciones si el usuario lo pide ---------- */
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

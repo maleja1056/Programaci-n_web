@@ -40,7 +40,7 @@
 }
 
 .footer-brand .brand-name small {
-  font-size: 8px;
+  font-size: 11px;
 }
 
 .footer-about p {
@@ -169,8 +169,8 @@
 
 .team-member-text small {
   overflow: hidden;
-  color: #89958e;
-  font-size: 10px;
+  color: #5f6c64;
+  font-size: 11px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
