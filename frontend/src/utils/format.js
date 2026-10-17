@@ -7,3 +7,9 @@ export const formatPrice = (price) =>
     currency: "COP",
     maximumFractionDigits: 0,
   }).format(price);
+
+// Unidades en inventario como texto ("12 unidades", "1 unidad", "Agotado")
+export const formatStock = (stock) => {
+  if (!(stock > 0)) return "Agotado";
+  return stock === 1 ? "1 unidad" : `${stock} unidades`;
+};

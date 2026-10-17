@@ -26,6 +26,21 @@ const productVisuals = {
 
 export const ALL_CATEGORIES = "Todos";
 
+// Texto en minúsculas y sin tildes, para que la búsqueda "acetaminofen"
+// encuentre "Acetaminofén". normalize("NFD") separa cada letra de su tilde
+// y el reemplazo elimina las tildes sueltas (rango Unicode U+0300–U+036F).
+const normalizeText = (text) =>
+  text
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLocaleLowerCase("es");
+
+// Etiqueta de la tarjeta: lo agotado tiene prioridad sobre la fórmula
+const productLabel = (soldOut, requiereFormula) => {
+  if (soldOut) return "Agotado";
+  return requiereFormula ? "Con fórmula" : "Disponible";
+};
+
 // Opciones del menú "Ordenar por" (clave -> texto y función de comparación)
 export const SORT_OPTIONS = {
   relevancia: { label: "Relevancia", compare: null },
@@ -60,6 +75,9 @@ function useCatalog() {
             color: "green",
             symbol: "+",
           };
+          const stock = Number(product.stock);
+          const soldOut = !(stock > 0);
+          const requiereFormula = Boolean(product.requiere_formula);
 
           return {
             id: product.id,
@@ -68,11 +86,12 @@ function useCatalog() {
             category: product.categoria || "Sin categoría",
             categoryId,
             price: Number(product.precio),
-            stock: Number(product.stock),
+            stock,
+            soldOut,
             color: visual.color,
             symbol: visual.symbol,
-            label: product.requiere_formula ? "Con fórmula" : "Disponible",
-            requiereFormula: Boolean(product.requiere_formula),
+            label: productLabel(soldOut, requiereFormula),
+            requiereFormula,
           };
         });
 
@@ -118,16 +137,15 @@ function useCatalog() {
     loadCatalog();
   }, []);
 
-  // Productos que se muestran: búsqueda (nombre, descripción o categoría) +
-  // filtro de categoría + orden. useMemo solo recalcula si cambia alguno.
+  // Productos que se muestran: búsqueda (nombre, descripción o categoría,
+  // sin importar mayúsculas ni tildes) + filtro de categoría + orden.
+  // useMemo solo recalcula si cambia alguno.
   const filteredProducts = useMemo(() => {
-    const query = search.trim().toLocaleLowerCase("es");
+    const query = normalizeText(search.trim());
 
     const filtered = products.filter((product) => {
-      const matchesSearch =
-        product.name.toLocaleLowerCase("es").includes(query) ||
-        product.description.toLocaleLowerCase("es").includes(query) ||
-        product.category.toLocaleLowerCase("es").includes(query);
+      const matchesSearch = [product.name, product.description, product.category]
+        .some((text) => normalizeText(text).includes(query));
 
       const matchesCategory =
         selectedCategory === ALL_CATEGORIES ||
