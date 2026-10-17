@@ -22,7 +22,7 @@ Abre `http://localhost:5173` e inicia sesión con usuario **`Admin`** y contrase
 - El backend valida el usuario (o el correo) y la contraseña contra la tabla `usuarios` (contraseñas con hash bcrypt).
 - La sesión se guarda en el servidor con `express-session` y viaja en la cookie `farmauis.sid` (`HttpOnly`, `SameSite=Lax`). Las sesiones se guardan en memoria, así que se pierden al reiniciar el backend.
 - Rutas: `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout` y la ruta privada `GET /api/panel/resumen` (responde 401 sin sesión).
-- En el frontend, el botón "Iniciar sesión" de la cabecera abre un modal de React-Bootstrap (`LoginModal` + `LoginForm` con `react-bootstrap/Form`). Con sesión iniciada aparece el menú desplegable de rutas privadas: `/panel` y `/perfil`, protegidas con `ProtectedRoute`. La página `/login` usa el mismo formulario y es el destino al intentar abrir una ruta privada sin sesión.
+- En el frontend, el botón «Iniciar sesión» de la cabecera abre un modal de React-Bootstrap (`LoginModal` + `LoginForm` con `react-bootstrap/Form`). Con sesión iniciada aparece el menú desplegable de rutas privadas: `/panel` y `/perfil`, protegidas con `ProtectedRoute`. La página `/login` usa el mismo formulario y es el destino al intentar abrir una ruta privada sin sesión.
 
 ### Primer uso
 
