@@ -10,6 +10,7 @@ import {
   FaPhone,
 } from "react-icons/fa6";
 import { Link } from "react-router-dom";
+import logo from "../../assets/img/logo.svg";
 import { equipo, iniciales } from "../../data/equipo.js";
 import { contacto, redesSociales } from "../../data/sitio.js";
 import TeamMemberModal from "./TeamMemberModal.jsx";
@@ -26,9 +27,7 @@ function SiteFooter() {
         {/* Marca, descripción y redes sociales */}
         <div className="footer-about">
           <Link className="brand footer-brand" to="/" aria-label="FarmaUIS, inicio">
-            <span className="brand-mark">
-              <span className="brand-cross">+</span>
-            </span>
+            <img className="brand-mark" src={logo} alt="" />
             <span className="brand-name">
               Farma<span>UIS</span>
               <small>Tu farmacia de confianza</small>
