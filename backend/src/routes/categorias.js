@@ -1,4 +1,4 @@
-
+// GET /api/categorias: lista las categorías activas ordenadas por nombre.
 const express = require('express');
 const pool = require('../config/db');
 

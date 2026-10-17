@@ -1,3 +1,7 @@
+// Mapa de rutas del sitio. Públicas: / y /login. Privadas: /panel y /perfil,
+// envueltas en ProtectedRoute para que no se puedan abrir escribiendo la URL
+// sin haber iniciado sesión. Cualquier otra ruta muestra la página 404.
+// Aquí también se cargan las hojas de estilo del proyecto.
 import { Route, Routes } from "react-router-dom";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 import HomePage from "./pages/HomePage.jsx";

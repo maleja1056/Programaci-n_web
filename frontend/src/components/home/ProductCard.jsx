@@ -1,4 +1,6 @@
-// Tarjeta de un producto del catálogo. El botón "→" muestra el detalle.
+// Tarjeta de un producto del catálogo: ilustración por categoría (color y
+// símbolo vienen de useCatalog), etiqueta, nombre, precio y el botón "→" que
+// muestra el detalle. La etiqueta "Con fórmula" es un botón con Popover.
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
 import { formatPrice } from "../../utils/format.js";

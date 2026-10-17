@@ -15,6 +15,7 @@ import { contacto, redesSociales } from "../../data/sitio.js";
 import TeamMemberModal from "./TeamMemberModal.jsx";
 
 function SiteFooter() {
+  // Integrante cuyo modal está abierto (null = modal cerrado)
   const [selectedMember, setSelectedMember] = useState(null);
 
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });

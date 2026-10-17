@@ -1,4 +1,5 @@
-
+// Configuración de express-session: cookie farmauis.sid con la sesión del
+// usuario que inició sesión (HttpOnly, SameSite=Lax, 2 horas).
 const crypto = require('crypto');
 const session = require('express-session');
 require('./db'); // carga el archivo .env de la raíz del proyecto

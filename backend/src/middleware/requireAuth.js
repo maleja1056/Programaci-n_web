@@ -1,4 +1,3 @@
-
 // Rechaza la petición con 401 si no existe una sesión válida en el servidor.
 function requireAuth(req, res, next) {
   if (!req.session || !req.session.user) {

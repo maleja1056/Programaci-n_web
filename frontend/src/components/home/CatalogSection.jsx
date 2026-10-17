@@ -1,5 +1,7 @@
-// Sección "Productos para ti" (#productos): buscador, filtro por categoría y
-// cuadrícula de productos, con el menú "Ordenar por" (visible sin iniciar sesión) y los estados de carga, error y sin resultados.
+// Sección "Productos para ti" (#productos): buscador, menú "Ordenar por"
+// (Dropdown), filtro por categoría y cuadrícula de productos, con los estados
+// de carga, error y sin resultados. No guarda estado propio: todo llega por
+// props desde HomePage (hook useCatalog).
 import Dropdown from "react-bootstrap/Dropdown";
 import { SORT_OPTIONS } from "../../hooks/useCatalog.js";
 import ProductCard from "./ProductCard.jsx";
@@ -57,39 +59,41 @@ function CatalogSection({
         </label>
 
         <div className="catalog-filters">
-        <div className="sort-select-label">
-          <span>Ordenar por:</span>
-          <Dropdown onSelect={onSortChange}>
-            <Dropdown.Toggle variant="outline-success" size="sm">
-              {SORT_OPTIONS[sortBy].label}
-            </Dropdown.Toggle>
-            <Dropdown.Menu>
-              {Object.entries(SORT_OPTIONS).map(([key, option]) => (
-                <Dropdown.Item key={key} eventKey={key} active={key === sortBy}>
-                  {option.label}
-                </Dropdown.Item>
-              ))}
-            </Dropdown.Menu>
-          </Dropdown>
-        </div>
+          {/* onSelect recibe el eventKey del item elegido (clave de SORT_OPTIONS) */}
+          <div className="sort-select-label">
+            <span>Ordenar por:</span>
+            <Dropdown onSelect={onSortChange}>
+              <Dropdown.Toggle variant="outline-success" size="sm">
+                {SORT_OPTIONS[sortBy].label}
+              </Dropdown.Toggle>
+              <Dropdown.Menu>
+                {Object.entries(SORT_OPTIONS).map(([key, option]) => (
+                  <Dropdown.Item key={key} eventKey={key} active={key === sortBy}>
+                    {option.label}
+                  </Dropdown.Item>
+                ))}
+              </Dropdown.Menu>
+            </Dropdown>
+          </div>
 
-        <label className="category-select-label">
-          <span>Filtrar:</span>
-          <select
-            value={selectedCategory}
-            onChange={(event) => onSelectCategory(event.target.value)}
-            aria-label="Filtrar por categoría"
-          >
-            {categories.map((category) => (
-              <option key={category.id} value={category.name}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </label>
+          <label className="category-select-label">
+            <span>Filtrar:</span>
+            <select
+              value={selectedCategory}
+              onChange={(event) => onSelectCategory(event.target.value)}
+              aria-label="Filtrar por categoría"
+            >
+              {categories.map((category) => (
+                <option key={category.id} value={category.name}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+          </label>
         </div>
       </div>
 
+      {/* Se muestra uno de cuatro estados: cargando, error, productos o vacío */}
       {loading ? (
         <div className="empty-state" role="status">
           <h3>Cargando catálogo...</h3>
@@ -115,7 +119,7 @@ function CatalogSection({
         </div>
       ) : (
         <div className="empty-state">
-          <span className="empty-state-icon">⌕</span>
+          <span className="empty-state-icon" aria-hidden="true">⌕</span>
           <h3>No encontramos productos</h3>
           <p>
             Prueba con otro nombre o selecciona una categoría diferente.

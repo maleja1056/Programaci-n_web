@@ -1,9 +1,12 @@
+// Página privada /panel: saludo al usuario y resumen del catálogo (productos,
+// categorías y productos sin stock). Solo se llega con sesión (ProtectedRoute).
 import { useEffect, useState } from "react";
 import SiteFooter from "../components/layout/SiteFooter.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";
 import { getPanelSummary } from "../api/auth.js";
 import { useAuth } from "../context/auth-context.js";
 
+// Texto que se muestra para cada rol guardado en la sesión
 const roleLabels = {
   administrador: "Administrador",
   cliente: "Cliente",
@@ -15,6 +18,8 @@ function PanelPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
+  // Pide el resumen al montar la página. "active" evita actualizar el estado
+  // si el usuario sale de la página antes de que llegue la respuesta.
   useEffect(() => {
     let active = true;
 

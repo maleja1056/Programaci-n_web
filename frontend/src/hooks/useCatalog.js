@@ -15,7 +15,8 @@ const categoryVisuals = {
   "Primeros auxilios": { symbol: "+", style: "first-aid" },
 };
 
-// Color y símbolo de la ilustración de cada producto, según su categoría
+// Color y símbolo de la ilustración de cada producto, según el id de su
+// categoría (clases .art-blue, .art-mint... en app.css)
 const productVisuals = {
   1: { color: "blue", symbol: "+" },
   2: { color: "mint", symbol: "◇" },
@@ -51,6 +52,8 @@ function useCatalog() {
         const { productos: productsData, categorias: categoriesData } =
           await getCatalog();
 
+        // Se pasan los campos de la API (en español) a los nombres que usan
+        // los componentes, y se añaden el color y el símbolo de la tarjeta
         const normalizedProducts = productsData.map((product) => {
           const categoryId = Number(product.categoria_id);
           const visual = productVisuals[categoryId] || {
@@ -73,6 +76,7 @@ function useCatalog() {
           };
         });
 
+        // "Todos" va primero: es la opción que quita el filtro
         const normalizedCategories = [
           {
             id: ALL_CATEGORIES,
@@ -114,6 +118,8 @@ function useCatalog() {
     loadCatalog();
   }, []);
 
+  // Productos que se muestran: búsqueda (nombre, descripción o categoría) +
+  // filtro de categoría + orden. useMemo solo recalcula si cambia alguno.
   const filteredProducts = useMemo(() => {
     const query = search.trim().toLocaleLowerCase("es");
 

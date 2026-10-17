@@ -1,4 +1,5 @@
-
+// Conexión a MySQL: carga el .env de la raíz del proyecto y crea un pool de
+// conexiones que reutilizan todas las rutas (pool.query).
 const mysql = require('mysql2/promise');
 const path = require('path');
 require('dotenv').config({

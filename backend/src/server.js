@@ -1,4 +1,6 @@
-
+// Servidor Express de FarmaUIS (fase siguiente; en la Fase I el frontend
+// funciona sin él, ver frontend/src/api/config.js). Registra los middlewares
+// (CORS, JSON y sesión), las rutas /api/* y un manejador final de errores.
 const express = require('express');
 const cors = require('cors');
 const pool = require('./config/db');

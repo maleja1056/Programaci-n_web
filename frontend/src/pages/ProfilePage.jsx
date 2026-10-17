@@ -5,6 +5,7 @@ import SiteFooter from "../components/layout/SiteFooter.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";
 import { useAuth } from "../context/auth-context.js";
 
+// Texto que se muestra para cada rol guardado en la sesión
 const roleLabels = {
   administrador: "Administrador",
   cliente: "Cliente",

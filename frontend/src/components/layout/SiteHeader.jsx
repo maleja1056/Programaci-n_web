@@ -19,7 +19,7 @@ const navSections = [
 ];
 const sectionIds = navSections.map((section) => section.id);
 
-// Rutas privadas que aparecen en el menú cuando hay sesión.
+// Rutas privadas que aparecen en el menú desplegable (Dropdown) cuando hay sesión
 const privateRoutes = [
   { to: "/panel", label: "Panel" },
   { to: "/perfil", label: "Mi perfil" },
@@ -121,6 +121,7 @@ function SiteHeader() {
             </Dropdown.Menu>
           </Dropdown>
         ) : status === "anonymous" ? (
+          // Mientras se comprueba la sesión ("checking") no se muestra ningún botón
           <button
             type="button"
             className="header-action header-login"

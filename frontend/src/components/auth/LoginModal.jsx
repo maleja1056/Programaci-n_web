@@ -1,5 +1,5 @@
 // Modal de inicio de sesión (React-Bootstrap Modal) que se abre desde la
-// cabecera. Si el servidor confirma el acceso, se cierra y lleva al panel.
+// cabecera. Si las credenciales son correctas, se cierra y lleva al panel.
 import Modal from "react-bootstrap/Modal";
 import { useNavigate } from "react-router-dom";
 import LoginForm from "./LoginForm.jsx";
