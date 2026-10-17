@@ -961,6 +961,145 @@ select:focus-visible {
   color: white;
 }
 
+/* Stock de la tarjeta, debajo de la descripción */
+.product-stock {
+  display: block;
+  margin-top: 8px;
+  color: #3f6650;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* Producto agotado: ilustración en gris (la etiqueta conserva su color) */
+.product-card.is-sold-out .product-art {
+  background: #f1f3f1;
+}
+
+.product-card.is-sold-out .product-art > :not(.product-label) {
+  filter: grayscale(1);
+  opacity: 0.6;
+}
+
+.product-card.is-sold-out .product-stock {
+  color: #b23b2e;
+}
+
+.product-label.label-sold-out {
+  border-color: #f2c4bd;
+  background: #fff1ef;
+  color: #a5352a;
+  font-weight: 700;
+}
+
+/* ---------- MODAL DE DETALLE DE PRODUCTO ---------- */
+.product-modal .modal-content {
+  border: 1px solid #e1eee2;
+  border-radius: 18px;
+  box-shadow: 0 18px 45px rgba(23, 78, 59, 0.15);
+}
+
+.product-modal .modal-header {
+  align-items: center;
+  gap: 16px;
+  padding: 24px 26px 10px;
+  border-bottom: 0;
+}
+
+.product-modal .modal-header .btn-close {
+  align-self: flex-start;
+}
+
+/* Cuadro de color con el símbolo de la categoría */
+.product-modal-art {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 16px;
+  font-family: "Manrope", sans-serif;
+  font-size: 24px;
+  font-weight: 800;
+}
+
+.product-modal .modal-title {
+  margin-top: 4px;
+  color: #183c2e;
+  font-family: "Manrope", sans-serif;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.product-modal .modal-body {
+  padding: 8px 26px 26px;
+}
+
+.product-modal-description {
+  margin: 0 0 16px;
+  color: #4d5e54;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.product-modal-details {
+  margin: 0 0 16px;
+  border: 1px solid #e1eee2;
+  border-radius: 12px;
+}
+
+.product-modal-details > div {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 12px;
+  padding: 11px 16px;
+  border-bottom: 1px solid #edf1ee;
+}
+
+.product-modal-details > div:last-child {
+  border-bottom: 0;
+}
+
+.product-modal-details dt {
+  color: #65766d;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.product-modal-details dd {
+  margin: 0;
+  color: #183c2e;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.product-modal-details .product-modal-price {
+  color: #1d6b41;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.product-modal-details .is-sold-out {
+  color: #b23b2e;
+}
+
+/* Aviso inferior: verde claro; con fórmula, ámbar */
+.product-modal-notice {
+  margin: 0;
+  padding: 11px 14px;
+  border: 1px solid #cfe7d6;
+  border-radius: 10px;
+  background: #f1f9f3;
+  color: #2c5440;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.product-modal-notice.notice-formula {
+  border-color: #f0d9a8;
+  background: #fff8e8;
+  color: #6b4b0f;
+}
+
 /* ---------- ESTADO VACÍO: sin resultados o error de carga ---------- */
 .empty-state {
   display: flex;
@@ -1305,6 +1444,11 @@ select:focus-visible {
   .view-product {
     width: 30px;
     height: 30px;
+  }
+
+  .product-modal-details > div {
+    grid-template-columns: 1fr;
+    gap: 2px;
   }
 
   .product-label {

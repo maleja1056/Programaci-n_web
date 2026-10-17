@@ -1,8 +1,9 @@
 // Catálogo local del modo demostración (ver api/config.js).
 // Tiene la misma forma que devuelven GET /api/categorias y GET /api/productos,
 // así useCatalog.js lo adapta igual que los datos del backend.
-// Los seis primeros productos son los de la base de datos del equipo; los dos
-// últimos requieren fórmula para poder mostrar el popover "Con fórmula".
+// Los seis primeros productos son los de la base de datos del equipo; el 7 y
+// el 8 requieren fórmula (para mostrar el popover "Con fórmula") y el 9 está
+// agotado (stock 0) para mostrar ese estado.
 
 export const categorias = [
   {
@@ -109,5 +110,14 @@ export const productos = [
     precio: 14000,
     stock: 18,
     requiere_formula: true,
+  },
+  {
+    id: 9,
+    categoria_id: 4,
+    nombre: "Termómetro digital",
+    descripcion: "Termómetro de lectura rápida con alarma de fiebre",
+    precio: 22000,
+    stock: 0,
+    requiere_formula: false,
   },
 ].map(crearProducto);
