@@ -7,7 +7,7 @@ function ProtectedRoute({ children }) {
   const { status } = useAuth();
   const location = useLocation();
 
-  // Mientras se consulta la sesión al servidor todavía no se decide nada
+  // Mientras se consulta la sesión todavía no se decide nada
   if (status === "checking") {
     return (
       <div className="auth-loading" role="status">

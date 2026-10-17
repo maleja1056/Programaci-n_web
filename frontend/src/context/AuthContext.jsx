@@ -2,8 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import * as authApi from "../api/auth.js";
 import { AuthContext } from "./auth-context.js";
 
-// status: "checking" mientras se consulta /api/auth/me,
-// "authenticated" con sesión válida en el servidor, "anonymous" sin ella.
+// status: "checking" mientras se consulta la sesión (/api/auth/me o, en el
+// modo demostración, sessionStorage), "authenticated" con sesión válida y
+// "anonymous" sin ella.
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null);
   const [status, setStatus] = useState("checking");

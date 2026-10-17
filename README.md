@@ -1,5 +1,21 @@
 # Programacion_web
-## Inicio de sesión (FarmaUIS)
+## Modo demostración (entrega Fase I)
+
+Por defecto el frontend funciona **solo, sin backend ni MySQL**, como pide la Fase I:
+
+```
+cd frontend
+npm install
+npm run dev
+```
+
+Abre `http://localhost:5173` e inicia sesión con usuario **`Admin`** y contraseña **`1234`**.
+
+- El login es simulado en `frontend/src/api/demo.js`: valida las credenciales escritas en el código y guarda la sesión en `sessionStorage` (se mantiene al recargar y termina al cerrar la pestaña). Las rutas privadas siguen protegidas por `ProtectedRoute`.
+- El catálogo sale de `frontend/src/data/productos.js` (mismos campos que devuelve la API).
+- Para usar el backend real, copia `frontend/.env.example` como `frontend/.env` con `VITE_USAR_BACKEND=true` y sigue los pasos de la sección siguiente. La conexión a la base de datos queda para la siguiente fase.
+
+## Inicio de sesión con backend (FarmaUIS)
 
 > Implementación académica: no está pensada para producción.
 
@@ -15,7 +31,8 @@
    Si tu volumen ya existía antes de este cambio, crea las tablas que falten (el script no borra datos):
    `docker compose exec -T mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD"' < database/schema.sql`
 3. Crea el administrador con `cd backend && npm run crear-admin`. Usa `ADMIN_USUARIO`, `ADMIN_CORREO` y `ADMIN_PASSWORD` del `.env` y, si la tabla `usuarios` no tiene la columna `usuario`, la añade.
-4. Inicia el backend (`npm run dev` en `backend/`) y el frontend (`npm run dev` en `frontend/`), y entra en `http://localhost:5173/login`.
+4. Crea `frontend/.env` con `VITE_USAR_BACKEND=true`.
+5. Inicia el backend (`npm run dev` en `backend/`) y el frontend (`npm run dev` en `frontend/`), y entra en `http://localhost:5173/login`.
 
 ## Estructura del frontend
 
@@ -23,9 +40,13 @@
 frontend/src/
 ├── main.jsx                 Punto de entrada: Bootstrap, estilos globales, router y sesión
 ├── App.jsx                  Rutas públicas y privadas
-├── api/                     Comunicación con el backend (fetch a /api)
+├── api/                     Comunicación con el backend (fetch a /api) y modo demostración
+│   ├── config.js            Interruptor VITE_USAR_BACKEND (demo por defecto)
+│   ├── demo.js              Login, sesión, panel y catálogo simulados
+│   ├── auth.js / catalog.js Funciones que usa la app (backend o demo)
+│   └── client.js            Cliente HTTP común
 ├── context/                 Estado global de la sesión (AuthContext)
-├── data/                    Integrantes del equipo, contacto y redes sociales (editar aquí)
+├── data/                    Equipo, contacto y redes, carrusel, preguntas y catálogo de la demo (productos.js)
 ├── hooks/
 │   ├── useActiveSection.js  Sección visible de la portada (enlace activo de la cabecera)
 │   └── useCatalog.js        Carga, búsqueda y filtro del catálogo

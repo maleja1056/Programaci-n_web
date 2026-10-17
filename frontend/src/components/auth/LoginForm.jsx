@@ -1,13 +1,15 @@
 // Formulario de inicio de sesión con React-Bootstrap (Form).
 // Lo usan el modal de la cabecera (LoginModal) y la página /login.
-// La validación final la hace el backend: aquí solo se evita enviar campos
-// vacíos y se muestran los mensajes de error.
+// La validación final la hace el backend o, en el modo demostración, api/demo.js
+// (usuario Admin, contraseña 1234): aquí solo se evita enviar campos vacíos y
+// se muestran los mensajes de error.
 import { useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Spinner from "react-bootstrap/Spinner";
+import { USAR_BACKEND } from "../../api/config.js";
 import { useAuth } from "../../context/auth-context.js";
 
 const validate = (usuario, password) => {
@@ -58,6 +60,14 @@ function LoginForm({ onSuccess, autoFocus = false }) {
 
   return (
     <Form className="auth-form" onSubmit={handleSubmit} noValidate>
+      {/* En el modo demostración se indican las credenciales de prueba */}
+      {!USAR_BACKEND && (
+        <Alert variant="success" className="auth-alert auth-demo-hint">
+          Modo demostración: usuario <strong>Admin</strong> y contraseña{" "}
+          <strong>1234</strong>.
+        </Alert>
+      )}
+
       {alertMessage && (
         <Alert variant="danger" className="auth-alert" role="alert">
           {alertMessage}

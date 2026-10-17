@@ -24,7 +24,7 @@ function PanelPage() {
       })
       .catch((err) => {
         if (!active) return;
-        // La sesión expiró en el servidor: ProtectedRoute redirige al login.
+        // La sesión expiró o se cerró: ProtectedRoute redirige al login.
         if (err.status === 401) handleUnauthorized();
         else setError(err.message);
       })
