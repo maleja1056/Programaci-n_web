@@ -36,12 +36,8 @@ function TeamMemberModal({ member, onHide }) {
           <Modal.Body>
             <dl className="team-details">
               <div>
-                <dt>Módulo</dt>
-                <dd>{member.modulo}</dd>
-              </div>
-              <div>
-                <dt>Código</dt>
-                <dd>{member.codigo}</dd>
+                <dt>Rol</dt>
+                <dd>{member.rol}</dd>
               </div>
               <div>
                 <dt>Programa</dt>

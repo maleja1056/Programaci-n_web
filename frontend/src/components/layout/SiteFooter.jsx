@@ -110,7 +110,7 @@ function SiteFooter() {
                   )}
                   <span className="team-member-text">
                     <strong>{member.nombre}</strong>
-                    <small>{member.modulo}</small>
+                    <small>{member.rol}</small>
                   </span>
                 </button>
               </li>
