@@ -21,6 +21,7 @@ import SiteFooter from "../components/layout/SiteFooter.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";
 import CategoriasTab from "../components/panel/CategoriasTab.jsx";
 import PestanaPendiente from "../components/panel/PestanaPendiente.jsx";
+import ProductosTab from "../components/panel/ProductosTab.jsx";
 import { useAuth } from "../context/auth-context.js";
 
 // Pestañas del panel, en orden. "Componente" es el contenido de cada una;
@@ -36,7 +37,7 @@ const PESTANAS = [
     clave: "productos",
     titulo: "Productos",
     Icono: FaBoxOpen,
-    Componente: () => <PestanaPendiente tabla="productos" />,
+    Componente: ProductosTab,
   },
   {
     clave: "usuarios",
