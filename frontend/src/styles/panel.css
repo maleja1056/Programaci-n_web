@@ -15,6 +15,11 @@
   font-size: 13px;
 }
 
+/* Aviso dentro de una pestaña (por ejemplo, si fallan las categorías) */
+.crud-tab-warning {
+  margin-bottom: 16px;
+}
+
 /* Pestañas (Tabs de React-Bootstrap) con la forma de botones redondeados.
    En pantallas estrechas se desplazan de lado dentro de su barra. */
 .panel-tabs {
