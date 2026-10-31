@@ -19,6 +19,7 @@ import { Navigate, useSearchParams } from "react-router-dom";
 import { getPanelSummary } from "../api/auth.js";
 import SiteFooter from "../components/layout/SiteFooter.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";
+import CategoriasTab from "../components/panel/CategoriasTab.jsx";
 import PestanaPendiente from "../components/panel/PestanaPendiente.jsx";
 import { useAuth } from "../context/auth-context.js";
 
@@ -29,7 +30,7 @@ const PESTANAS = [
     clave: "categorias",
     titulo: "Categorías",
     Icono: FaTags,
-    Componente: () => <PestanaPendiente tabla="categorías" />,
+    Componente: CategoriasTab,
   },
   {
     clave: "productos",
