@@ -34,7 +34,7 @@ const PAREJAS = [
   ['--color-info', FONDOS_CLAROS],
   ['--color-aviso', FONDOS_CLAROS],
   ['--color-peligro', FONDOS_CLAROS],
-  ['--color-sobre-marca', ['--color-marca-fondo', '--color-marca-fondo-hover', '--color-oscuro-fondo']],
+  ['--color-sobre-marca', ['--color-marca-fondo', '--color-marca-fondo-hover', '--color-oscuro-fondo', '--color-peligro', '#861d14']], // #861d14: botón rojo (hover) del panel
   ['--color-sobre-oscuro-suave', ['--color-marca-fondo', '--color-oscuro-fondo']],
 ];
 

@@ -14,6 +14,7 @@ import "./styles/header.css";
 import "./styles/footer.css";
 import "./styles/home.css";
 import "./styles/auth.css";
+import "./styles/panel.css";
 
 function App() {
   return (
