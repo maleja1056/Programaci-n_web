@@ -1,6 +1,6 @@
 // Contenido provisional de una pestaña del panel que todavía no se ha hecho.
-// Cada integrante reemplaza su pestaña en PESTANAS (pages/PanelPage.jsx) por
-// el componente real cuando lo termine.
+// Para activar una pestaña se cambia su componente en PESTANAS
+// (pages/PanelPage.jsx).
 import { FaScrewdriverWrench } from "react-icons/fa6";
 
 function PestanaPendiente({ tabla }) {
