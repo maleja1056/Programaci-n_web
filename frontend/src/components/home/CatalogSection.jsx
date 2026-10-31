@@ -1,9 +1,10 @@
 // Sección "Productos para ti" (#productos): buscador, menú "Ordenar por"
-// (Dropdown), filtro por categoría y cuadrícula de productos, con los estados
+// (Dropdown), filtros por categoría y por tipo de producto ("Mostrar") y
+// cuadrícula de productos, con los estados
 // de carga, error y sin resultados. No guarda estado propio: todo llega por
 // props desde HomePage (hook useCatalog).
 import Dropdown from "react-bootstrap/Dropdown";
-import { SORT_OPTIONS } from "../../hooks/useCatalog.js";
+import { PRODUCT_VIEWS, SORT_OPTIONS } from "../../hooks/useCatalog.js";
 import ProductCard from "./ProductCard.jsx";
 
 function CatalogSection({
@@ -15,6 +16,8 @@ function CatalogSection({
   onSearchChange,
   selectedCategory,
   onSelectCategory,
+  productView,
+  onProductViewChange,
   sortBy,
   onSortChange,
   onResetFilters,
@@ -86,6 +89,21 @@ function CatalogSection({
               {categories.map((category) => (
                 <option key={category.id} value={category.name}>
                   {category.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label className="category-select-label">
+            <span>Mostrar:</span>
+            <select
+              value={productView}
+              onChange={(event) => onProductViewChange(event.target.value)}
+              aria-label="Mostrar por tipo de producto"
+            >
+              {Object.entries(PRODUCT_VIEWS).map(([key, view]) => (
+                <option key={key} value={key}>
+                  {view.label}
                 </option>
               ))}
             </select>

@@ -38,7 +38,7 @@ html {
   display: none;
 }
 
-@media (min-width: 651px) {
+@media (min-width: 901px) {
   /* En escritorio la navegación siempre está visible: el contenedor del
      Collapse no genera caja propia y la cabecera queda igual que antes. */
   .site-header .main-nav-collapse,
@@ -47,14 +47,25 @@ html {
   }
 }
 
-@media (max-width: 650px) {
+/* "Explorar tienda" repite el submenú Productos; en pantallas medianas se
+   oculta para que la barra quepa en una sola fila. */
+@media (max-width: 1100px) {
+  .header-explore {
+    display: none;
+  }
+}
+
+/* Hasta 900px (móvil y tableta) la barra completa no cabe junto al logo y
+   los botones: se usa el botón de menú (hamburguesa). */
+@media (max-width: 900px) {
   /* La navegación se despliega como un panel flotante bajo la cabecera, sin
-     cambiar su altura: así el contenido no salta al abrir o cerrar el menú. */
+     cambiar su altura: así el contenido no salta al abrir o cerrar el menú.
+     El panel ocupa todo el ancho de la ventana. */
   .main-nav-collapse {
     position: absolute;
     top: 100%;
-    right: -16px;
-    left: -16px;
+    right: calc(50% - 50vw);
+    left: calc(50% - 50vw);
     border-bottom: 1px solid #edf1ee;
     background: #fff;
     box-shadow: 0 14px 24px rgba(23, 78, 59, 0.08);
@@ -72,7 +83,7 @@ html {
     border: 1px solid #dce9df;
     border-radius: 9px;
     background: #fff;
-    color: #246545;
+    color: var(--color-marca);
     font-size: 17px;
     transition: background 180ms ease, border-color 180ms ease;
   }
@@ -83,8 +94,137 @@ html {
     background: #f0faf3;
   }
 
+  .main-nav-collapse .main-nav {
+    width: min(100% - 32px, 640px);
+    margin: auto;
+  }
+}
+
+@media (max-width: 650px) {
   /* Con el menú cerrado la cabecera es más baja que en escritorio */
   html {
     scroll-padding-top: 88px;
+  }
+}
+
+/* Pantallas muy estrechas: se oculta el lema para que el logo, "Iniciar
+   sesión" y el botón de menú quepan en una sola fila. */
+@media (max-width: 420px) {
+  .brand-name small {
+    display: none;
+  }
+}
+
+/* ---------- Submenús de la barra (Categorías, Productos, Nosotros) ---------- */
+
+/* El botón que abre el submenú se ve igual que un enlace de la barra */
+.nav-menu-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 0;
+  border-radius: 0;
+  background: none;
+}
+
+.nav-menu-toggle:hover,
+.nav-menu-toggle.show {
+  color: var(--color-marca);
+}
+
+/* Flecha del submenú (la dibuja Bootstrap); gira al abrirse */
+.nav-menu-toggle::after {
+  margin-left: 0;
+  transition: transform 180ms ease;
+}
+
+.nav-menu-toggle.show::after {
+  transform: rotate(180deg);
+}
+
+.nav-menu-list {
+  --bs-dropdown-min-width: 230px;
+  --bs-dropdown-padding-y: 8px;
+  --bs-dropdown-border-color: #d3e2d8;
+  --bs-dropdown-border-radius: 12px;
+  --bs-dropdown-link-color: var(--color-texto);
+  --bs-dropdown-link-hover-color: var(--color-texto);
+  --bs-dropdown-link-hover-bg: #e8f5ec;
+  --bs-dropdown-link-active-color: var(--color-sobre-marca);
+  --bs-dropdown-link-active-bg: var(--color-marca-fondo);
+  --bs-dropdown-header-color: var(--color-texto-suave);
+  --bs-dropdown-item-padding-y: 9px;
+  margin-top: 14px !important;
+  box-shadow: 0 16px 32px rgba(23, 78, 59, 0.14);
+  font-size: 15px;
+}
+
+.nav-menu-list .dropdown-header {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.nav-menu-list .dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-weight: 500;
+}
+
+/* Número de productos de cada categoría */
+.nav-menu-count {
+  min-width: 26px;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: #e8f5ec;
+  color: var(--color-marca);
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.nav-menu-list .dropdown-item:active .nav-menu-count {
+  background: var(--color-sobre-marca);
+}
+
+/* ---------- Menú en móvil y tableta: lista vertical con submenús dentro ---------- */
+@media (max-width: 900px) {
+  .site-header .main-nav {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+  }
+
+  /* Zonas de toque de 48px de alto, una debajo de otra */
+  .site-header .nav-link {
+    display: flex;
+    width: 100%;
+    min-height: 48px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 4px;
+    border-bottom: 1px solid #e3ece6;
+    font-size: 16px;
+  }
+
+  .site-header .nav-link.active {
+    color: var(--color-marca);
+  }
+
+  .site-header .nav-link.active::before {
+    display: none;
+  }
+
+  /* El submenú se abre dentro del panel, empujando las opciones de abajo,
+     en lugar de flotar (se anulan las posiciones que calcula Popper). */
+  .nav-menu-list {
+    position: static !important;
+    inset: auto !important;
+    margin: 4px 0 8px !important;
+    transform: none !important;
+    box-shadow: none;
   }
 }

@@ -1,0 +1,28 @@
+/* Paleta de colores de FarmaUIS (variables CSS).
+   Regla del proyecto: en los demás CSS, la propiedad "color" (color del texto)
+   solo usa estas variables, nunca un código #hex suelto. Así todo el sitio
+   comparte los mismos tonos y el contraste se comprueba en un solo lugar:
+   "npm run check:colores" (scripts/check-colores.cjs) verifica que cada pareja
+   texto/fondo cumpla WCAG AA (4,5:1). Si añades un color, añádelo también a
+   las parejas de ese script.
+   Corrección de la Fase I: el profesor pidió mejorar el contraste de la barra
+   de menús y del sitio en general. Todos los textos quedan por encima de 6:1. */
+
+:root {
+  /* Textos sobre fondos claros (blanco y verdes, azules o naranjas pálidos) */
+  --color-texto: #16362a; /* títulos y texto principal */
+  --color-texto-suave: #46594e; /* descripciones y texto secundario */
+  --color-marca: #176139; /* enlaces, acentos y textos en verde */
+  --color-info: #2b5592; /* azul de ilustraciones */
+  --color-aviso: #7f4a07; /* naranja: avisos y ilustraciones */
+  --color-peligro: #a3261b; /* errores y productos agotados */
+
+  /* Textos sobre fondos oscuros (botones verdes, franja superior, pie) */
+  --color-sobre-marca: #ffffff;
+  --color-sobre-oscuro-suave: #cfeedd;
+
+  /* Fondos de los botones verdes (con texto --color-sobre-marca) */
+  --color-marca-fondo: #1b6e43;
+  --color-marca-fondo-hover: #145a37;
+  --color-oscuro-fondo: #174e3b; /* franja de anuncio */
+}

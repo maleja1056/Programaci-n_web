@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "lint": "oxlint",
+    "lint": "oxlint && node scripts/check-colores.cjs",
+    "check:colores": "node scripts/check-colores.cjs",
     "preview": "vite preview"
   },
   "dependencies": {

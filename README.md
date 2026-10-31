@@ -44,6 +44,14 @@ Para mostrar el frontend sin backend ni MySQL, crea `frontend/.env` con `VITE_MO
 - el login es simulado (`Admin` / `1234`, en `frontend/src/api/demo.js`);
 - el catálogo sale de `frontend/src/data/productos.js`.
 
+## Antes de subir cambios del frontend (correcciones de la Fase I)
+
+En la Fase I el profesor bajó la nota por tres cosas. Revísalas antes de abrir un PR:
+
+1. **Submenús:** las secciones con contenido agrupable usan un dropdown en la barra, como Categorías, Productos y Nosotros en `SiteHeader.jsx`.
+2. **Contraste:** el color del texto solo se escribe con las variables de `src/styles/tokens.css` (por ejemplo `color: var(--color-texto-suave)`), nunca con un `#hex` suelto. `npm run lint` ejecuta también `npm run check:colores`, que falla si algún color de texto no usa la paleta o si una pareja texto/fondo no llega al contraste AA (4,5:1).
+3. **Simplicidad:** menos elementos y flujos cortos. Prueba en móvil (360–390 px), tableta (820 px) y PC antes de dar algo por terminado.
+
 ## Estructura del frontend
 
 ```
@@ -59,6 +67,7 @@ frontend/src/
 ├── data/                    Equipo, contacto y redes, carrusel, preguntas y catálogo de la demo (productos.js)
 ├── hooks/
 │   ├── useActiveSection.js  Sección visible de la portada (enlace activo de la cabecera)
+│   ├── useCategoryMenu.js   Categorías del submenú de la cabecera
 │   └── useCatalog.js        Carga, búsqueda y filtro del catálogo
 ├── utils/
 │   └── format.js            Formato de precios

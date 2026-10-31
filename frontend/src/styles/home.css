@@ -36,12 +36,12 @@
 }
 
 .promo-caption .section-kicker {
-  color: #1d6b43;
+  color: var(--color-marca);
 }
 
 .promo-caption h3 {
   margin: 8px 0;
-  color: #183c2e;
+  color: var(--color-texto);
   font-family: "Manrope", sans-serif;
   font-size: 28px;
   line-height: 1.2;
@@ -49,7 +49,7 @@
 
 .promo-caption p {
   margin: 0 0 18px;
-  color: #3d5547;
+  color: var(--color-texto-suave);
   font-size: 14px;
 }
 
@@ -91,19 +91,19 @@
   place-items: center;
   border-radius: 14px;
   background: #dff2e2;
-  color: #1d6b43;
+  color: var(--color-marca);
   font-size: 22px;
 }
 
 .feature-card h3 {
   margin: 0 0 6px;
-  color: #183c2e;
+  color: var(--color-texto);
   font-size: 17px;
 }
 
 .feature-card p {
   margin: 0;
-  color: #4a5f53;
+  color: var(--color-texto-suave);
   font-size: 13px;
   line-height: 1.55;
 }
@@ -118,12 +118,12 @@
 
 .about-text h2 {
   margin: 8px 0 14px;
-  color: #183c2e;
+  color: var(--color-texto);
   font-family: "Manrope", sans-serif;
 }
 
 .about-text p {
-  color: #3d5547;
+  color: var(--color-texto-suave);
   font-size: 14px;
   line-height: 1.7;
 }
@@ -132,7 +132,7 @@
 .drop-cap::first-letter {
   float: left;
   margin: 4px 10px 0 0;
-  color: #1d6b43;
+  color: var(--color-marca);
   font-family: "Manrope", sans-serif;
   font-size: 58px;
   font-weight: 800;
@@ -147,12 +147,12 @@
   border: 1px solid #dce9df;
   border-radius: 12px;
   background: #f0faf3;
-  color: #3d5547;
+  color: var(--color-texto-suave);
   font-size: 13px;
 }
 
 .audio-card strong {
-  color: #183c2e;
+  color: var(--color-texto);
 }
 
 .audio-card audio {
@@ -162,7 +162,7 @@
 .audio-card small,
 .video-card small {
   display: block;
-  color: #566b5e;
+  color: var(--color-texto-suave);
   font-size: 11px;
 }
 
@@ -179,7 +179,7 @@
 
 .video-card figcaption {
   margin-top: 10px;
-  color: #3d5547;
+  color: var(--color-texto-suave);
   font-size: 13px;
 }
 
@@ -197,7 +197,7 @@
 }
 
 .faq-accordion .accordion-body {
-  color: #3d5547;
+  color: var(--color-texto-suave);
   font-size: 14px;
 }
 
@@ -210,7 +210,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  color: #566b5e;
+  color: var(--color-texto-suave);
   font-size: 12px;
 }
 
@@ -220,7 +220,7 @@
   border: 1px solid #e1eae2;
   border-radius: 9px;
   background: white;
-  color: #294a35;
+  color: var(--color-texto);
   font-size: 12px;
   cursor: pointer;
 }

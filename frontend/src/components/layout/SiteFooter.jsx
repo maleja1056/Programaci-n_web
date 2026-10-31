@@ -66,8 +66,8 @@ function SiteFooter() {
           </ul>
         </nav>
 
-        {/* Datos de contacto */}
-        <div className="footer-column">
+        {/* Datos de contacto (#contacto: destino del submenú Nosotros > Contacto) */}
+        <div className="footer-column" id="contacto">
           <h2 className="footer-title">Contáctanos</h2>
           <ul className="footer-contact">
             <li>

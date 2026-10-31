@@ -1,7 +1,7 @@
 // Página pública de inicio (/). Solo organiza las secciones de la portada;
 // cada sección vive en su propio componente dentro de components/home y la
 // lógica del catálogo está en hooks/useCatalog.js.
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import AboutSection from "../components/home/AboutSection.jsx";
 import AnnouncementBar from "../components/home/AnnouncementBar.jsx";
@@ -18,19 +18,18 @@ import useCatalog from "../hooks/useCatalog.js";
 
 function HomePage() {
   const catalog = useCatalog();
-  const { hash } = useLocation();
-  const scrolledToHash = useRef(false);
+  const { hash, key } = useLocation();
 
-  // Al llegar desde otra página con un ancla (por ejemplo /#preguntas desde
-  // el pie de /panel), el navegador intenta saltar a la sección antes de que
-  // React la dibuje y se queda arriba. Por eso, cuando el catálogo termina de
-  // cargar (la altura de la página ya es la final), se hace el salto una vez.
+  // Salto a la sección del ancla (#productos, #preguntas...) en cada
+  // navegación que la incluya: al llegar desde otra página y al elegir una
+  // opción de los submenús de la cabecera (/?categoria=...#productos) estando
+  // ya en la portada. Se espera a que cargue el catálogo, porque antes la
+  // página aún no tiene su altura final y el salto quedaría corto.
   // scroll-padding-top (header.css) deja la sección debajo de la cabecera fija.
   useEffect(() => {
-    if (catalog.loading || !hash || scrolledToHash.current) return;
-    scrolledToHash.current = true;
+    if (catalog.loading || !hash) return;
     document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView();
-  }, [catalog.loading, hash]);
+  }, [catalog.loading, hash, key]);
 
   return (
     <div className="app-shell">
@@ -57,6 +56,8 @@ function HomePage() {
           onSearchChange={catalog.setSearch}
           selectedCategory={catalog.selectedCategory}
           onSelectCategory={catalog.setSelectedCategory}
+          productView={catalog.productView}
+          onProductViewChange={catalog.setProductView}
           sortBy={catalog.sortBy}
           onSortChange={catalog.setSortBy}
           onResetFilters={catalog.resetFilters}

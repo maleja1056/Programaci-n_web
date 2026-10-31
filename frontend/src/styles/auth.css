@@ -25,13 +25,13 @@ button.header-action:disabled {
 /* Botón "Iniciar sesión" (abre el modal) */
 button.header-login {
   border-color: #208551;
-  background: #208551;
-  color: #fff;
+  background: var(--color-marca-fondo);
+  color: var(--color-sobre-marca);
 }
 
 button.header-login:hover {
   border-color: #166d40;
-  background: #166d40;
+  background: var(--color-marca-fondo-hover);
 }
 
 /* Botón del menú de rutas privadas (Dropdown.Toggle) */
@@ -39,7 +39,7 @@ button.header-login:hover {
   gap: 8px;
   border-color: #dce9df;
   background: #fff;
-  color: #246545;
+  color: var(--color-marca);
 }
 
 .header-user.dropdown-toggle:hover,
@@ -47,7 +47,7 @@ button.header-login:hover {
 .header-user.dropdown-toggle.show {
   border-color: #b9dfc5;
   background: #f0faf3;
-  color: #246545;
+  color: var(--color-marca);
 }
 
 .header-user-avatar {
@@ -56,8 +56,8 @@ button.header-login:hover {
   height: 24px;
   place-items: center;
   border-radius: 50%;
-  background: #208551;
-  color: #fff;
+  background: var(--color-marca-fondo);
+  color: var(--color-sobre-marca);
   font-size: 11px;
   line-height: 1;
 }
@@ -91,7 +91,7 @@ button.header-login:hover {
 .header-error {
   width: 100%;
   margin: 0;
-  color: #b42318;
+  color: var(--color-peligro);
   font-size: 11px;
   text-align: right;
 }
@@ -112,7 +112,7 @@ button.header-login:hover {
 
 .login-modal .modal-title {
   margin-top: 6px;
-  color: #183c2e;
+  color: var(--color-texto);
   font-family: "Manrope", sans-serif;
   font-size: 26px;
   font-weight: 800;
@@ -157,7 +157,7 @@ button.header-login:hover {
   margin-bottom: 18px;
   border-radius: 14px;
   background: #e1f5e7;
-  color: #16834f;
+  color: var(--color-marca);
   font-family: "Manrope", sans-serif;
   font-size: 34px;
   font-weight: 700;
@@ -167,7 +167,7 @@ button.header-login:hover {
 .auth-card h1,
 .panel-heading h1 {
   margin: 8px 0 6px;
-  color: #183c2e;
+  color: var(--color-texto);
   font-family: "Manrope", sans-serif;
   font-size: 28px;
   letter-spacing: -0.8px;
@@ -175,7 +175,7 @@ button.header-login:hover {
 
 .auth-subtitle {
   margin: 0 0 20px;
-  color: #5c6a61;
+  color: var(--color-texto-suave);
   font-size: 13px;
   line-height: 1.6;
 }
@@ -186,7 +186,7 @@ button.header-login:hover {
   border: 1px solid #cfe4d2;
   border-radius: 10px;
   background: #f0faf3;
-  color: #246545;
+  color: var(--color-marca);
   font-size: 12px;
   line-height: 1.5;
 }
@@ -194,12 +194,12 @@ button.header-login:hover {
 .auth-back {
   align-self: center;
   margin-top: 20px;
-  color: #65766d;
+  color: var(--color-texto-suave);
   font-size: 12px;
 }
 
 .auth-back:hover {
-  color: #16834f;
+  color: var(--color-marca);
 }
 
 /* ---------- Formulario (React-Bootstrap Form) ---------- */
@@ -215,12 +215,12 @@ button.header-login:hover {
 .auth-form .auth-demo-hint {
   border-color: #b9dfc5;
   background-color: #e5f4e7;
-  color: #1d5a3a;
+  color: var(--color-texto);
 }
 
 .auth-form .form-label {
   margin-bottom: 6px;
-  color: #294c36;
+  color: var(--color-texto);
   font-size: 12px;
   font-weight: 700;
 }
@@ -229,7 +229,7 @@ button.header-login:hover {
   min-height: 44px;
   border-color: #dce9df;
   background-color: #fbfdfb;
-  color: #19372d;
+  color: var(--color-texto);
   font-size: 14px;
 }
 
@@ -292,7 +292,7 @@ button.header-login:hover {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  color: #65766d;
+  color: var(--color-texto-suave);
   font-size: 13px;
 }
 
@@ -326,7 +326,7 @@ button.header-login:hover {
 
 .panel-heading p {
   margin: 0;
-  color: #5c6a61;
+  color: var(--color-texto-suave);
   font-size: 13px;
 }
 
@@ -347,13 +347,13 @@ button.header-login:hover {
 }
 
 .panel-stat span {
-  color: #65766d;
+  color: var(--color-texto-suave);
   font-size: 12px;
   font-weight: 600;
 }
 
 .panel-stat strong {
-  color: #183c2e;
+  color: var(--color-texto);
   font-family: "Manrope", sans-serif;
   font-size: 32px;
 }
@@ -379,14 +379,14 @@ button.header-login:hover {
 }
 
 .profile-row dt {
-  color: #65766d;
+  color: var(--color-texto-suave);
   font-size: 12px;
   font-weight: 600;
 }
 
 .profile-row dd {
   margin: 0;
-  color: #183c2e;
+  color: var(--color-texto);
   font-size: 14px;
   font-weight: 600;
   word-break: break-word;
@@ -400,7 +400,7 @@ button.header-login:hover {
 
 .not-found h1 {
   margin: 12px 0 5px;
-  color: #294c36;
+  color: var(--color-texto);
   font-family: "Manrope", sans-serif;
   font-size: 22px;
 }
