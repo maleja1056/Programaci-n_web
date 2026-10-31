@@ -241,9 +241,10 @@ function CrudTable({
   const { handleUnauthorized } = useAuth();
   const idBase = useId();
 
-  const [filas, setFilas] = useState([]);
-  const [cargando, setCargando] = useState(true);
-  const [errorCarga, setErrorCarga] = useState("");
+  // Última respuesta recibida y la consulta a la que corresponde. Mientras la
+  // consulta actual sea distinta, la tabla está "cargando" (y sigue mostrando
+  // las filas anteriores para que no parpadee).
+  const [resultado, setResultado] = useState({ consulta: null, filas: [], error: "" });
   const [buscar, setBuscar] = useState("");
   const [buscarAplicado, setBuscarAplicado] = useState("");
   const [verInactivas, setVerInactivas] = useState(false);
@@ -278,34 +279,38 @@ function CrudTable({
     return () => clearTimeout(espera);
   }, [buscar]);
 
-  // Los filtros se comparan como texto para no recargar en cada render
-  const filtrosClave = JSON.stringify(filtros || {});
+  // Consulta actual como texto: cambia con el buscador, los filtros, el
+  // interruptor de cancelados y cada vez que se pide recargar.
+  const consulta = JSON.stringify({
+    ...(filtros || {}),
+    buscar: buscarAplicado,
+    todos: campoActivo && verInactivas ? true : undefined,
+    recargar,
+  });
 
   useEffect(() => {
     let activo = true;
-    setCargando(true);
-    setErrorCarga("");
+    const { recargar: _ignorar, ...parametros } = JSON.parse(consulta);
 
     api
-      .listar({
-        ...JSON.parse(filtrosClave),
-        buscar: buscarAplicado,
-        todos: campoActivo && verInactivas ? true : undefined,
-      })
-      .then((datos) => {
-        if (activo) setFilas(datos);
+      .listar(parametros)
+      .then((filas) => {
+        if (activo) setResultado({ consulta, filas, error: "" });
       })
       .catch((error) => {
-        if (activo) manejarError(error, setErrorCarga);
-      })
-      .finally(() => {
-        if (activo) setCargando(false);
+        if (!activo) return;
+        manejarError(error, (mensaje) =>
+          setResultado((anterior) => ({ ...anterior, consulta, error: mensaje }))
+        );
       });
 
     return () => {
       activo = false;
     };
-  }, [api, buscarAplicado, verInactivas, campoActivo, filtrosClave, recargar, manejarError]);
+  }, [api, consulta, manejarError]);
+
+  const { filas, error: errorCarga } = resultado;
+  const cargando = resultado.consulta !== consulta;
 
   // Sin "Mostrar canceladas", la API ya excluye las inactivas; en las tablas
   // que las devuelven siempre (usuarios) se filtran aquí.
