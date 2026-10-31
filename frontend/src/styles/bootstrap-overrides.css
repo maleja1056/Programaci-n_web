@@ -6,18 +6,18 @@
 :root {
   /* Tipografía y colores base del sitio */
   --bs-body-font-family: "DM Sans", sans-serif;
-  --bs-body-color: #19372d;
+  --bs-body-color: var(--color-texto);
   --bs-body-bg: #fff;
   --bs-body-line-height: normal;
   --bs-heading-color: inherit;
 
   /* Color principal: verde FarmaUIS */
-  --bs-primary: #208551;
-  --bs-primary-rgb: 32, 133, 81;
-  --bs-link-color: #16834f;
-  --bs-link-color-rgb: 22, 131, 79;
-  --bs-link-hover-color: #166d40;
-  --bs-link-hover-color-rgb: 22, 109, 64;
+  --bs-primary: #1b6e43; /* = --color-marca-fondo */
+  --bs-primary-rgb: 27, 110, 67;
+  --bs-link-color: #176139; /* = --color-marca */
+  --bs-link-color-rgb: 23, 97, 57;
+  --bs-link-hover-color: #145a37;
+  --bs-link-hover-color-rgb: 20, 90, 55;
   --bs-border-color: #dce9df;
   --bs-border-radius: 10px;
   --bs-focus-ring-color: rgba(139, 217, 174, 0.45);

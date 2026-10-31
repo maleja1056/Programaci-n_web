@@ -3,7 +3,12 @@
 // los adapta para la vista y aplica la búsqueda, el filtro por categoría y el orden.
 // Lo usa HomePage para compartir el estado entre CategoriesSection y
 // CatalogSection.
+// La categoría y el tipo de producto elegidos se guardan en la URL
+// (/?categoria=Medicamentos&ver=con-formula). Así los submenús de la cabecera
+// pueden abrir el catálogo ya filtrado desde cualquier página, y el enlace se
+// puede compartir o recargar sin perder el filtro.
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { getCatalog } from "../api/catalog.js";
 import { USAR_BACKEND } from "../api/config.js";
 
@@ -41,6 +46,24 @@ const productLabel = (soldOut, requiereFormula) => {
   return requiereFormula ? "Con fórmula" : "Disponible";
 };
 
+// Tipos de producto del submenú "Productos" de la cabecera y del filtro
+// "Mostrar" del catálogo (clave en la URL -> texto y condición)
+export const PRODUCT_VIEWS = {
+  todos: { label: "Todos los productos", matches: () => true },
+  "sin-formula": {
+    label: "Venta libre (sin fórmula)",
+    matches: (product) => !product.requiereFormula,
+  },
+  "con-formula": {
+    label: "Con fórmula médica",
+    matches: (product) => product.requiereFormula,
+  },
+  disponibles: {
+    label: "Disponibles ahora",
+    matches: (product) => !product.soldOut,
+  },
+};
+
 // Opciones del menú "Ordenar por" (clave -> texto y función de comparación)
 export const SORT_OPTIONS = {
   relevancia: { label: "Relevancia", compare: null },
@@ -53,10 +76,33 @@ function useCatalog() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [search, setSearch] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(ALL_CATEGORIES);
+  const [searchParams, setSearchParams] = useSearchParams();
   const [sortBy, setSortBy] = useState("relevancia");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // Filtros leídos de la URL; un valor desconocido se trata como "sin filtro"
+  const selectedCategory = searchParams.get("categoria") || ALL_CATEGORIES;
+  const viewParam = searchParams.get("ver");
+  const productView = PRODUCT_VIEWS[viewParam] ? viewParam : "todos";
+
+  // Cambia un parámetro de la URL sin añadir una entrada al historial; el
+  // valor por defecto se quita para que la URL quede limpia.
+  const updateParam = (key, value, defaultValue) => {
+    setSearchParams(
+      (current) => {
+        const next = new URLSearchParams(current);
+        if (!value || value === defaultValue) next.delete(key);
+        else next.set(key, value);
+        return next;
+      },
+      { replace: true }
+    );
+  };
+
+  const setSelectedCategory = (category) =>
+    updateParam("categoria", category, ALL_CATEGORIES);
+  const setProductView = (view) => updateParam("ver", view, "todos");
 
   useEffect(() => {
     const loadCatalog = async () => {
@@ -138,7 +184,7 @@ function useCatalog() {
   }, []);
 
   // Productos que se muestran: búsqueda (nombre, descripción o categoría,
-  // sin importar mayúsculas ni tildes) + filtro de categoría + orden.
+  // sin importar mayúsculas ni tildes) + categoría + tipo de producto + orden.
   // useMemo solo recalcula si cambia alguno.
   const filteredProducts = useMemo(() => {
     const query = normalizeText(search.trim());
@@ -151,18 +197,20 @@ function useCatalog() {
         selectedCategory === ALL_CATEGORIES ||
         product.category === selectedCategory;
 
-      return matchesSearch && matchesCategory;
+      const matchesView = PRODUCT_VIEWS[productView].matches(product);
+
+      return matchesSearch && matchesCategory && matchesView;
     });
 
     // sort ordena una copia para no alterar el orden original
     const compare = SORT_OPTIONS[sortBy].compare;
     return compare ? [...filtered].sort(compare) : filtered;
-  }, [products, search, selectedCategory, sortBy]);
+  }, [products, search, selectedCategory, productView, sortBy]);
 
   // Quita la búsqueda y el filtro (botón "Ver todos los productos")
   const resetFilters = () => {
     setSearch("");
-    setSelectedCategory(ALL_CATEGORIES);
+    setSearchParams({}, { replace: true });
     setSortBy("relevancia");
   };
 
@@ -175,6 +223,8 @@ function useCatalog() {
     setSearch,
     selectedCategory,
     setSelectedCategory,
+    productView,
+    setProductView,
     sortBy,
     setSortBy,
     resetFilters,

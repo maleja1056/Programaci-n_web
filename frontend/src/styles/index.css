@@ -29,6 +29,6 @@ svg {
 }
 
 ::selection {
-  color: #174e3b;
+  color: var(--color-texto);
   background: #d9f1df;
 }
