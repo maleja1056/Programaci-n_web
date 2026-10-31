@@ -36,7 +36,41 @@ cliente | cliente123  // cliente de prueba (cliente@farmauis.local), tiene un pe
 - El backend valida el usuario (o el correo) y la contraseña contra la tabla `usuarios`. Las contraseñas se guardan con hash bcrypt.
 - La sesión se guarda en el servidor con `express-session` y viaja en la cookie `farmauis.sid` (`HttpOnly`, `SameSite=Lax`). Las sesiones están en memoria, así que se pierden al reiniciar el backend.
 - Rutas: `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout` y la ruta privada `GET /api/panel/resumen`, que responde 401 sin sesión.
+- `backend/src/middleware/requireAuth.js` exige sesión (401) y `requireAdmin.js` exige además el rol `administrador` (403).
 - En el frontend, el botón «Iniciar sesión» de la cabecera abre un modal de React-Bootstrap (`LoginModal` + `LoginForm` con `react-bootstrap/Form`). Con la sesión iniciada aparece el menú de rutas privadas, `/panel` y `/perfil`, protegidas con `ProtectedRoute`.
+
+### API REST (CRUD de las 5 tablas)
+
+Cada tabla tiene su `express.Router` en `backend/src/routes/` con el mismo patrón:
+
+| Método | Ruta | Qué hace |
+|---|---|---|
+| `GET` | `/api/<tabla>` | Lista. `?buscar=` filtra por texto |
+| `GET` | `/api/<tabla>/:id` | Un registro |
+| `POST` | `/api/<tabla>` | Inserta (responde 201) |
+| `PUT` | `/api/<tabla>/:id` | Modifica solo los campos enviados |
+| `DELETE` | `/api/<tabla>/:id` | Cancela (ver abajo) |
+
+| Tabla | Ruta | Quién puede | Cancelar (`DELETE`) |
+|---|---|---|---|
+| categorias | `/api/categorias` | Leer: todos. Escribir: administrador | `activa = FALSE`; `?definitivo=true` la borra |
+| productos | `/api/productos` (`?categoria=<id>`) | Leer: todos. Escribir: administrador | `activo = FALSE`; `?definitivo=true` lo borra si no está en ningún pedido |
+| usuarios | `/api/usuarios` (`?rol=`) | Administrador. `POST /api/usuarios/registro` es público y siempre crea un cliente | `activo = FALSE` (ya no puede iniciar sesión); `?definitivo=true` lo borra si no tiene pedidos |
+| pedidos | `/api/pedidos` (`?estado=`, `?usuario=<id>`) | Con sesión. El cliente solo ve y cancela los suyos; el administrador, todos | `estado = 'cancelado'` y se devuelve el stock |
+| detalle_pedidos | `/api/detalle-pedidos` (`?pedido=<id>`) | Con sesión, sobre pedidos que se puedan modificar | Quita la línea y devuelve el stock |
+
+Detalles:
+- `?todos=true` en categorías y productos incluye los inactivos, solo para el administrador. Así el panel puede reactivarlos con `PUT { "activa": true }` o `{ "activo": true }`.
+- `POST /api/pedidos` recibe `{ direccion_entrega, lineas: [{ producto_id, cantidad }] }`. Crea el pedido y sus líneas en una transacción y toma el precio de cada producto. Si no hay stock suficiente responde 409 y no guarda nada.
+- El cliente modifica sus pedidos solo mientras están en `pendiente`. El administrador puede cambiar las líneas hasta `preparando`, y además cambia el `estado` con `PUT`.
+- Las contraseñas se envían en `password` y se guardan con bcrypt. Ninguna respuesta incluye `password_hash`.
+- **Aporte del equipo:** el middleware `backend/src/middleware/validarCorreo.js` revisa el correo con una expresión regular antes de guardar un usuario (`POST /api/usuarios`, `POST /api/usuarios/registro` y `PUT /api/usuarios/:id`). Si no es válido, responde 400.
+- Errores: siempre `{ "success": false, "message": "..." }` con el código adecuado:
+  - 400: datos inválidos;
+  - 401: sin sesión;
+  - 403: sin permiso;
+  - 404: no existe;
+  - 409: repetido, sin stock o estado que no lo permite.
 
 ### Modo demostración (Fase I)
 
