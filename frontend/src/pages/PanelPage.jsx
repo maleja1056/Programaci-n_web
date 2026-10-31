@@ -1,46 +1,131 @@
-// Página privada /panel: saludo al usuario y resumen del catálogo (productos,
-// categorías y productos sin stock). Solo se llega con sesión (ProtectedRoute).
-import { useEffect, useState } from "react";
+// Página privada /panel: panel de administración de FarmaUIS.
+// Solo para el rol "administrador": un cliente que llegue aquí (por ejemplo,
+// justo después de iniciar sesión) se envía a /perfil.
+// Arriba muestra el resumen del catálogo (productos, categorías y productos
+// sin stock) y debajo una pestaña (Tabs de React-Bootstrap) por tabla de la
+// base de datos, donde se listan, buscan, crean, editan y cancelan registros.
+// La pestaña abierta se guarda en la URL (/panel?pestana=productos), así se
+// conserva al recargar la página.
+import { useCallback, useEffect, useState } from "react";
+import Tab from "react-bootstrap/Tab";
+import Tabs from "react-bootstrap/Tabs";
+import {
+  FaBoxOpen,
+  FaReceipt,
+  FaTags,
+  FaUsers,
+} from "react-icons/fa6";
+import { Navigate, useSearchParams } from "react-router-dom";
+import { getPanelSummary } from "../api/auth.js";
 import SiteFooter from "../components/layout/SiteFooter.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";
-import { getPanelSummary } from "../api/auth.js";
+import PestanaPendiente from "../components/panel/PestanaPendiente.jsx";
 import { useAuth } from "../context/auth-context.js";
 
-// Texto que se muestra para cada rol guardado en la sesión
-const roleLabels = {
-  administrador: "Administrador",
-  cliente: "Cliente",
-};
+// Pestañas del panel, en orden. "Componente" es el contenido de cada una;
+// las que aún no están hechas muestran un aviso (PestanaPendiente).
+const PESTANAS = [
+  {
+    clave: "categorias",
+    titulo: "Categorías",
+    Icono: FaTags,
+    Componente: () => <PestanaPendiente tabla="categorías" />,
+  },
+  {
+    clave: "productos",
+    titulo: "Productos",
+    Icono: FaBoxOpen,
+    Componente: () => <PestanaPendiente tabla="productos" />,
+  },
+  {
+    clave: "usuarios",
+    titulo: "Usuarios",
+    Icono: FaUsers,
+    Componente: () => <PestanaPendiente tabla="usuarios" />,
+  },
+  {
+    clave: "pedidos",
+    titulo: "Pedidos",
+    Icono: FaReceipt,
+    Componente: () => <PestanaPendiente tabla="pedidos" />,
+  },
+];
 
-function PanelPage() {
-  const { user, handleUnauthorized } = useAuth();
-  const [summary, setSummary] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
+const esPestana = (clave) => PESTANAS.some((pestana) => pestana.clave === clave);
 
-  // Pide el resumen al montar la página. "active" evita actualizar el estado
-  // si el usuario sale de la página antes de que llegue la respuesta.
+// Resumen del catálogo. "version" cambia cuando una pestaña guarda algo, y
+// entonces se vuelve a pedir para que los totales estén al día.
+function ResumenPanel({ version }) {
+  const { handleUnauthorized } = useAuth();
+  const [estado, setEstado] = useState({ version: null, resumen: null, error: "" });
+
   useEffect(() => {
-    let active = true;
+    let activo = true;
 
     getPanelSummary()
       .then((data) => {
-        if (active) setSummary(data.resumen);
+        if (activo) setEstado({ version, resumen: data.resumen, error: "" });
       })
       .catch((err) => {
-        if (!active) return;
-        // La sesión expiró o se cerró: ProtectedRoute redirige al login.
+        if (!activo) return;
+        // La sesión expiró o se cerró: ProtectedRoute redirige al login
         if (err.status === 401) handleUnauthorized();
-        else setError(err.message);
-      })
-      .finally(() => {
-        if (active) setLoading(false);
+        else setEstado({ version, resumen: null, error: err.message });
       });
 
     return () => {
-      active = false;
+      activo = false;
     };
-  }, [handleUnauthorized]);
+  }, [version, handleUnauthorized]);
+
+  const { resumen, error } = estado;
+
+  if (error) {
+    return (
+      <p className="panel-summary-error" role="alert">
+        No se pudo cargar el resumen: {error}
+      </p>
+    );
+  }
+
+  const tarjetas = [
+    { texto: "Productos activos", valor: resumen?.productos },
+    { texto: "Categorías activas", valor: resumen?.categorias },
+    { texto: "Productos sin stock", valor: resumen?.productosSinStock },
+  ];
+
+  return (
+    <div className="panel-grid" aria-busy={!resumen}>
+      {tarjetas.map((tarjeta) => (
+        <article className="panel-stat" key={tarjeta.texto}>
+          <span>{tarjeta.texto}</span>
+          <strong>{tarjeta.valor ?? "—"}</strong>
+        </article>
+      ))}
+    </div>
+  );
+}
+
+function PanelPage() {
+  const { user } = useAuth();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [versionResumen, setVersionResumen] = useState(0);
+
+  // Cada pestaña llama a esto después de guardar para actualizar el resumen
+  const alGuardar = useCallback(() => setVersionResumen((n) => n + 1), []);
+
+  // Los clientes no administran la tienda: su página es /perfil
+  if (user.rol !== "administrador") {
+    return <Navigate to="/perfil" replace />;
+  }
+
+  const pedida = searchParams.get("pestana");
+  const activa = esPestana(pedida) ? pedida : PESTANAS[0].clave;
+
+  const cambiarPestana = (clave) =>
+    setSearchParams(clave === PESTANAS[0].clave ? {} : { pestana: clave }, {
+      replace: true,
+    });
 
   return (
     <div className="app-shell">
@@ -48,40 +133,38 @@ function PanelPage() {
 
       <main className="panel-page">
         <div className="panel-heading">
-          <span className="section-kicker">ÁREA PRIVADA</span>
+          <span className="section-kicker">PANEL DE ADMINISTRACIÓN</span>
           <h1>Hola, {user.nombre}</h1>
           <p>
-            Sesión iniciada como <strong>{user.correo}</strong> ·{" "}
-            {roleLabels[user.rol] || user.rol}
+            Administra el catálogo, los usuarios y los pedidos de FarmaUIS.
+            Sesión iniciada como <strong>{user.correo}</strong>.
           </p>
         </div>
 
-        {loading ? (
-          <div className="auth-loading" role="status">
-            <span className="auth-spinner" aria-hidden="true" />
-            Cargando resumen...
-          </div>
-        ) : error ? (
-          <div className="empty-state" role="alert">
-            <h3>No se pudo cargar el resumen</h3>
-            <p>{error}</p>
-          </div>
-        ) : (
-          <div className="panel-grid">
-            <article className="panel-stat">
-              <span>Productos activos</span>
-              <strong>{summary.productos}</strong>
-            </article>
-            <article className="panel-stat">
-              <span>Categorías activas</span>
-              <strong>{summary.categorias}</strong>
-            </article>
-            <article className="panel-stat">
-              <span>Productos sin stock</span>
-              <strong>{summary.productosSinStock}</strong>
-            </article>
-          </div>
-        )}
+        <ResumenPanel version={versionResumen} />
+
+        {/* mountOnEnter: cada pestaña pide sus datos la primera vez que se abre */}
+        <Tabs
+          id="panel-pestanas"
+          className="panel-tabs"
+          activeKey={activa}
+          onSelect={cambiarPestana}
+          mountOnEnter
+        >
+          {PESTANAS.map(({ clave, titulo, Icono, Componente }) => (
+            <Tab
+              key={clave}
+              eventKey={clave}
+              title={
+                <span className="panel-tab-title">
+                  <Icono aria-hidden="true" /> {titulo}
+                </span>
+              }
+            >
+              <Componente alGuardar={alGuardar} />
+            </Tab>
+          ))}
+        </Tabs>
       </main>
 
       <SiteFooter />

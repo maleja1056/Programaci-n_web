@@ -27,9 +27,10 @@ const homeLink = (sectionId, params = {}) => {
   return `/${query ? `?${query}` : ""}#${sectionId}`;
 };
 
-// Rutas privadas que aparecen en el menú desplegable (Dropdown) cuando hay sesión
+// Rutas privadas que aparecen en el menú desplegable (Dropdown) cuando hay
+// sesión. "soloAdmin": solo se muestran al rol administrador.
 const privateRoutes = [
-  { to: "/panel", label: "Panel" },
+  { to: "/panel", label: "Panel de administración", soloAdmin: true },
   { to: "/perfil", label: "Mi perfil" },
 ];
 
@@ -191,7 +192,9 @@ function SiteHeader() {
 
             <Dropdown.Menu className="private-menu">
               <Dropdown.Header>Rutas privadas</Dropdown.Header>
-              {privateRoutes.map((route) => (
+              {privateRoutes
+                .filter((route) => !route.soloAdmin || user.rol === "administrador")
+                .map((route) => (
                 <Dropdown.Item key={route.to} as={NavLink} to={route.to}>
                   {route.label}
                 </Dropdown.Item>
