@@ -1,22 +1,19 @@
-
+# Alternativa a XAMPP: un MySQL 8.4 local con root sin contraseña (igual que
+# XAMPP). Después de "docker compose up -d", crea la base, el usuario un_usr
+# y los datos con "npm run init-db" desde backend/.
 services:
   mysql:
     image: mysql:8.4
     container_name: farmauis-mysql
     restart: unless-stopped
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: farmauis
-      MYSQL_USER: farmauis_user
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
     ports:
       - "3306:3306"
     volumes:
       - farmauis_mysql_data:/var/lib/mysql
-      # Crea las tablas automáticamente la primera vez que se inicia el volumen.
-      - ./database:/docker-entrypoint-initdb.d:ro
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p$${MYSQL_ROOT_PASSWORD}"]
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root"]
       interval: 10s
       timeout: 5s
       retries: 10

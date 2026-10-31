@@ -9,8 +9,8 @@ require('dotenv').config({
 const pool = mysql.createPool({
   host: process.env.MYSQL_HOST || '127.0.0.1',
   port: Number(process.env.MYSQL_PORT || 3306),
-  user: process.env.MYSQL_USER || 'farmauis_user',
-  password: process.env.MYSQL_PASSWORD,
+  user: process.env.MYSQL_USER || 'un_usr',
+  password: process.env.MYSQL_PASSWORD || 'una_clave',
   database: process.env.MYSQL_DATABASE || 'farmauis',
   charset: 'utf8mb4',
   waitForConnections: true,

@@ -1,38 +1,48 @@
 # Programacion_web
-## Modo demostración (entrega Fase I)
-
-Por defecto el frontend funciona **solo, sin backend ni MySQL**, como pide la Fase I:
-
-```
-cd frontend
-npm install
-npm run dev
-```
-
-Abre `http://localhost:5173` e inicia sesión con usuario **`Admin`** y contraseña **`1234`**.
-
-- El login es simulado en `frontend/src/api/demo.js`: valida las credenciales escritas en el código y guarda la sesión en `sessionStorage` (se mantiene al recargar y termina al cerrar la pestaña). Las rutas privadas siguen protegidas por `ProtectedRoute`.
-- El catálogo sale de `frontend/src/data/productos.js` (mismos campos que devuelve la API).
-- Para usar el backend real, copia `frontend/.env.example` como `frontend/.env` con `VITE_USAR_BACKEND=true` y sigue los pasos de la sección siguiente. La conexión a la base de datos queda para la siguiente fase.
-
-## Inicio de sesión con backend (FarmaUIS)
+## Puesta en marcha (Fase II, con XAMPP)
 
 > Implementación académica: no está pensada para producción.
 
-- El backend valida el usuario (o el correo) y la contraseña contra la tabla `usuarios` (contraseñas con hash bcrypt).
-- La sesión se guarda en el servidor con `express-session` y viaja en la cookie `farmauis.sid` (`HttpOnly`, `SameSite=Lax`). Las sesiones se guardan en memoria, así que se pierden al reiniciar el backend.
-- Rutas: `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout` y la ruta privada `GET /api/panel/resumen` (responde 401 sin sesión).
-- En el frontend, el botón «Iniciar sesión» de la cabecera abre un modal de React-Bootstrap (`LoginModal` + `LoginForm` con `react-bootstrap/Form`). Con sesión iniciada aparece el menú desplegable de rutas privadas: `/panel` y `/perfil`, protegidas con `ProtectedRoute`. La página `/login` usa el mismo formulario y es el destino al intentar abrir una ruta privada sin sesión.
+1. Instala XAMPP y enciende **MySQL** en su panel de control. Apache no hace falta, salvo para usar phpMyAdmin.
+2. Copia `.env.example` como `.env` en la raíz del proyecto. Con XAMPP recién instalado no hay que cambiar nada, porque `root` no tiene contraseña. Si le pusiste una, escríbela en `MYSQL_ROOT_PASSWORD`.
+3. Crea la base de datos:
+   ```
+   cd backend
+   npm install
+   npm run init-db
+   ```
+   El script (`backend/scripts/init-db.js`):
+   - crea el usuario de MySQL **`un_usr` / `una_clave`**;
+   - crea la base **`farmauis`** con sus 5 tablas (`database/schema.sql`);
+   - crea los usuarios de prueba con su contraseña cifrada;
+   - carga los datos de ejemplo (`database/datos.sql`).
 
-### Primer uso
+   Se puede ejecutar varias veces sin duplicar datos.
+4. Inicia el backend con `npm run dev` en `backend/` (puerto 3000) y el frontend con `npm install && npm run dev` en `frontend/`.
+5. Abre `http://localhost:5173`.
 
-1. Copia `.env.example` como `.env` en la raíz y completa `MYSQL_*`, `SESSION_SECRET` y `ADMIN_*`.
-2. Levanta MySQL con `docker compose up -d`. La primera vez que se crea el volumen, Docker ejecuta `database/schema.sql` y crea todas las tablas.
-   Si tu volumen ya existía antes de este cambio, crea las tablas que falten (el script no borra datos):
-   `docker compose exec -T mysql sh -c 'mysql -uroot -p"$MYSQL_ROOT_PASSWORD"' < database/schema.sql`
-3. Crea el administrador con `cd backend && npm run crear-admin`. Usa `ADMIN_USUARIO`, `ADMIN_CORREO` y `ADMIN_PASSWORD` del `.env` y, si la tabla `usuarios` no tiene la columna `usuario`, la añade.
-4. Crea `frontend/.env` con `VITE_USAR_BACKEND=true`.
-5. Inicia el backend (`npm run dev` en `backend/`) y el frontend (`npm run dev` en `frontend/`), y entra en `http://localhost:5173/login`.
+Usuarios para iniciar sesión (se puede usar el usuario o el correo):
+
+```
+usuario | clave       // descripción
+Admin   | 1234        // administrador (admin@farmauis.local)
+cliente | cliente123  // cliente de prueba (cliente@farmauis.local), tiene un pedido
+```
+
+**Alternativa sin XAMPP:** `docker compose up -d` levanta un MySQL 8.4 con `root` sin contraseña. Después se sigue desde el paso 3.
+
+### Inicio de sesión
+
+- El backend valida el usuario (o el correo) y la contraseña contra la tabla `usuarios`. Las contraseñas se guardan con hash bcrypt.
+- La sesión se guarda en el servidor con `express-session` y viaja en la cookie `farmauis.sid` (`HttpOnly`, `SameSite=Lax`). Las sesiones están en memoria, así que se pierden al reiniciar el backend.
+- Rutas: `POST /api/auth/login`, `GET /api/auth/me`, `POST /api/auth/logout` y la ruta privada `GET /api/panel/resumen`, que responde 401 sin sesión.
+- En el frontend, el botón «Iniciar sesión» de la cabecera abre un modal de React-Bootstrap (`LoginModal` + `LoginForm` con `react-bootstrap/Form`). Con la sesión iniciada aparece el menú de rutas privadas, `/panel` y `/perfil`, protegidas con `ProtectedRoute`.
+
+### Modo demostración (Fase I)
+
+Para mostrar el frontend sin backend ni MySQL, crea `frontend/.env` con `VITE_MODO_DEMO=true`. En ese modo:
+- el login es simulado (`Admin` / `1234`, en `frontend/src/api/demo.js`);
+- el catálogo sale de `frontend/src/data/productos.js`.
 
 ## Estructura del frontend
 
@@ -41,7 +51,7 @@ frontend/src/
 ├── main.jsx                 Punto de entrada: Bootstrap, estilos globales, router y sesión
 ├── App.jsx                  Rutas públicas y privadas
 ├── api/                     Comunicación con el backend (fetch a /api) y modo demostración
-│   ├── config.js            Interruptor VITE_USAR_BACKEND (demo por defecto)
+│   ├── config.js            Interruptor VITE_MODO_DEMO (backend por defecto)
 │   ├── demo.js              Login, sesión, panel y catálogo simulados
 │   ├── auth.js / catalog.js Funciones que usa la app (backend o demo)
 │   └── client.js            Cliente HTTP común
