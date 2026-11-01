@@ -204,11 +204,11 @@ select:focus-visible {
   position: relative;
   display: grid;
   width: 100%;
-  min-height: 480px;
+  min-height: 440px;
   grid-template-columns: 1.04fr 0.96fr;
   align-items: center;
   margin: 0;
-  padding: 56px var(--margen-lateral) 70px;
+  padding: 48px var(--margen-lateral) 40px;
   overflow: hidden;
   background:
     radial-gradient(ellipse at 85% 20%, rgba(210, 244, 216, 0.9), transparent 42%),
@@ -492,6 +492,11 @@ select:focus-visible {
   margin: 78px auto 0;
 }
 
+/* Después del carrusel, que ya termina en un fundido blanco */
+.promo-section + .products-section {
+  margin-top: 16px;
+}
+
 /* Dentro de una página interna (carrito) ya está en el ancho de la página */
 .panel-page .products-section {
   width: 100%;
@@ -504,9 +509,9 @@ select:focus-visible {
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-  gap: 12px 20px;
-  margin-top: 28px;
-  padding: 20px;
+  gap: 10px 18px;
+  margin-top: 20px;
+  padding: 12px 16px;
   border: 1px dashed #cfe4d2;
   border-radius: 14px;
   background: #f6fbf7;
@@ -1140,8 +1145,8 @@ select:focus-visible {
     --margen-lateral: 16px;
     grid-template-columns: 1fr;
     gap: 0;
-    padding-top: 30px;
-    padding-bottom: 110px;
+    padding-top: 28px;
+    padding-bottom: 70px;
   }
 
   .hero h1 {
@@ -1223,11 +1228,16 @@ select:focus-visible {
   }
 
   .product-art {
-    min-height: 140px;
+    min-height: 106px;
+  }
+
+  .product-art .producto-ilustracion {
+    width: min(118px, 72%);
+    margin-top: 16px;
   }
 
   .product-info {
-    padding: 12px 10px;
+    padding: 10px 10px 11px;
   }
 
   .product-info h3 {

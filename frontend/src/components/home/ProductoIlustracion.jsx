@@ -267,6 +267,142 @@ function Alcohol() {
   );
 }
 
+// Rollo de venda con la punta desenrollada
+function Venda() {
+  return (
+    <>
+      <path
+        d="M94 66c16 2 24 14 42 20l-4 12c-18-6-26-18-38-20z"
+        fill={BLANCO}
+        {...trazo}
+      />
+      <path d="M100 72l30 18" stroke="currentColor" strokeWidth="1" opacity="0.3" />
+      <ellipse cx="70" cy="96" rx="26" ry="8" fill={BLANCO} {...trazo} />
+      <rect x="44" y="38" width="52" height="58" fill={BLANCO} />
+      <path d="M44 38v58M96 38v58" {...trazo} />
+      <rect x="44" y="38" width="52" height="58" fill="currentColor" opacity="0.16" />
+      <path d="M46 54h48M46 68h48M46 82h48" stroke="currentColor" strokeWidth="1" opacity="0.3" />
+      <ellipse cx="70" cy="38" rx="26" ry="8" fill={BLANCO} {...trazo} />
+      <ellipse cx="70" cy="38" rx="9" ry="3" fill="currentColor" opacity="0.35" />
+    </>
+  );
+}
+
+// Jarabe: frasco con vasito dosificador de tapa y una cuchara
+function Jarabe() {
+  return (
+    <>
+      <rect x="56" y="46" width="48" height="58" rx="10" fill={BLANCO} {...trazo} />
+      <rect x="70" y="34" width="20" height="14" fill={BLANCO} {...trazo} />
+      <path d="M64 35h32l-4-17H68z" fill="currentColor" />
+      <path d="M70 26h20" stroke={BLANCO} strokeWidth="1.4" opacity="0.5" />
+      <rect x="62" y="60" width="36" height="30" rx="5" fill="currentColor" opacity="0.16" />
+      <path d="M80 64c5 7 7 10 7 13a7 7 0 0 1-14 0c0-3 2-6 7-13z" fill="currentColor" opacity="0.75" />
+      <Reflejo x="60" y="52" width="3" height="40" />
+      <path d="M116 95l-14-5" stroke="currentColor" strokeWidth="3" strokeLinecap="round" />
+      <ellipse cx="127" cy="97" rx="11" ry="5" fill={BLANCO} {...trazo} />
+    </>
+  );
+}
+
+// Tabletas redondas sueltas, con su ranura para partirlas
+function Tableta({ x, y, r = 14 }) {
+  return (
+    <g transform={`translate(${x} ${y})`}>
+      <ellipse cy="4" rx={r} ry={r * 0.9} fill="currentColor" opacity="0.35" />
+      <circle r={r} fill={BLANCO} {...trazo} />
+      <circle r={r - 4} fill="currentColor" opacity="0.14" />
+      <path d={`M${-r + 5} 0h${2 * r - 10}`} stroke="currentColor" strokeWidth="1.6" />
+    </g>
+  );
+}
+
+function Tabletas() {
+  return (
+    <>
+      <Tableta x={78} y={54} r={13} />
+      <Tableta x={56} y={84} />
+      <Tableta x={92} y={86} r={15} />
+      <Tableta x={122} y={72} r={12} />
+    </>
+  );
+}
+
+// Cápsula abierta con los gránulos que lleva adentro
+function Granulos() {
+  const granulos = [
+    [72, 88], [80, 94], [88, 86], [96, 93], [104, 87], [84, 79], [92, 99], [76, 99], [100, 78],
+  ];
+  return (
+    <>
+      <g transform="translate(54 58) rotate(-24)">
+        <path d="M6-12h-22a12 12 0 0 0 0 24H6z" fill="currentColor" />
+        <path d="M6-12v24" {...trazo} />
+      </g>
+      <g transform="translate(112 50) rotate(22)">
+        <path d="M-6-12h22a12 12 0 0 1 0 24H-6z" fill={BLANCO} {...trazo} />
+      </g>
+      {granulos.map(([x, y], i) => (
+        <circle
+          key={`${x}-${y}`}
+          cx={x}
+          cy={y}
+          r="3.4"
+          fill={i % 2 ? BLANCO : "currentColor"}
+          stroke="currentColor"
+          strokeWidth="1.2"
+          opacity={i % 2 ? 1 : 0.7}
+        />
+      ))}
+    </>
+  );
+}
+
+// Pastillero semanal (para tratamientos de todos los días)
+function Pastillero() {
+  const casillas = [0, 1, 2, 3, 4, 5, 6];
+  return (
+    <>
+      <rect x="22" y="58" width="116" height="36" rx="8" fill={BLANCO} {...trazo} />
+      {casillas.map((i) => (
+        <g key={i}>
+          {i > 0 && <path d={`M${22 + i * 16.6} 60v32`} stroke="currentColor" strokeWidth="1.2" opacity="0.35" />}
+          {i % 2 === 0 ? (
+            <circle cx={30.3 + i * 16.6} cy="78" r="4.2" fill="currentColor" opacity="0.75" />
+          ) : (
+            <rect
+              x={24 + i * 16.6}
+              y="44"
+              width="12.6"
+              height="14"
+              rx="3"
+              fill="currentColor"
+              opacity="0.45"
+            />
+          )}
+        </g>
+      ))}
+    </>
+  );
+}
+
+// Barra de jabón con burbujas
+function Jabon() {
+  return (
+    <>
+      <g transform="rotate(-8 80 78)">
+        <rect x="38" y="60" width="84" height="38" rx="15" fill={BLANCO} {...trazo} />
+        <rect x="46" y="66" width="68" height="22" rx="10" fill="currentColor" opacity="0.16" />
+        <Reflejo x="52" y="70" width="26" height="3" />
+      </g>
+      <circle cx="112" cy="46" r="9" fill={BLANCO} {...trazo} />
+      <circle cx="129" cy="31" r="5.5" fill={BLANCO} {...trazo} />
+      <circle cx="94" cy="38" r="4.5" fill={BLANCO} {...trazo} />
+      <circle cx="109" cy="43" r="2.4" fill={BLANCO} opacity="0.9" />
+    </>
+  );
+}
+
 const DIBUJOS = {
   blister: Blister,
   capsulas: Capsulas,
@@ -282,6 +418,12 @@ const DIBUJOS = {
   curita: Curita,
   protector: Protector,
   alcohol: Alcohol,
+  venda: Venda,
+  jarabe: Jarabe,
+  tabletas: Tabletas,
+  granulos: Granulos,
+  pastillero: Pastillero,
+  jabon: Jabon,
 };
 
 function ProductoIlustracion({ tipo, className = "" }) {
