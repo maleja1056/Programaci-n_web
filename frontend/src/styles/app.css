@@ -1473,6 +1473,12 @@ select:focus-visible {
   .product-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  /* Tarjetas angostas: 3 líneas para que se lea la presentación completa */
+  .product-info p {
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+  }
 }
 
 @media (max-width: 359px) {
