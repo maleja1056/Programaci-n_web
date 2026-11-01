@@ -3,7 +3,17 @@
 // inserta en la segunda posición.
 // Cada diapositiva tiene un "tipo" (cómo se dibuja) y un "tono" (color de
 // fondo: verde, menta, naranja o azul; ver .tono-* en home.css).
-import { FaCartPlus, FaClipboardCheck, FaTruckFast } from "react-icons/fa6";
+import {
+  FaBoxOpen,
+  FaCartPlus,
+  FaClipboardCheck,
+  FaClock,
+  FaHandHoldingDollar,
+  FaRecycle,
+  FaTemperatureLow,
+  FaTruckFast,
+} from "react-icons/fa6";
+import { contacto } from "./sitio.js";
 import vitaminas from "../assets/img/carrusel/vitaminas.svg";
 
 // Los tres pasos de una compra (diapositiva "Cómo pedir")
@@ -35,9 +45,14 @@ export const diapositivas = [
     texto: "Sin filas ni llamadas: eliges, confirmas y lo recibes.",
     boton: "Ver el catálogo",
     enlace: "#productos",
+    datos: [
+      { Icono: FaHandHoldingDollar, texto: "Pago contra entrega" },
+      { Icono: FaClock, texto: contacto.horario },
+    ],
   },
   {
     id: "vitaminas",
+    categoria: "Vitaminas y suplementos",
     tipo: "imagen",
     tono: "naranja",
     imagen: vitaminas,
@@ -53,8 +68,13 @@ export const diapositivas = [
     tono: "azul",
     etiqueta: "CONSEJO DE SALUD",
     titulo: "Con el calor de Bucaramanga, cuida tus medicamentos",
-    texto:
-      "Guárdalos en un lugar fresco y seco, en su caja original y lejos del baño: el calor y la humedad los dañan.",
+    texto: "El calor, la humedad y la luz los dañan antes de tiempo. Tres hábitos para el botiquín de la casa:",
+    // Recomendaciones del artículo enlazado (sin agregar nada que no diga)
+    consejos: [
+      { Icono: FaTemperatureLow, texto: "Guárdalos en un lugar fresco y seco, fuera del alcance de los niños." },
+      { Icono: FaBoxOpen, texto: "Déjalos en su caja original, que los protege de la luz, y revisa la fecha de vencimiento." },
+      { Icono: FaRecycle, texto: "Los vencidos van a un Punto Azul, no a la basura. Destruye antes el empaque." },
+    ],
     boton: "Leer el artículo",
     // Artículo real (consultado el 1 de noviembre de 2026)
     enlaceExterno:
