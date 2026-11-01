@@ -1,6 +1,9 @@
 // Servidor Express de FarmaUIS. Registra los middlewares (CORS, JSON y
-// sesión), las rutas /api/* (un express.Router por tabla, con su CRUD) y un
-// manejador final que convierte los errores en respuestas JSON.
+// sesión), las rutas /api/* (un express.Router por tabla, con su CRUD, y
+// /api/archivos para subir y bajar archivos), el servidor de contenidos
+// /publico (express.static) y un manejador final que convierte los errores
+// en respuestas JSON.
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const pool = require('./config/db');
@@ -12,6 +15,7 @@ const panelRoutes = require('./routes/panel');
 const usuariosRoutes = require('./routes/usuarios');
 const pedidosRoutes = require('./routes/pedidos');
 const detallePedidosRoutes = require('./routes/detalle-pedidos');
+const archivosRoutes = require('./routes/archivos');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,6 +30,12 @@ app.use('/api/panel', panelRoutes);
 app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/pedidos', pedidosRoutes);
 app.use('/api/detalle-pedidos', detallePedidosRoutes);
+app.use('/api/archivos', archivosRoutes);
+
+// Servidor de contenidos: todo lo que está en backend/public se sirve tal
+// cual, sin sesión. Por ejemplo, las imágenes turísticas de Bucaramanga:
+//   http://localhost:3000/publico/turismo/catedral-sagrada-familia.jpg
+app.use('/publico', express.static(path.join(__dirname, '../public'), { maxAge: '1h' }));
 
 app.get('/api/health', async (req, res) => {
   try {
@@ -72,6 +82,17 @@ app.use((error, req, res, next) => {
       success: false,
       message: 'El cuerpo de la petición no es un JSON válido',
     });
+  }
+
+  // Errores de multer al subir archivos (routes/archivos.js)
+  if (error.name === 'MulterError') {
+    const mensajes = {
+      LIMIT_FILE_SIZE: [413, 'El archivo supera el tamaño máximo de 50 MB'],
+      LIMIT_FILE_COUNT: [400, 'Sube un solo archivo a la vez'],
+      LIMIT_UNEXPECTED_FILE: [400, 'El archivo debe enviarse en el campo "archivo"'],
+    };
+    const [status, message] = mensajes[error.code] || [400, 'No se pudo recibir el archivo'];
+    return res.status(status).json({ success: false, message });
   }
 
   // HttpError (lib/http.js): validaciones y reglas de las rutas

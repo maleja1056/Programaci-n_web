@@ -18,13 +18,12 @@ import Modal from "react-bootstrap/Modal";
 import { FaCheck, FaPlus, FaTrashCan } from "react-icons/fa6";
 import { crearCrud } from "../../api/crud.js";
 import { useAuth } from "../../context/auth-context.js";
-import { formatPrice } from "../../utils/format.js";
+import { formatFecha, formatPrice } from "../../utils/format.js";
 import {
   ESTADOS_CON_PRODUCTOS_EDITABLES,
   ESTADOS_PEDIDO,
   MAX_CANTIDAD,
   estadoDe,
-  formatFecha,
 } from "../../utils/pedidos.js";
 
 const pedidosApi = crearCrud("pedidos");
