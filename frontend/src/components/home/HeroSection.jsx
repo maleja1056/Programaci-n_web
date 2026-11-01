@@ -5,6 +5,7 @@
 // precios reales. Es decorativa (aria-hidden): al cargar, los productos
 // caen en la repisa uno a uno y al final aparece el ticket (app.css).
 import { FaCheck, FaLocationDot, FaTruckFast } from "react-icons/fa6";
+import { Link } from "react-router-dom";
 import { formatPrice } from "../../utils/format.js";
 import ProductoIlustracion from "./ProductoIlustracion.jsx";
 
@@ -53,9 +54,11 @@ function HeroSection() {
           <a className="primary-button" href="#productos">
             Ver el catálogo
           </a>
-          <a className="hero-link" href="#como-pedir">
+          {/* Link (no <a>): cada clic es una navegación nueva, y el carrusel
+              vuelve a su primera diapositiva, la de "Cómo pedir" */}
+          <Link className="hero-link" to="#como-pedir">
             Cómo pedir
-          </a>
+          </Link>
         </div>
 
         <ul className="hero-benefits">

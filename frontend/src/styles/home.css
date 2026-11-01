@@ -9,114 +9,395 @@
   margin: 68px auto 0;
 }
 
-/* ---------- Carrusel de promociones ---------- */
+/* ---------- Carrusel (PromoCarousel.jsx) ----------
+   Cada diapositiva: texto a la izquierda y dibujo a la derecha, con su
+   propio color de fondo (.tono-*). La transición es un fundido (fade). */
+.promo-section {
+  position: relative;
+}
+
 .promo-carousel {
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: 18px;
   box-shadow: var(--sombra-2);
-  background: #e7f6e8;
 }
 
-.promo-image {
-  display: block;
-  width: 100%;
-  height: 340px;
-  object-fit: cover;
-  object-position: right center;
+.promo-slide {
+  min-height: 340px;
 }
 
-/* El texto va a la izquierda y la ilustración queda a la derecha */
-.promo-caption {
-  right: auto;
-  bottom: 50%;
-  left: 11%;
-  max-width: 400px;
-  padding: 0;
-  transform: translateY(50%);
-  text-align: left;
+/* El contenido de la diapositiva activa (y la que entra) usa la grilla */
+.promo-slide.active,
+.promo-slide.carousel-item-next,
+.promo-slide.carousel-item-prev {
+  display: grid;
 }
 
-.promo-caption .section-kicker {
-  color: var(--color-marca);
+.promo-slide {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 32px;
+  padding: 40px 9% 56px;
 }
 
-.promo-caption h3 {
+.tono-verde {
+  background: linear-gradient(120deg, #eef8f0, #e1f2e5);
+}
+
+.tono-menta {
+  background: linear-gradient(120deg, #edf9f4, #dcf1e8);
+}
+
+.tono-naranja {
+  background: linear-gradient(120deg, #fff7ec, #ffecd6);
+}
+
+.tono-azul {
+  background: linear-gradient(120deg, #f1f6ff, #e1ebfb);
+}
+
+.promo-texto h3 {
   margin: 8px 0;
   color: var(--color-texto);
   font-family: "Manrope", sans-serif;
   font-size: 28px;
+  font-weight: 800;
   line-height: 1.2;
+  letter-spacing: -0.6px;
+  text-wrap: balance;
 }
 
-.promo-caption p {
-  margin: 0 0 18px;
+.promo-texto > p {
+  max-width: 46ch;
+  margin: 0;
   color: var(--color-texto-suave);
   font-size: 14px;
+  line-height: 1.6;
 }
 
-/* Flechas e indicadores oscuros para verse sobre el fondo claro */
-.promo-carousel .carousel-control-prev-icon,
-.promo-carousel .carousel-control-next-icon {
-  filter: invert(1) grayscale(1);
+.promo-texto .primary-button {
+  gap: 10px;
 }
 
-.promo-carousel .carousel-control-prev,
-.promo-carousel .carousel-control-next {
-  width: 8%;
+/* El texto de la diapositiva que entra aparece en secuencia y el dibujo
+   se acerca un poco (los @keyframes están en app.css) */
+.promo-slide.active .promo-texto > * {
+  animation: aparecer 520ms var(--curva) backwards;
 }
 
-.promo-carousel .carousel-indicators [data-bs-target] {
-  background-color: #1d6b43;
+.promo-slide.active .promo-texto > :nth-child(2) { animation-delay: 80ms; }
+.promo-slide.active .promo-texto > :nth-child(3) { animation-delay: 160ms; }
+.promo-slide.active .promo-texto > :nth-child(4) { animation-delay: 240ms; }
+.promo-slide.active .promo-texto > :nth-child(5) { animation-delay: 300ms; }
+
+.promo-slide.active .promo-visual {
+  animation: acercar 700ms var(--curva) backwards;
 }
 
-/* ---------- Tres columnas ---------- */
-.features-grid {
+@keyframes acercar {
+  from {
+    opacity: 0;
+    scale: 0.94;
+  }
+}
+
+/* Diapositiva "Cómo pedir": los tres pasos unidos por una línea punteada */
+.promo-pasos {
+  position: relative;
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 21px;
-  margin-top: 26px;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
-.feature-card {
-  padding: 26px 22px;
-  border: 1px solid var(--borde-suave);
-  border-radius: 16px;
-  background: linear-gradient(180deg, #fff 55%, #f8fcf9);
+.promo-pasos::before {
+  position: absolute;
+  top: 26px;
+  bottom: 26px;
+  left: 25px;
+  border-left: 2px dashed #a9d3b5;
+  content: "";
+}
+
+.promo-pasos li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px 12px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.82);
   box-shadow: var(--sombra-1);
 }
 
-.feature-icon {
+.promo-paso-icono {
   display: grid;
-  width: 48px;
-  height: 48px;
-  margin-bottom: 14px;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
   place-items: center;
-  border-radius: 14px;
-  background: #dff2e2;
-  color: var(--color-marca);
-  font-size: 22px;
+  border-radius: 9px;
+  background: var(--color-marca-fondo);
+  color: var(--color-sobre-marca);
+  font-size: 14px;
 }
 
-/* "Paso 1", "Paso 2"... encima del título */
-.feature-paso {
-  display: block;
-  margin-bottom: 4px;
-  color: var(--color-marca);
+.promo-pasos li > span:last-child {
+  display: grid;
+  gap: 1px;
+  color: var(--color-texto-suave);
   font-size: 12px;
+  line-height: 1.4;
+}
+
+.promo-pasos small {
+  color: var(--color-marca);
+  font-size: 11px;
   font-weight: 700;
 }
 
-.feature-card h3 {
-  margin: 0 0 6px;
+.promo-pasos strong {
   color: var(--color-texto);
-  font-size: 17px;
+  font-size: 14px;
 }
 
-.feature-card p {
-  margin: 0;
+/* Diapositiva "Destacado de hoy" */
+.promo-destacado {
+  display: grid;
+  width: min(300px, 100%);
+  aspect-ratio: 1;
+  justify-self: center;
+  place-items: center;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 10px rgba(255, 255, 255, 0.55), var(--sombra-2);
+}
+
+.promo-destacado .producto-ilustracion {
+  width: 82%;
+  height: auto;
+  overflow: visible;
+}
+
+.promo-precio {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  margin: 14px 0 0;
   color: var(--color-texto-suave);
   font-size: 13px;
-  line-height: 1.55;
+}
+
+.promo-precio strong {
+  color: var(--color-texto);
+  font-size: 24px;
+}
+
+.promo-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+  margin-top: 16px;
+}
+
+.boton-agregar.promo-agregar {
+  min-height: 46px;
+  padding: 0 20px;
+  font-size: 14px;
+}
+
+.promo-enlace {
+  color: var(--color-marca);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Diapositiva "Consejo de salud": sol y caja de medicamento */
+.promo-consejo {
+  position: relative;
+  display: grid;
+  height: 250px;
+  place-items: center;
+}
+
+.promo-sol {
+  position: absolute;
+  top: 0;
+  right: 14%;
+  display: grid;
+  width: 110px;
+  height: 110px;
+  place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffe2a8, #ffd07a);
+  box-shadow: 0 0 0 16px rgba(255, 208, 122, 0.25), 0 0 0 34px rgba(255, 208, 122, 0.12);
+  color: var(--color-aviso);
+  font-size: 46px;
+}
+
+.promo-consejo-caja {
+  width: min(250px, 80%);
+  margin-top: 60px;
+  background: none;
+}
+
+.promo-consejo-caja .producto-ilustracion {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.promo-fuente {
+  display: block;
+  max-width: 46ch;
+  margin-top: 12px;
+  color: var(--color-texto-suave);
+  font-size: 11px;
+}
+
+/* Diapositiva con imagen (vitaminas) */
+.promo-imagen {
+  width: 100%;
+  max-height: 280px;
+  object-fit: contain;
+}
+
+/* ---------- Carrusel: flechas ----------
+   Botones redondos que aparecen al pasar el mouse o con el foco del
+   teclado. En pantallas táctiles no se muestran: se desliza con el dedo. */
+.promo-carousel .carousel-control-prev,
+.promo-carousel .carousel-control-next {
+  top: 50%;
+  bottom: auto;
+  width: 44px;
+  height: 44px;
+  margin: 0 16px;
+  border-radius: 50%;
+  background: #fff;
+  box-shadow: var(--sombra-2);
+  color: var(--color-marca);
+  font-size: 16px;
+  opacity: 0;
+  translate: 0 -50%;
+  transition:
+    opacity var(--duracion) var(--curva),
+    scale var(--duracion) var(--curva);
+}
+
+.promo-carousel:hover .carousel-control-prev,
+.promo-carousel:hover .carousel-control-next,
+.promo-carousel .carousel-control-prev:focus-visible,
+.promo-carousel .carousel-control-next:focus-visible {
+  opacity: 1;
+}
+
+.promo-carousel .carousel-control-prev:hover,
+.promo-carousel .carousel-control-next:hover {
+  scale: 1.08;
+}
+
+/* Sin mouse (pantallas táctiles) o en pantallas angostas, donde taparían el
+   texto, no hay flechas: se cambia deslizando o con las barras */
+@media (hover: none), (max-width: 900px) {
+  .promo-carousel .carousel-control-prev,
+  .promo-carousel .carousel-control-next {
+    display: none;
+  }
+}
+
+/* ---------- Carrusel: barras de progreso y pausa ---------- */
+/* z-index: encima de las diapositivas (el fade de Bootstrap les pone 1) */
+.promo-controles {
+  position: absolute;
+  z-index: 3;
+  bottom: 18px;
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  translate: -50% 0;
+}
+
+.promo-barras {
+  display: flex;
+  gap: 8px;
+}
+
+/* Cada barra es un botón: el área para hacer clic es más alta que la línea */
+.promo-barra {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.promo-barra::before,
+.promo-barra-relleno {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 4px;
+  border-radius: 4px;
+  translate: 0 -50%;
+}
+
+.promo-barra::before {
+  right: 0;
+  background: rgba(23, 78, 59, 0.2);
+  content: "";
+}
+
+/* Barra activa: sin animación (reducir movimiento) se ve llena */
+.promo-barra-relleno {
+  width: 100%;
+  background: var(--color-marca-fondo);
+}
+
+.promo-barra-relleno.is-animada {
+  animation: llenar 6s linear forwards;
+}
+
+/* En pausa la barra se detiene donde va */
+.promo-section.is-pausado .promo-barra-relleno {
+  animation-play-state: paused;
+}
+
+@keyframes llenar {
+  from {
+    width: 0;
+  }
+}
+
+.promo-pausa {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: var(--sombra-1);
+  color: var(--color-marca);
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.promo-pausa:disabled {
+  display: none;
+}
+
+.promo-carousel {
+  cursor: default;
 }
 
 /* ---------- Sobre nosotros ---------- */
@@ -256,26 +537,57 @@
 
 /* ---------- Adaptable ---------- */
 @media (max-width: 900px) {
-  /* En tableta y móvil la ilustración va arriba y el texto debajo, sin superponerse */
-  .promo-image {
-    height: 220px;
-    object-position: 80% center;
-  }
-
-  .promo-carousel .carousel-control-prev,
-  .promo-carousel .carousel-control-next {
-    height: 220px;
-  }
-
-  .promo-caption {
-    position: static;
-    max-width: none;
-    padding: 18px 56px 44px;
-    transform: none;
-  }
-
-  .features-grid {
+  /* Carrusel en tableta y celular: dibujo arriba, más pequeño, y texto
+     debajo; las barras quedan al final */
+  .promo-slide {
+    min-height: 0;
     grid-template-columns: 1fr;
+    gap: 18px;
+    padding: 24px 22px 58px;
+  }
+
+  .promo-visual {
+    order: -1;
+  }
+
+  .promo-texto h3 {
+    font-size: 22px;
+  }
+
+  .promo-pasos {
+    gap: 8px;
+  }
+
+  .promo-pasos li {
+    padding: 8px 12px 8px 10px;
+  }
+
+  .promo-pasos li > span:last-child > span {
+    display: none;
+  }
+
+  .promo-destacado {
+    width: 150px;
+  }
+
+  .promo-consejo {
+    height: 140px;
+  }
+
+  .promo-sol {
+    right: 18%;
+    width: 64px;
+    height: 64px;
+    font-size: 28px;
+  }
+
+  .promo-consejo-caja {
+    width: 150px;
+    margin-top: 40px;
+  }
+
+  .promo-imagen {
+    max-height: 150px;
   }
 
   .about-section {

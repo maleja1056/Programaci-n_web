@@ -209,6 +209,7 @@ function useCatalog() {
 
   return {
     categories,
+    products,
     filteredProducts,
     loading,
     error,

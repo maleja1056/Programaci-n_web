@@ -104,8 +104,7 @@ frontend/src/
 ├── hooks/
 │   ├── useActiveSection.js  Sección visible de la portada (enlace activo de la cabecera)
 │   ├── useCategoryMenu.js   Categorías del submenú de la cabecera
-│   ├── useCatalog.js        Carga, búsqueda y filtro del catálogo
-│   └── useInView.js         Aparición de secciones al hacer scroll
+│   └── useCatalog.js        Carga, búsqueda y filtro del catálogo
 ├── utils/
 │   ├── format.js            Formato de precios, stock, fechas y plurales
 │   └── pedidos.js           Estados de un pedido (los mismos del backend)

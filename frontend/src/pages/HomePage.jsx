@@ -8,7 +8,6 @@ import AnnouncementBar from "../components/home/AnnouncementBar.jsx";
 import CareBanner from "../components/home/CareBanner.jsx";
 import CatalogSection from "../components/home/CatalogSection.jsx";
 import FaqSection from "../components/home/FaqSection.jsx";
-import FeaturesSection from "../components/home/FeaturesSection.jsx";
 import HeroSection from "../components/home/HeroSection.jsx";
 import PromoCarousel from "../components/home/PromoCarousel.jsx";
 import TurismoSection from "../components/home/TurismoSection.jsx";
@@ -38,8 +37,7 @@ function HomePage() {
 
       <main>
         <HeroSection />
-        <PromoCarousel />
-        <FeaturesSection />
+        <PromoCarousel productos={catalog.products} />
 
         <CatalogSection
           categories={catalog.categories}
