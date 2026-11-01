@@ -12,19 +12,49 @@
 /* ---------- Carrusel (PromoCarousel.jsx) ----------
    Cada diapositiva: texto a la izquierda y dibujo a la derecha, con su
    propio color de fondo (.tono-*). La transición es un fundido (fade). */
+/* El carrusel también es una franja de borde a borde. Arriba y abajo se
+   desvanece (máscara): arriba se funde con el hero, sobre el que se monta,
+   y abajo con el blanco de la página. El contenido se alinea con el logo,
+   igual que el hero. */
 .promo-section {
+  --fundido: 110px;
+  --margen-lateral: max(32px, calc(50% - 590px));
   position: relative;
+  z-index: 1;
+  width: 100%;
 }
 
-/* Justo después de la franja del hero, que ya termina en un fundido blanco */
 .hero + .promo-section {
-  margin-top: 0;
+  margin-top: calc(var(--fundido) * -1);
+}
+
+/* Más específico que .home-section (que en celular cambia el ancho) */
+.home-section.promo-section {
+  width: 100%;
+}
+
+@media (max-width: 1000px) {
+  .promo-section {
+    --margen-lateral: 20px;
+  }
+}
+
+@media (max-width: 650px) {
+  .promo-section {
+    --fundido: 80px;
+    --margen-lateral: 16px;
+  }
 }
 
 .promo-carousel {
   overflow: hidden;
-  border-radius: 18px;
-  box-shadow: var(--sombra-2);
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 var(--fundido),
+    #000 calc(100% - var(--fundido)),
+    transparent
+  );
 }
 
 /* Todas las diapositivas en la misma celda de una grilla: el carrusel mide
@@ -53,8 +83,8 @@
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   align-items: center;
   gap: 40px;
-  min-height: 380px;
-  padding: 40px 9% 64px;
+  min-height: calc(380px + 2 * var(--fundido));
+  padding: calc(var(--fundido) + 8px) var(--margen-lateral) calc(var(--fundido) + 56px);
 }
 
 .tono-verde {
@@ -491,7 +521,7 @@
 .promo-controles {
   position: absolute;
   z-index: 3;
-  bottom: 18px;
+  bottom: calc(var(--fundido) + 16px);
   left: 50%;
   display: flex;
   align-items: center;
@@ -719,7 +749,7 @@
     grid-template-columns: 1fr;
     align-content: start;
     gap: 18px;
-    padding: 24px 22px 62px;
+    padding: calc(var(--fundido) + 8px) var(--margen-lateral) calc(var(--fundido) + 56px);
   }
 
   /* En celular solo lo principal: sin "También en" ni tarjetas extra */

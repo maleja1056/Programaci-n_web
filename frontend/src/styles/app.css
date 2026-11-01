@@ -195,9 +195,10 @@ select:focus-visible {
 }
 
 /* ---------- HERO (PORTADA): título, descripción y etiquetas de bienvenida ---------- */
-/* Franja de borde a borde: empieza justo debajo de la línea de la cabecera
-   y abajo se funde con el blanco de la página (última capa del fondo). El
-   contenido queda alineado con el logo (mismo ancho que la cabecera). */
+/* Franja de borde a borde: empieza justo debajo de la línea de la cabecera.
+   Abajo no termina en seco: el carrusel se monta encima y se funde con ella
+   (home.css). El contenido queda alineado con el logo (mismo ancho que la
+   cabecera). */
 .hero {
   --margen-lateral: max(32px, calc(50% - 590px));
   position: relative;
@@ -207,10 +208,9 @@ select:focus-visible {
   grid-template-columns: 1.04fr 0.96fr;
   align-items: center;
   margin: 0;
-  padding: 56px var(--margen-lateral) 110px;
+  padding: 56px var(--margen-lateral) 70px;
   overflow: hidden;
   background:
-    linear-gradient(to bottom, transparent calc(100% - 120px), #fff),
     radial-gradient(ellipse at 85% 20%, rgba(210, 244, 216, 0.9), transparent 42%),
     radial-gradient(ellipse at 8% 90%, rgba(226, 244, 236, 0.9), transparent 40%),
     linear-gradient(120deg, #eef8f0 0%, #f6fbf4 55%, #e2f3e5 100%);
@@ -1115,7 +1115,7 @@ select:focus-visible {
     grid-template-columns: 1fr;
     gap: 0;
     padding-top: 30px;
-    padding-bottom: 80px;
+    padding-bottom: 110px;
   }
 
   .hero h1 {
