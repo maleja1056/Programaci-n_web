@@ -195,21 +195,25 @@ select:focus-visible {
 }
 
 /* ---------- HERO (PORTADA): título, descripción y etiquetas de bienvenida ---------- */
+/* Franja de borde a borde: empieza justo debajo de la línea de la cabecera
+   y abajo se funde con el blanco de la página (última capa del fondo). El
+   contenido queda alineado con el logo (mismo ancho que la cabecera). */
 .hero {
+  --margen-lateral: max(32px, calc(50% - 590px));
   position: relative;
   display: grid;
-  width: min(1180px, calc(100% - 64px));
-  min-height: 425px;
+  width: 100%;
+  min-height: 480px;
   grid-template-columns: 1.04fr 0.96fr;
   align-items: center;
-  margin: 26px auto 0;
-  padding: 48px 68px 50px;
+  margin: 0;
+  padding: 56px var(--margen-lateral) 110px;
   overflow: hidden;
-  border-radius: 19px;
   background:
-    radial-gradient(ellipse at 85% 20%, rgba(219, 247, 224, 0.8), transparent 38%),
-    linear-gradient(120deg, #f2faf3 0%, #f7fbf5 58%, #e7f6e8 100%);
-  box-shadow: var(--sombra-2), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    linear-gradient(to bottom, transparent calc(100% - 120px), #fff),
+    radial-gradient(ellipse at 85% 20%, rgba(210, 244, 216, 0.9), transparent 42%),
+    radial-gradient(ellipse at 8% 90%, rgba(226, 244, 236, 0.9), transparent 40%),
+    linear-gradient(120deg, #eef8f0 0%, #f6fbf4 55%, #e2f3e5 100%);
 }
 
 .hero-content {
@@ -1046,7 +1050,6 @@ select:focus-visible {
 
 @media (max-width: 1000px) {
   .site-header,
-  .hero,
   .products-section,
   .care-banner {
     width: calc(100% - 40px);
@@ -1061,8 +1064,7 @@ select:focus-visible {
   }
 
   .hero {
-    padding-right: 35px;
-    padding-left: 40px;
+    --margen-lateral: 20px;
   }
 
   .hero-visual {
@@ -1109,11 +1111,11 @@ select:focus-visible {
   }
 
   .hero {
-    width: calc(100% - 24px);
+    --margen-lateral: 16px;
     grid-template-columns: 1fr;
     gap: 0;
-    margin-top: 12px;
-    padding: 34px 25px 43px;
+    padding-top: 30px;
+    padding-bottom: 80px;
   }
 
   .hero h1 {
