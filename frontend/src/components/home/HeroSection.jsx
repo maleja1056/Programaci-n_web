@@ -4,6 +4,9 @@
 // las tarjetas, ProductoIlustracion) y un ticket de pedido de ejemplo con
 // precios reales. Es decorativa (aria-hidden): al cargar, los productos
 // caen en la repisa uno a uno y al final aparece el ticket (app.css).
+// Al hacer clic en la vitrina la animación se repite: cambiar la "key"
+// vuelve a crear los elementos y el navegador reinicia sus animaciones.
+import { useState } from "react";
 import { FaCheck, FaLocationDot, FaTruckFast } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { formatPrice } from "../../utils/format.js";
@@ -34,6 +37,9 @@ const totalEjemplo = pedidoEjemplo.reduce((suma, l) => suma + l.cantidad * l.pre
 const datos = ["Precio y stock al día", "Aviso de fórmula médica", "Pago contra entrega"];
 
 function HeroSection() {
+  const [repeticion, setRepeticion] = useState(0);
+  const repetir = () => setRepeticion((n) => n + 1);
+
   return (
     <section className="hero" id="inicio">
       <div className="hero-content">
@@ -74,9 +80,17 @@ function HeroSection() {
       </div>
 
       <div className="hero-visual" aria-hidden="true">
-        <div className="vitrina">
+        {/* Solo con mouse o toque: es decorativa (tabIndex -1, fuera del
+            recorrido del teclado y oculta a los lectores de pantalla) */}
+        <button
+          type="button"
+          className="vitrina"
+          tabIndex={-1}
+          onClick={repetir}
+          title="Toca la vitrina para repetir la animación"
+        >
           {repisas.map((repisa, fila) => (
-            <div className="vitrina-repisa" key={fila}>
+            <div className="vitrina-repisa" key={`${fila}-${repeticion}`}>
               {repisa.map((producto, columna) => (
                 <span
                   key={producto.tipo}
@@ -88,9 +102,9 @@ function HeroSection() {
               ))}
             </div>
           ))}
-        </div>
+        </button>
 
-        <div className="hero-ticket">
+        <div className="hero-ticket" key={repeticion}>
           <span className="hero-ticket-titulo">Tu pedido</span>
           <ul>
             {pedidoEjemplo.map(({ nombre, cantidad, precio }) => (
