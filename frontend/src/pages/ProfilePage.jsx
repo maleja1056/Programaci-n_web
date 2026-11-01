@@ -1,6 +1,8 @@
-// Página privada /perfil: datos públicos del usuario con sesión iniciada.
+// Página privada /perfil: datos públicos del usuario con sesión iniciada y
+// accesos a sus pedidos, al carrito y a sus archivos.
 // Los datos vienen de la sesión del servidor (GET /api/auth/me) o, en el modo
 // demostración, del usuario simulado de api/demo.js.
+import { Link } from "react-router-dom";
 import SiteFooter from "../components/layout/SiteFooter.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";
 import { useAuth } from "../context/auth-context.js";
@@ -40,6 +42,12 @@ function ProfilePage() {
             </div>
           ))}
         </dl>
+
+        <nav className="profile-links" aria-label="Accesos de tu cuenta">
+          <Link className="crud-button" to="/mis-pedidos">Mis pedidos</Link>
+          <Link className="crud-button" to="/carrito">Carrito</Link>
+          <Link className="crud-button" to="/archivos">Archivos</Link>
+        </nav>
       </main>
 
       <SiteFooter />

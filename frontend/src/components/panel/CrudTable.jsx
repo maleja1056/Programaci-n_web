@@ -29,6 +29,9 @@
 //   filaProtegida (fila) => true si la fila no se puede cancelar ni borrar
 //                 (por ejemplo, la cuenta del propio administrador)
 //   permitirReactivar  false si una fila cancelada no puede volver a activarse
+//   permitirCrear false oculta el botón "Nuevo" (por ejemplo, en Mis pedidos
+//                 los pedidos se crean desde el carrito)
+//   textoVacio    texto cuando no hay filas (en lugar de "Usa Nuevo...")
 //   mostrarEstado false oculta la columna "Estado" (Activo/Cancelado) cuando la
 //                 pestaña muestra su propio estado
 //   formularioPropio   ({ modo, fila, alTerminar(texto), alCerrar }) => modal
@@ -255,6 +258,8 @@ function CrudTable({
   avisoCancelar = "dejará de mostrarse en la tienda",
   filaProtegida = () => false,
   permitirReactivar = true,
+  permitirCrear = true,
+  textoVacio,
   mostrarEstado = true,
   formularioPropio,
   alGuardar,
@@ -494,9 +499,11 @@ function CrudTable({
           />
         )}
 
-        <button type="button" className="crud-button is-primary crud-new" onClick={abrirNuevo}>
-          <FaPlus aria-hidden="true" /> {nuevo} {singular}
-        </button>
+        {permitirCrear && (
+          <button type="button" className="crud-button is-primary crud-new" onClick={abrirNuevo}>
+            <FaPlus aria-hidden="true" /> {nuevo} {singular}
+          </button>
+        )}
       </div>
 
       {aviso && (
@@ -535,7 +542,7 @@ function CrudTable({
           <p>
             {buscarAplicado
               ? `Ningún registro coincide con "${buscarAplicado}".`
-              : `Usa "${nuevo} ${singular}" para crear ${un}.`}
+              : textoVacio || `Usa "${nuevo} ${singular}" para crear ${un}.`}
           </p>
         </div>
       ) : (

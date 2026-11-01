@@ -1,11 +1,12 @@
 // Tarjeta de un producto del catálogo: ilustración por categoría (color y
-// símbolo vienen de useCatalog), etiqueta, nombre, precio, stock y el botón
-// "→" que abre el modal de detalle. La etiqueta "Con fórmula" es un botón con
+// símbolo vienen de useCatalog), etiqueta, nombre, precio, stock, el botón
+// del carrito y el botón "→" que abre el modal de detalle. La etiqueta "Con fórmula" es un botón con
 // Popover. Los productos agotados se muestran atenuados.
 import { useState } from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Popover from "react-bootstrap/Popover";
 import { formatPrice, formatStock } from "../../utils/format.js";
+import BotonAgregar from "../carrito/BotonAgregar.jsx";
 import ProductDetailModal from "./ProductDetailModal.jsx";
 
 // Popover que explica la etiqueta "Con fórmula" al pasar el mouse, tocarla
@@ -60,6 +61,7 @@ function ProductCard({ product }) {
           <strong className="product-price">
             {formatPrice(product.price)}
           </strong>
+          <BotonAgregar product={product} conTexto={false} className="product-cart" />
           <button
             className="view-product"
             type="button"

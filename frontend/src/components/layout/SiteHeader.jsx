@@ -3,16 +3,18 @@
 // Productos y Nosotros: cada opción abre la portada en la sección indicada y,
 // en el catálogo, con el filtro ya aplicado (corrección de la Fase I: "faltó
 // un dropdown para los submenús de Productos y Categorías").
-// Sin sesión muestra el botón que abre el modal de login; con sesión muestra
-// el menú desplegable de rutas privadas. Ocultar el menú no protege nada por
+// A la derecha está el carrito (para todos, con el número de unidades). Sin
+// sesión muestra el botón que abre el modal de login; con sesión muestra el
+// menú desplegable de rutas privadas. Ocultar el menú no protege nada por
 // sí solo: las rutas usan ProtectedRoute y, con backend, el servidor exige sesión.
 import { useState } from "react";
 import Collapse from "react-bootstrap/Collapse";
 import Dropdown from "react-bootstrap/Dropdown";
-import { FaBars, FaXmark } from "react-icons/fa6";
+import { FaBars, FaCartShopping, FaXmark } from "react-icons/fa6";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/img/logo.svg";
 import { useAuth } from "../../context/auth-context.js";
+import { useCart } from "../../context/cart-context.js";
 import useActiveSection from "../../hooks/useActiveSection.js";
 import { PRODUCT_VIEWS } from "../../hooks/useCatalog.js";
 import useCategoryMenu from "../../hooks/useCategoryMenu.js";
@@ -32,6 +34,7 @@ const homeLink = (sectionId, params = {}) => {
 const privateRoutes = [
   { to: "/panel", label: "Panel de administración", soloAdmin: true },
   { to: "/perfil", label: "Mi perfil" },
+  { to: "/mis-pedidos", label: "Mis pedidos" },
   { to: "/archivos", label: "Archivos" },
 ];
 
@@ -55,6 +58,7 @@ function NavMenu({ id, label, active, children }) {
 
 function SiteHeader() {
   const { user, status, logout } = useAuth();
+  const { unidades } = useCart();
   const categories = useCategoryMenu();
   const navigate = useNavigate();
   const location = useLocation();
@@ -180,6 +184,20 @@ function SiteHeader() {
           <span aria-hidden="true">⌕</span>
           Explorar tienda
         </a>
+
+        <NavLink
+          className="header-action header-cart"
+          to="/carrito"
+          aria-label={`Carrito de compras, ${unidades} ${unidades === 1 ? "unidad" : "unidades"}`}
+        >
+          <FaCartShopping aria-hidden="true" />
+          <span className="header-cart-text">Carrito</span>
+          {unidades > 0 && (
+            <span className="header-cart-count" aria-hidden="true">
+              {unidades > 99 ? "99+" : unidades}
+            </span>
+          )}
+        </NavLink>
 
         {status === "authenticated" ? (
           <Dropdown align="end">
