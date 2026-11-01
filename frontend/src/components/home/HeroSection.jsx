@@ -1,79 +1,112 @@
-// Sección principal de la portada (#inicio): título, descripción, botón al
-// catálogo y la ilustración de productos hecha con CSS.
+// Sección principal de la portada (#inicio): dónde está la farmacia, qué
+// ofrece y los botones al catálogo y a "Cómo pedir".
+// A la derecha, una vitrina con productos del catálogo (los mismos dibujos de
+// las tarjetas, ProductoIlustracion) y un ticket de pedido de ejemplo con
+// precios reales. Es decorativa (aria-hidden): al cargar, los productos
+// caen en la repisa uno a uno y al final aparece el ticket (app.css).
+import { FaCheck, FaLocationDot, FaTruckFast } from "react-icons/fa6";
+import { formatPrice } from "../../utils/format.js";
+import ProductoIlustracion from "./ProductoIlustracion.jsx";
+
+// Dos repisas de tres productos: dibujo y color de su categoría
+const repisas = [
+  [
+    { tipo: "frasco", color: "blue" },
+    { tipo: "vitaminas", color: "orange" },
+    { tipo: "dosificador", color: "mint" },
+  ],
+  [
+    { tipo: "blister", color: "blue" },
+    { tipo: "tubo", color: "mint" },
+    { tipo: "gasas", color: "green" },
+  ],
+];
+
+// Pedido de ejemplo con precios del catálogo (database/datos.sql)
+const pedidoEjemplo = [
+  { nombre: "Acetaminofén 500 mg", cantidad: 2, precio: 8500 },
+  { nombre: "Vitamina C", cantidad: 1, precio: 15000 },
+  { nombre: "Gel antibacterial", cantidad: 1, precio: 7500 },
+];
+const totalEjemplo = pedidoEjemplo.reduce((suma, l) => suma + l.cantidad * l.precio, 0);
+
+const datos = ["Precio y stock al día", "Aviso de fórmula médica", "Pago contra entrega"];
+
 function HeroSection() {
   return (
     <section className="hero" id="inicio">
       <div className="hero-content">
-        <div className="eyebrow">
-          <span className="eyebrow-icon">✳</span>
-          CUIDAMOS DE TI
-        </div>
+        <span className="hero-lugar">
+          <FaLocationDot aria-hidden="true" />
+          Bucaramanga y su área metropolitana
+        </span>
 
-        <h1>
-          Tu salud merece
-          <br />
-          <span>lo mejor.</span>
-        </h1>
+        <h1>La farmacia del barrio, ahora a un clic.</h1>
 
         <p className="hero-description">
-          Encuentra productos para tu bienestar y cuidado personal en un
-          solo lugar. Una forma más sencilla de cuidar de ti y de los tuyos.
+          Medicamentos, vitaminas y cuidado personal con el precio y las
+          unidades disponibles a la vista. Armas tu carrito, confirmas y te lo
+          llevamos a Bucaramanga, Floridablanca, Girón o Piedecuesta.
         </p>
 
-        <a className="primary-button" href="#productos">
-          Explorar productos <span aria-hidden="true">→</span>
-        </a>
-
-        <div className="hero-benefits">
-          <div className="benefit">
-            <span className="benefit-icon">✓</span>
-            <span>Compra sencilla</span>
-          </div>
-          <div className="benefit">
-            <span className="benefit-icon">♡</span>
-            <span>Bienestar para todos</span>
-          </div>
+        <div className="hero-acciones">
+          <a className="primary-button" href="#productos">
+            Ver el catálogo
+          </a>
+          <a className="hero-link" href="#como-pedir">
+            Cómo pedir
+          </a>
         </div>
+
+        <ul className="hero-benefits">
+          {datos.map((dato) => (
+            <li className="benefit" key={dato}>
+              <span className="benefit-icon" aria-hidden="true">
+                <FaCheck />
+              </span>
+              {dato}
+            </li>
+          ))}
+        </ul>
       </div>
 
-      {/* Ilustración decorativa: frasco y caja de producto */}
       <div className="hero-visual" aria-hidden="true">
-        <div className="hero-orbit orbit-one" />
-        <div className="hero-orbit orbit-two" />
-        <div className="hero-leaf leaf-one" />
-        <div className="hero-leaf leaf-two" />
-
-        <div className="hero-product product-bottle">
-          <div className="bottle-cap" />
-          <div className="bottle-label">
-            <span className="bottle-plus">+</span>
-            <span>DAILY</span>
-            <strong>CARE</strong>
-            <small>BIENESTAR</small>
-          </div>
+        <div className="vitrina">
+          {repisas.map((repisa, fila) => (
+            <div className="vitrina-repisa" key={fila}>
+              {repisa.map((producto, columna) => (
+                <span
+                  key={producto.tipo}
+                  className={`vitrina-producto art-${producto.color}`}
+                  style={{ "--orden": fila * 3 + columna }}
+                >
+                  <ProductoIlustracion tipo={producto.tipo} />
+                </span>
+              ))}
+            </div>
+          ))}
         </div>
 
-        <div className="hero-product product-box">
-          <span className="box-plus">+</span>
-          <span className="box-small">FARMAUIS</span>
-          <strong>VITAL</strong>
-          <span className="box-caption">CUIDADO DIARIO</span>
-        </div>
-
-        <div className="floating-note">
-          <span className="floating-note-icon">✳</span>
-          <span>
-            <strong>Cuida de ti</strong>
-            <small>Todos los días</small>
+        <div className="hero-ticket">
+          <span className="hero-ticket-titulo">Tu pedido</span>
+          <ul>
+            {pedidoEjemplo.map(({ nombre, cantidad, precio }) => (
+              <li key={nombre}>
+                <span>
+                  {nombre} <small>×{cantidad}</small>
+                </span>
+                <span>{formatPrice(cantidad * precio)}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="hero-ticket-total">
+            <span>Total</span>
+            <strong>{formatPrice(totalEjemplo)}</strong>
+          </p>
+          <span className="hero-ticket-nota">
+            <FaTruckFast /> Pagas al recibir
           </span>
         </div>
-
-        <span className="decorative-plus plus-one">+</span>
-        <span className="decorative-plus plus-two">+</span>
-      </div>
-
-      <div className="hero-bottom-label">
-        BIENESTAR <span>·</span> CONFIANZA <span>·</span> CUIDADO
       </div>
     </section>
   );

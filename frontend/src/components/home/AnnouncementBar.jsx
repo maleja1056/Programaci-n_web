@@ -1,11 +1,14 @@
-// Franja verde superior con el mensaje de bienvenida de la portada.
+// Franja verde superior de la portada: zona de entregas y horario de atención
+// (el horario sale de data/sitio.js, el mismo del pie de página).
+import { contacto } from "../../data/sitio.js";
+
 function AnnouncementBar() {
   return (
     <div className="announcement">
       <span className="announcement-dot" aria-hidden="true" />
-      Tu bienestar, nuestra prioridad
+      Entregas en el área metropolitana de Bucaramanga
       <span className="announcement-divider">·</span>
-      Descubre una forma más fácil de cuidarte
+      <span className="announcement-horario">{contacto.horario}</span>
       <span className="announcement-dot" aria-hidden="true" />
     </div>
   );

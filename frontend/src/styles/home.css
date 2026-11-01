@@ -97,6 +97,15 @@
   font-size: 22px;
 }
 
+/* "Paso 1", "Paso 2"... encima del título */
+.feature-paso {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--color-marca);
+  font-size: 12px;
+  font-weight: 700;
+}
+
 .feature-card h3 {
   margin: 0 0 6px;
   color: var(--color-texto);

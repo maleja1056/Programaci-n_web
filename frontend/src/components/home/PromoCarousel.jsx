@@ -1,6 +1,7 @@
 // Carrusel de promociones y servicios (React-Bootstrap Carousel), debajo del
 // hero. Las diapositivas se definen en src/data/carrusel.js.
 import Carousel from "react-bootstrap/Carousel";
+import { Link } from "react-router-dom";
 import { diapositivas } from "../../data/carrusel.js";
 
 function PromoCarousel() {
@@ -22,9 +23,10 @@ function PromoCarousel() {
               <span className="section-kicker">{diapositiva.etiqueta}</span>
               <h3>{diapositiva.titulo}</h3>
               <p>{diapositiva.texto}</p>
-              <a className="primary-button" href={diapositiva.enlace}>
+              {/* Link: cambia la URL sin recargar la página */}
+              <Link className="primary-button" to={diapositiva.enlace}>
                 {diapositiva.boton} <span aria-hidden="true">→</span>
-              </a>
+              </Link>
             </Carousel.Caption>
           </Carousel.Item>
         ))}

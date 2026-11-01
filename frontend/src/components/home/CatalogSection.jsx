@@ -28,8 +28,8 @@ function CatalogSection({
       <div className="products-heading">
         <div>
           <span className="section-kicker">NUESTRO CATÁLOGO</span>
-          <h2>Productos para ti</h2>
-          <p>Descubre opciones para acompañar tu rutina de cuidado.</p>
+          <h2>Qué hay hoy en la farmacia</h2>
+          <p>Precios en pesos colombianos y unidades disponibles en este momento.</p>
         </div>
         <span className="results-count">
           {loading
