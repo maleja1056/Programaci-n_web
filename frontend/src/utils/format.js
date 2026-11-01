@@ -21,3 +21,7 @@ export const formatFecha = (fecha) =>
         new Date(fecha)
       )
     : "";
+
+// Cantidad con su palabra en singular o plural: plural(2, "unidad", "unidades")
+// → "2 unidades"
+export const plural = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;

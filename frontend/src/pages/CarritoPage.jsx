@@ -18,12 +18,10 @@ import SiteFooter from "../components/layout/SiteFooter.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";
 import { useAuth } from "../context/auth-context.js";
 import { useCart } from "../context/cart-context.js";
-import { formatPrice } from "../utils/format.js";
+import { formatPrice, plural } from "../utils/format.js";
 
 const pedidosApi = crearCrud("pedidos");
 const productosApi = crearCrud("productos");
-
-const plural = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
 
 function CarritoPage() {
   const { status } = useAuth();

@@ -7,7 +7,6 @@
 //     al administrador se le filtra por su propio id (?usuario=).
 import { useCallback, useMemo, useState } from "react";
 import Alert from "react-bootstrap/Alert";
-import Form from "react-bootstrap/Form";
 import { FaCartShopping } from "react-icons/fa6";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { crearCrud } from "../api/crud.js";
@@ -15,52 +14,26 @@ import SiteFooter from "../components/layout/SiteFooter.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";
 import CrudTable from "../components/panel/CrudTable.jsx";
 import PedidoModal from "../components/panel/PedidoModal.jsx";
+import {
+  COLUMNA_ESTADO,
+  COLUMNA_PEDIDO,
+  COLUMNA_PRODUCTOS,
+  COLUMNA_TOTAL,
+  nombrePedido,
+  pedidoActivo,
+} from "../components/panel/columnasPedido.jsx";
+import FiltroEstado from "../components/panel/FiltroEstado.jsx";
 import { useAuth } from "../context/auth-context.js";
-import { formatFecha, formatPrice } from "../utils/format.js";
-import { ESTADOS_PEDIDO, estadoDe } from "../utils/pedidos.js";
 
 const api = crearCrud("pedidos");
 
-const plural = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
-
 const columnas = [
-  {
-    clave: "id",
-    titulo: "Pedido",
-    render: (fila) => (
-      <>
-        <span className="crud-cell-strong">Pedido #{fila.id}</span>
-        <span className="crud-cell-sub">{formatFecha(fila.creado_en)}</span>
-      </>
-    ),
-  },
-  {
-    clave: "direccion_entrega",
-    titulo: "Entrega en",
-  },
-  {
-    clave: "unidades",
-    titulo: "Productos",
-    render: (fila) =>
-      `${plural(Number(fila.unidades), "unidad", "unidades")} · ${plural(Number(fila.lineas), "producto", "productos")}`,
-  },
-  {
-    clave: "total",
-    titulo: "Total",
-    className: "crud-cell-number",
-    render: (fila) => formatPrice(Number(fila.total)),
-  },
-  {
-    clave: "estado",
-    titulo: "Estado",
-    render: (fila) => {
-      const estado = estadoDe(fila.estado);
-      return <span className={`crud-badge ${estado.clase}`}>{estado.texto}</span>;
-    },
-  },
+  COLUMNA_PEDIDO,
+  { clave: "direccion_entrega", titulo: "Entrega en" },
+  COLUMNA_PRODUCTOS,
+  COLUMNA_TOTAL,
+  COLUMNA_ESTADO,
 ];
-
-const nombreFila = (fila) => `Pedido #${fila.id}`;
 
 // El cliente solo puede cancelar sus pedidos pendientes
 const filaProtegida = (fila) => fila.estado !== "pendiente";
@@ -89,10 +62,7 @@ function MisPedidosPage() {
     [user, estadoFiltro]
   );
 
-  const estaActivo = useCallback(
-    (fila) => fila.estado !== "cancelado" || estadoFiltro === "cancelado",
-    [estadoFiltro]
-  );
+  const estaActivo = useMemo(() => pedidoActivo(estadoFiltro), [estadoFiltro]);
 
   const formularioPropio = useCallback(
     (props) => <PedidoModal {...props} paraCliente />,
@@ -137,24 +107,11 @@ function MisPedidosPage() {
           textoVacio="Agrega productos al carrito desde el catálogo y confirma tu pedido."
           filaProtegida={filaProtegida}
           filtros={filtros}
-          nombreFila={nombreFila}
+          nombreFila={nombrePedido}
           formularioPropio={formularioPropio}
           textoBusqueda="Buscar por dirección..."
           avisoCancelar='pasará a "cancelado" y no se enviará'
-          herramientas={
-            <Form.Select
-              aria-label="Filtrar por estado"
-              value={estadoFiltro}
-              onChange={(e) => setEstadoFiltro(e.target.value)}
-            >
-              <option value="">Todos los estados</option>
-              {ESTADOS_PEDIDO.map(({ valor, texto }) => (
-                <option key={valor} value={valor}>
-                  {texto}
-                </option>
-              ))}
-            </Form.Select>
-          }
+          herramientas={<FiltroEstado valor={estadoFiltro} alCambiar={setEstadoFiltro} />}
         />
       </main>
 
