@@ -5,6 +5,7 @@
 import Modal from "react-bootstrap/Modal";
 import { formatPrice, formatStock } from "../../utils/format.js";
 import BotonAgregar from "../carrito/BotonAgregar.jsx";
+import ProductoIlustracion from "./ProductoIlustracion.jsx";
 
 function ProductDetailModal({ product, show, onHide }) {
   return (
@@ -21,7 +22,7 @@ function ProductDetailModal({ product, show, onHide }) {
           className={`product-modal-art art-${product.color}`}
           aria-hidden="true"
         >
-          {product.symbol}
+          <ProductoIlustracion tipo={product.ilustracion} />
         </span>
         <div>
           <span className="section-kicker">{product.category}</span>

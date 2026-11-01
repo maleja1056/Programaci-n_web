@@ -4,7 +4,7 @@
 // envueltas en ProtectedRoute para que no se puedan abrir escribiendo la URL
 // sin haber iniciado sesión. Cualquier otra ruta muestra la página 404.
 // Aquí también se cargan las hojas de estilo del proyecto.
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation } from "react-router-dom";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
 import ArchivosPage from "./pages/ArchivosPage.jsx";
 import CarritoPage from "./pages/CarritoPage.jsx";
@@ -22,45 +22,52 @@ import "./styles/auth.css";
 import "./styles/panel.css";
 
 function App() {
+  const { pathname } = useLocation();
+
+  // La key hace que el contenedor se vuelva a montar al cambiar de página, y
+  // con eso se repite la transición de entrada (.pagina en app.css). Cambiar
+  // solo el #hash o los filtros de la URL no la repite.
   return (
-    <Routes>
-      <Route path="/" element={<HomePage />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/carrito" element={<CarritoPage />} />
-      <Route
-        path="/panel"
-        element={
-          <ProtectedRoute>
-            <PanelPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/perfil"
-        element={
-          <ProtectedRoute>
-            <ProfilePage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/mis-pedidos"
-        element={
-          <ProtectedRoute>
-            <MisPedidosPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/archivos"
-        element={
-          <ProtectedRoute>
-            <ArchivosPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route path="*" element={<NotFoundPage />} />
-    </Routes>
+    <div className="pagina" key={pathname}>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/carrito" element={<CarritoPage />} />
+        <Route
+          path="/panel"
+          element={
+            <ProtectedRoute>
+              <PanelPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/perfil"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/mis-pedidos"
+          element={
+            <ProtectedRoute>
+              <MisPedidosPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/archivos"
+          element={
+            <ProtectedRoute>
+              <ArchivosPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
+    </div>
   );
 }
 

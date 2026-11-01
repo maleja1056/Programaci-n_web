@@ -11,6 +11,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getCatalog } from "../api/catalog.js";
 import { USAR_BACKEND } from "../api/config.js";
+import { ilustracionDe } from "../utils/ilustraciones.js";
 
 // Símbolo y estilo de cada categoría en las tarjetas de categorías
 const categoryVisuals = {
@@ -20,13 +21,14 @@ const categoryVisuals = {
   "Primeros auxilios": { symbol: "+", style: "first-aid" },
 };
 
-// Color y símbolo de la ilustración de cada producto, según el id de su
-// categoría (clases .art-blue, .art-mint... en app.css)
-const productVisuals = {
-  1: { color: "blue", symbol: "+" },
-  2: { color: "mint", symbol: "◇" },
-  3: { color: "orange", symbol: "C" },
-  4: { color: "green", symbol: "+" },
+// Color de fondo de la ilustración de cada producto, según el id de su
+// categoría (clases .art-blue, .art-mint... en app.css). El dibujo lo elige
+// utils/ilustraciones.js.
+const productColors = {
+  1: "blue",
+  2: "mint",
+  3: "orange",
+  4: "green",
 };
 
 export const ALL_CATEGORIES = "Todos";
@@ -114,13 +116,9 @@ function useCatalog() {
           await getCatalog();
 
         // Se pasan los campos de la API (en español) a los nombres que usan
-        // los componentes, y se añaden el color y el símbolo de la tarjeta
+        // los componentes, y se añaden el color y el dibujo de la tarjeta
         const normalizedProducts = productsData.map((product) => {
           const categoryId = Number(product.categoria_id);
-          const visual = productVisuals[categoryId] || {
-            color: "green",
-            symbol: "+",
-          };
           const stock = Number(product.stock);
           const soldOut = !(stock > 0);
           const requiereFormula = Boolean(product.requiere_formula);
@@ -134,8 +132,8 @@ function useCatalog() {
             price: Number(product.precio),
             stock,
             soldOut,
-            color: visual.color,
-            symbol: visual.symbol,
+            color: productColors[categoryId] || "green",
+            ilustracion: ilustracionDe(product.nombre, product.categoria),
             label: productLabel(soldOut, requiereFormula),
             requiereFormula,
           };

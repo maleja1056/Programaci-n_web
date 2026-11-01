@@ -25,4 +25,19 @@
   --color-marca-fondo: #1b6e43;
   --color-marca-fondo-hover: #145a37;
   --color-oscuro-fondo: #174e3b; /* franja de anuncio */
+
+  /* Profundidad: sombras teñidas del verde de la marca (no gris), en tres
+     niveles. 1: tarjetas en reposo; 2: elementos destacados o al pasar el
+     mouse; 3: tarjeta elevada y menús. Cada una combina una sombra corta y
+     nítida (contacto) con una larga y difusa (ambiente). */
+  --sombra-1: 0 1px 2px rgba(23, 54, 42, 0.05), 0 4px 12px rgba(23, 78, 59, 0.05);
+  --sombra-2: 0 2px 4px rgba(23, 54, 42, 0.05), 0 10px 24px rgba(23, 78, 59, 0.08);
+  --sombra-3: 0 4px 8px rgba(23, 54, 42, 0.06), 0 22px 44px rgba(23, 78, 59, 0.13);
+  --borde-suave: #e3ece5;
+
+  /* Movimiento: duración y curvas comunes. "rebote" pasa un poco del final
+     y vuelve, para lo que se eleva o salta. */
+  --duracion: 240ms;
+  --curva: cubic-bezier(0.22, 0.61, 0.36, 1);
+  --curva-rebote: cubic-bezier(0.34, 1.56, 0.64, 1);
 }

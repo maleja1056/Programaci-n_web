@@ -13,6 +13,7 @@
 .promo-carousel {
   overflow: hidden;
   border-radius: 16px;
+  box-shadow: var(--sombra-2);
   background: #e7f6e8;
 }
 
@@ -78,9 +79,10 @@
 
 .feature-card {
   padding: 26px 22px;
-  border: 1px solid #e8eee9;
-  border-radius: 13px;
-  background: #fff;
+  border: 1px solid var(--borde-suave);
+  border-radius: 16px;
+  background: linear-gradient(180deg, #fff 55%, #f8fcf9);
+  box-shadow: var(--sombra-1);
 }
 
 .feature-icon {
@@ -192,8 +194,22 @@
   --bs-accordion-border-color: #e1eae2;
 }
 
+/* Cada pregunta es una tarjeta separada */
+.faq-accordion .accordion-item {
+  margin-bottom: 10px;
+  overflow: hidden;
+  border: 1px solid var(--borde-suave);
+  border-radius: 14px;
+  box-shadow: var(--sombra-1);
+}
+
 .faq-accordion .accordion-button {
   font-weight: 600;
+}
+
+.faq-accordion .accordion-item:first-of-type .accordion-button,
+.faq-accordion .accordion-item:last-of-type .accordion-button.collapsed {
+  border-radius: 0;
 }
 
 .faq-accordion .accordion-body {
@@ -310,9 +326,29 @@
   flex-direction: column;
   overflow: hidden;
   margin: 0;
-  border: 1px solid #e8eee9;
-  border-radius: 13px;
+  border: 1px solid var(--borde-suave);
+  border-radius: 16px;
   background: #fff;
+  box-shadow: var(--sombra-1);
+  transition:
+    transform var(--duracion) var(--curva),
+    box-shadow var(--duracion) var(--curva);
+}
+
+.turismo-card:hover,
+.turismo-card:focus-within {
+  transform: translateY(-4px);
+  box-shadow: var(--sombra-3);
+}
+
+/* La foto se acerca un poco al pasar el mouse (el marco la recorta) */
+.turismo-card img {
+  transition: transform 600ms var(--curva);
+}
+
+.turismo-card:hover img,
+.turismo-card:focus-within img {
+  transform: scale(1.04);
 }
 
 .turismo-card img {

@@ -35,6 +35,9 @@ function BotonAgregar({ product, className = "", conTexto = true }) {
       precio: product.price,
       stock: product.stock,
       requiereFormula: product.requiereFormula,
+      // Para mostrar el mismo dibujo en el carrito
+      ilustracion: product.ilustracion,
+      color: product.color,
     });
     setAgregado(true);
   };

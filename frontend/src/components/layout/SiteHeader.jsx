@@ -7,7 +7,7 @@
 // sesión muestra el botón que abre el modal de login; con sesión muestra el
 // menú desplegable de rutas privadas. Ocultar el menú no protege nada por
 // sí solo: las rutas usan ProtectedRoute y, con backend, el servidor exige sesión.
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Collapse from "react-bootstrap/Collapse";
 import Dropdown from "react-bootstrap/Dropdown";
 import { FaBars, FaCartShopping, FaXmark } from "react-icons/fa6";
@@ -59,6 +59,14 @@ function NavMenu({ id, label, active, children }) {
 function SiteHeader() {
   const { user, status, logout } = useAuth();
   const { unidades } = useCart();
+  // El contador "salta" cuando se agrega algo al carrito (no al cargar la
+  // página). La key reinicia la animación en cada salto.
+  const [saltos, setSaltos] = useState(0);
+  const unidadesAntes = useRef(unidades);
+  useEffect(() => {
+    if (unidades > unidadesAntes.current) setSaltos((n) => n + 1);
+    unidadesAntes.current = unidades;
+  }, [unidades]);
   const categories = useCategoryMenu();
   const navigate = useNavigate();
   const location = useLocation();
@@ -193,7 +201,11 @@ function SiteHeader() {
           <FaCartShopping aria-hidden="true" />
           <span className="header-cart-text">Carrito</span>
           {unidades > 0 && (
-            <span className="header-cart-count" aria-hidden="true">
+            <span
+              key={saltos}
+              className={`header-cart-count${saltos ? " is-salto" : ""}`}
+              aria-hidden="true"
+            >
               {unidades > 99 ? "99+" : unidades}
             </span>
           )}

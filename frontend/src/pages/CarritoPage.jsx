@@ -15,10 +15,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { crearCrud } from "../api/crud.js";
 import LoginModal from "../components/auth/LoginModal.jsx";
 import SiteFooter from "../components/layout/SiteFooter.jsx";
+import ProductoIlustracion from "../components/home/ProductoIlustracion.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";
 import { useAuth } from "../context/auth-context.js";
 import { useCart } from "../context/cart-context.js";
 import { formatPrice, plural } from "../utils/format.js";
+import { ilustracionDe } from "../utils/ilustraciones.js";
 
 const pedidosApi = crearCrud("pedidos");
 const productosApi = crearCrud("productos");
@@ -130,6 +132,9 @@ function CarritoPage() {
                 const agotado = item.disponible === false;
                 return (
                   <li key={item.id} className={`carrito-item${agotado ? " is-agotado" : ""}`}>
+                    <span className={`carrito-item-art art-${item.color || "green"}`}>
+                      <ProductoIlustracion tipo={item.ilustracion || ilustracionDe(item.nombre)} />
+                    </span>
                     <div className="carrito-item-info">
                       <strong>{item.nombre}</strong>
                       <span className="crud-cell-sub">
