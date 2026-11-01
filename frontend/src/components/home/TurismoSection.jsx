@@ -5,8 +5,9 @@
 // Primero se lee /publico/turismo/imagenes.json y luego cada imagen se carga
 // desde /publico/turismo/<archivo>. Si el backend no responde (por ejemplo,
 // en el modo demostración), la sección no se muestra.
-// Las tres fotos forman una franja de borde a borde, fundidas entre sí con
-// un degradado. En computador, la que tiene el mouse o el foco del teclado
+// Las tres fotos forman una franja de borde a borde, inclinada 5° y fundidas
+// entre sí con un degradado. En computador el encabezado va arriba a la
+// derecha, en el espacio que deja la inclinación. En computador, la que tiene el mouse o el foco del teclado
 // se ensancha y muestra su descripción (home.css). En celular van en
 // columna, con toda la información.
 import { useEffect, useState } from "react";

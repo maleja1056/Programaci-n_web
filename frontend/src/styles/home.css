@@ -881,11 +881,21 @@
    encabezado sigue en el ancho normal). Cada foto se monta sobre la
    anterior y su borde se desvanece con una máscara, así que se funden sin
    línea de corte. .app-shell recorta el desborde (no hay scroll lateral). */
+/* Bordes inclinados 5° (bajan de izquierda a derecha): se recortan con
+   clip-path, así las fotos y los textos siguen derechos. La caída en todo
+   el ancho es tan(5°) × 100vw ≈ 8.75vw. */
 .turismo-franja {
   --fundido: 90px;
+  --inclinacion: 8.75vw;
   display: flex;
   margin: 28px calc(50% - 50vw) 0;
   background: #16362a;
+  clip-path: polygon(
+    0 0,
+    100% var(--inclinacion),
+    100% 100%,
+    0 calc(100% - var(--inclinacion))
+  );
 }
 
 .turismo-card {
@@ -980,6 +990,15 @@
   .turismo-card figcaption {
     padding-inline: 16px;
   }
+
+  /* El borde inclinado de abajo solo recorta la última foto */
+  .turismo-card:last-child figcaption {
+    padding-bottom: calc(var(--inclinacion) + 16px);
+  }
+
+  .turismo-card:last-child {
+    min-height: calc(250px + var(--inclinacion));
+  }
 }
 
 /* ---------- Bucaramanga como panel que se expande (computador) ----------
@@ -990,7 +1009,12 @@
    Con "reducir movimiento" el cambio es inmediato (regla de app.css). */
 @media (min-width: 901px) and (hover: hover) {
   .turismo-franja {
-    height: 460px;
+    height: calc(460px + var(--inclinacion));
+  }
+
+  /* El texto de cada foto sube por encima del borde inclinado de abajo */
+  .turismo-card figcaption {
+    padding-bottom: calc(var(--inclinacion) + 18px);
   }
 
   .turismo-card {
@@ -1062,3 +1086,31 @@
   }
 }
 
+/* ---------- Bucaramanga: encabezado arriba a la derecha (computador) ----------
+   El encabezado y la franja comparten la celda de una grilla: el encabezado
+   queda en el triángulo libre que deja el borde inclinado arriba a la
+   derecha. La franja baja 56 px para que ese triángulo sea más alto que el
+   encabezado. En pantallas angostas el encabezado va encima, como antes. */
+@media (min-width: 1001px) {
+  .turismo-section {
+    display: grid;
+  }
+
+  .turismo-section > .section-heading,
+  .turismo-section > .turismo-franja {
+    grid-area: 1 / 1;
+  }
+
+  .turismo-section > .section-heading {
+    position: relative;
+    z-index: 2;
+    align-self: start;
+    justify-self: end;
+    max-width: 560px;
+    text-align: right;
+  }
+
+  .turismo-section > .turismo-franja {
+    margin-top: 56px;
+  }
+}
