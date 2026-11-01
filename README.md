@@ -78,14 +78,6 @@ Para mostrar el frontend sin backend ni MySQL, crea `frontend/.env` con `VITE_MO
 - el login es simulado (`Admin` / `1234`, en `frontend/src/api/demo.js`);
 - el catálogo sale de `frontend/src/data/productos.js`.
 
-## Antes de subir cambios del frontend (correcciones de la Fase I)
-
-En la Fase I el profesor bajó la nota por tres cosas. Revísalas antes de abrir un PR:
-
-1. **Submenús:** las secciones con contenido agrupable usan un dropdown en la barra, como Categorías, Productos y Nosotros en `SiteHeader.jsx`.
-2. **Contraste:** el color del texto solo se escribe con las variables de `src/styles/tokens.css` (por ejemplo `color: var(--color-texto-suave)`), nunca con un `#hex` suelto. `npm run lint` ejecuta también `npm run check:colores`, que falla si algún color de texto no usa la paleta o si una pareja texto/fondo no llega al contraste AA (4,5:1).
-3. **Simplicidad:** menos elementos y flujos cortos. Prueba en móvil (360–390 px), tableta (820 px) y PC antes de dar algo por terminado.
-
 ## Estructura del frontend
 
 ```
@@ -117,12 +109,3 @@ frontend/src/
 ├── pages/                   Inicio, login, panel, perfil, carrito, mis pedidos, archivos y 404
 └── styles/                  Hojas de estilo (tokens de color, app, cabecera, pie, auth, inicio, panel)
 ```
-
-Archivos de cada integrante, para no editar los mismos a la vez:
-
-| Integrante | Archivos principales |
-|---|---|
-| 1. Usuarios y sesión | `components/auth/`, `context/`, `api/auth.js`, `pages/LoginPage.jsx`, `PanelPage.jsx`, `ProfilePage.jsx` |
-| 2. Catálogo y búsqueda | `hooks/useCatalog.js`, `components/home/CategoriesSection.jsx`, `CatalogSection.jsx` |
-| 3. Detalle de producto | `components/home/ProductCard.jsx` y los componentes nuevos de detalle |
-| 4. Diseño e integración | `components/layout/`, `data/`, `components/home/HeroSection.jsx`, `CareBanner.jsx`, las secciones nuevas de la portada y `styles/` |
