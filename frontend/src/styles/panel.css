@@ -655,3 +655,135 @@
     height: 42px;
   }
 }
+
+/* ---------- Modal de pedidos (PedidoModal.jsx) ---------- */
+
+/* Cliente, correo y fecha bajo el título "Pedido #N" */
+.pedido-meta {
+  margin: 4px 0 0;
+  color: var(--color-texto-suave);
+  font-size: 13px;
+}
+
+.pedido-subtitulo {
+  margin: 22px 0 4px;
+  color: var(--color-texto);
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.pedido-nota {
+  margin: 0 0 8px;
+  color: var(--color-texto-suave);
+  font-size: 13px;
+}
+
+.pedido-error {
+  grid-column: 1 / -1;
+  margin: 6px 0 0;
+  color: var(--color-peligro);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* Lista de productos del pedido: nombre | cantidad | subtotal | quitar */
+.pedido-lineas {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.pedido-linea {
+  display: grid;
+  grid-template-columns: 1fr auto 110px 36px;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid #edf1ee;
+}
+
+.pedido-linea-nombre {
+  min-width: 0;
+  color: var(--color-texto);
+  font-weight: 700;
+}
+
+.pedido-linea-editar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.pedido-linea-cantidad {
+  width: 84px;
+}
+
+.pedido-linea-cantidad-texto {
+  color: var(--color-texto-suave);
+}
+
+.pedido-linea-subtotal {
+  color: var(--color-texto);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* Fila para agregar un producto: producto | cantidad | botón */
+.pedido-agregar {
+  display: grid;
+  grid-template-columns: 1fr 110px auto;
+  align-items: end;
+  gap: 10px 12px;
+  margin-top: 14px;
+  padding: 14px;
+  border: 1px dashed #c9dccd;
+  border-radius: 14px;
+  background: #f7fbf8;
+}
+
+.pedido-agregar .form-label {
+  margin-bottom: 6px;
+  color: var(--color-texto);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.pedido-agregar-boton {
+  height: 38px;
+}
+
+.pedido-total {
+  display: flex;
+  justify-content: flex-end;
+  align-items: baseline;
+  gap: 10px;
+  margin: 16px 0 4px;
+  color: var(--color-texto-suave);
+  font-size: 14px;
+}
+
+.pedido-total strong {
+  color: var(--color-texto);
+  font-size: 20px;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 650px) {
+  .pedido-linea {
+    grid-template-columns: 1fr auto auto;
+  }
+
+  .pedido-linea-nombre {
+    grid-column: 1 / -1;
+  }
+
+  .pedido-agregar {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .pedido-agregar-producto,
+  .pedido-agregar-boton {
+    grid-column: 1 / -1;
+  }
+}

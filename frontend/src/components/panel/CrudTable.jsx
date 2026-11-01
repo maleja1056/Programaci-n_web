@@ -15,7 +15,9 @@
 //   columnas      [{ clave, titulo, render?(fila), className? }]; la primera
 //                 es la principal (en celulares encabeza la tarjeta de la fila)
 //   campos        campos del formulario (ver CampoFormulario más abajo)
-//   campoActivo   columna que indica si la fila está activa ("activo"/"activa")
+//   campoActivo   columna que indica si la fila está activa ("activo"/"activa"),
+//                 o una función (fila) => true/false (por ejemplo, en pedidos:
+//                 activo es todo lo que no está "cancelado")
 //   filtros       filtros extra para listar (por ejemplo { categoria: 3 })
 //   herramientas  elementos extra junto al buscador (por ejemplo un select)
 //   nombreFila    (fila) => texto con el que se nombra la fila al confirmar
@@ -26,6 +28,13 @@
 //                 mostrarse en la tienda)
 //   filaProtegida (fila) => true si la fila no se puede cancelar ni borrar
 //                 (por ejemplo, la cuenta del propio administrador)
+//   permitirReactivar  false si una fila cancelada no puede volver a activarse
+//   mostrarEstado false oculta la columna "Estado" (Activo/Cancelado) cuando la
+//                 pestaña muestra su propio estado
+//   formularioPropio   ({ modo, fila, alTerminar(texto), alCerrar }) => modal
+//                 para crear y editar cuando el formulario no es una lista de
+//                 campos simple (por ejemplo, un pedido con varios productos).
+//                 Si se pasa, "campos" no se usa.
 import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
@@ -127,8 +136,11 @@ function validar(campos, valores, modo) {
   return errores;
 }
 
-const estaActiva = (fila, campoActivo) =>
-  !campoActivo || Boolean(Number(fila[campoActivo]));
+const estaActiva = (fila, campoActivo) => {
+  if (!campoActivo) return true;
+  if (typeof campoActivo === "function") return campoActivo(fila);
+  return Boolean(Number(fila[campoActivo]));
+};
 
 // ---------- Un campo del formulario ----------
 // Cada campo es un objeto:
@@ -242,6 +254,9 @@ function CrudTable({
   avisoBorrar = "",
   avisoCancelar = "dejará de mostrarse en la tienda",
   filaProtegida = () => false,
+  permitirReactivar = true,
+  mostrarEstado = true,
+  formularioPropio,
   alGuardar,
 }) {
   const { handleUnauthorized } = useAuth();
@@ -259,6 +274,8 @@ function CrudTable({
 
   // Formulario: { modo: "crear" | "editar", fila, valores, errores }
   const [formulario, setFormulario] = useState(null);
+  // Formulario propio de la pestaña (prop formularioPropio): { modo, fila }
+  const [formularioExterno, setFormularioExterno] = useState(null);
   const [guardando, setGuardando] = useState(false);
   const [errorGuardar, setErrorGuardar] = useState("");
 
@@ -336,6 +353,7 @@ function CrudTable({
 
   // ----- Formulario -----
   const abrirNuevo = () => {
+    if (formularioPropio) return setFormularioExterno({ modo: "crear", fila: null });
     const valores = {};
     for (const campo of campos) valores[campo.nombre] = valorVacio(campo);
     setErrorGuardar("");
@@ -343,6 +361,7 @@ function CrudTable({
   };
 
   const abrirEditar = (fila) => {
+    if (formularioPropio) return setFormularioExterno({ modo: "editar", fila });
     setErrorGuardar("");
     setFormulario({
       modo: "editar",
@@ -415,7 +434,7 @@ function CrudTable({
   const textosConfirmacion = confirmacion && {
     cancelar: {
       titulo: `¿Cancelar ${singular}?`,
-      texto: `"${nombreFila(confirmacion.fila)}" ${avisoCancelar}, pero sus datos se conservan. Puedes reactivarl${femenino ? "a" : "o"} después.`,
+      texto: `"${nombreFila(confirmacion.fila)}" ${avisoCancelar}, pero sus datos se conservan.${permitirReactivar ? ` Puedes reactivarl${femenino ? "a" : "o"} después.` : ""}`,
       boton: "Sí, cancelar",
       peligro: false,
     },
@@ -534,7 +553,7 @@ function CrudTable({
                     {columna.titulo}
                   </th>
                 ))}
-                {campoActivo && <th scope="col">Estado</th>}
+                {campoActivo && mostrarEstado && <th scope="col">Estado</th>}
                 <th scope="col" className="crud-actions-col">
                   Acciones
                 </th>
@@ -559,7 +578,7 @@ function CrudTable({
                         </div>
                       </td>
                     ))}
-                    {campoActivo && (
+                    {campoActivo && mostrarEstado && (
                       <td data-label="Estado">
                         <span className={`crud-badge ${activa ? "is-on" : "is-off"}`}>
                           {activa ? (femenino ? "Activa" : "Activo") : femenino ? "Cancelada" : "Cancelado"}
@@ -588,7 +607,7 @@ function CrudTable({
                             >
                               <FaBan aria-hidden="true" />
                             </button>
-                          ) : (
+                          ) : permitirReactivar && (
                             <button
                               type="button"
                               className="crud-icon-button"
@@ -683,6 +702,19 @@ function CrudTable({
           </Form>
         )}
       </Modal>
+
+      {/* Formulario propio de la pestaña (por ejemplo, el de pedidos) */}
+      {formularioPropio &&
+        formularioPropio({
+          modo: formularioExterno?.modo,
+          fila: formularioExterno?.fila,
+          abierto: Boolean(formularioExterno),
+          alCerrar: () => setFormularioExterno(null),
+          alTerminar: (texto) => {
+            setFormularioExterno(null);
+            terminar(texto);
+          },
+        })}
 
       {/* Modal de confirmación para cancelar, reactivar o borrar */}
       <Modal
