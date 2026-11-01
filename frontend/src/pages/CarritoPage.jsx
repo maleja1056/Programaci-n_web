@@ -129,10 +129,12 @@ function CarritoPage() {
         </div>
 
         {!items.length ? (
-          <div className="empty-state">
+          <div className="empty-state carrito-vacio">
             <FaCartShopping className="empty-state-icon" aria-hidden="true" />
-            <h3>Tu carrito está vacío</h3>
-            <p>Busca lo que necesitas en el catálogo y usa "Agregar al carrito".</p>
+            <div>
+              <h3>Tu carrito está vacío</h3>
+              <p>Elige productos del catálogo de abajo con "Agregar al carrito".</p>
+            </div>
             <a className="crud-button is-primary" href="#catalogo">
               Ver el catálogo
             </a>

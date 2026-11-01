@@ -20,7 +20,7 @@
   display: grid;
   grid-template-columns: 1.3fr 0.8fr 1.2fr 1.3fr;
   gap: 40px;
-  padding: 44px 0 36px;
+  padding: 36px 0 28px;
 }
 
 /* ---------- Marca y redes ---------- */
@@ -292,16 +292,72 @@
     width: calc(100% - 32px);
   }
 
+  /* Celular: marca y redes en una fila, los enlaces en línea y el equipo
+     en dos columnas */
   .footer-main {
     grid-template-columns: 1fr;
-    gap: 28px;
-    padding: 36px 0 28px;
+    gap: 20px;
+    padding: 24px 0 18px;
+  }
+
+  .footer-about {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 16px;
+  }
+
+  .footer-about p {
+    order: 3;
+    max-width: none;
+    flex-basis: 100%;
+    margin: 0;
+  }
+
+  .footer-social {
+    gap: 8px;
+  }
+
+  .footer-social a {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .footer-title {
+    margin-bottom: 10px;
+  }
+
+  .footer-links {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+  }
+
+  .footer-contact {
+    gap: 7px;
+  }
+
+  .footer-team {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 8px;
+  }
+
+  .team-member {
+    align-items: flex-start;
+    gap: 8px;
+    padding: 4px 8px;
+  }
+
+  .team-avatar {
+    width: 28px;
+    height: 28px;
   }
 
   .footer-bottom {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 8px;
+    padding: 12px 0;
   }
 
   .team-details > div {

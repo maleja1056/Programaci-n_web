@@ -56,10 +56,19 @@ select:focus-visible {
 }
 
 /* ---------- CONTENEDOR Y BARRA DE ANUNCIO: franja verde superior ---------- */
+/* Columna de alto mínimo de la pantalla: en las páginas cortas el contenido
+   crece (flex: 1) y el pie queda abajo sin forzar un alto fijo */
 .app-shell {
+  display: flex;
   width: 100%;
+  min-height: 100vh;
+  flex-direction: column;
   overflow: hidden;
   background: #fff;
+}
+
+.app-shell > main {
+  flex: 1 0 auto;
 }
 
 .announcement {
@@ -500,7 +509,7 @@ select:focus-visible {
 /* Dentro de una página interna (carrito) ya está en el ancho de la página */
 .panel-page .products-section {
   width: 100%;
-  margin-top: 64px;
+  margin-top: 44px;
 }
 
 /* "Ver más" debajo de las dos filas de productos de la portada: una línea
@@ -973,11 +982,10 @@ select:focus-visible {
 /* ---------- ESTADO VACÍO: sin resultados o error de carga ---------- */
 .empty-state {
   display: flex;
-  min-height: 260px;
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  padding: 30px;
+  padding: 28px 24px;
   border: 1px dashed #dce9de;
   border-radius: 14px;
   background: #fbfdfb;
@@ -1004,6 +1012,35 @@ select:focus-visible {
 
 .empty-state .primary-button {
   margin-top: 10px;
+}
+
+/* Carrito vacío: una sola fila (ícono, texto y botón), sin caja */
+.empty-state.carrito-vacio {
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 12px 16px;
+  padding: 16px 20px;
+  border-style: solid;
+  border-color: var(--borde-suave);
+  text-align: left;
+}
+
+.carrito-vacio .empty-state-icon {
+  font-size: 26px;
+}
+
+.carrito-vacio h3 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.carrito-vacio p {
+  margin: 0;
+}
+
+.carrito-vacio > div {
+  flex: 1 1 240px;
 }
 
 /* ---------- BANNER DE CUIDADO Y BOTÓN SECUNDARIO ---------- */

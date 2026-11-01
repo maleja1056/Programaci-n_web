@@ -128,11 +128,10 @@ button.header-login:hover {
 .auth-page {
   display: flex;
   width: min(1180px, calc(100% - 64px));
-  min-height: calc(100vh - 82px);
   align-items: flex-start;
   justify-content: center;
-  margin: auto;
-  padding: 56px 0 72px;
+  margin: 0 auto;
+  padding: 40px 0 48px;
   background:
     radial-gradient(circle at 15% 10%, #eaf7ee 0, transparent 40%),
     radial-gradient(circle at 85% 80%, #f1f9f1 0, transparent 45%);
@@ -315,13 +314,12 @@ button.header-login:hover {
 
 .panel-page {
   width: min(1180px, calc(100% - 64px));
-  min-height: calc(100vh - 82px);
-  margin: auto;
-  padding: 48px 0 72px;
+  margin: 0 auto;
+  padding: 36px 0 48px;
 }
 
 .panel-heading {
-  margin-bottom: 28px;
+  margin-bottom: 20px;
 }
 
 .panel-heading p {
@@ -424,7 +422,7 @@ button.header-login:hover {
   .auth-page,
   .panel-page {
     width: calc(100% - 32px);
-    padding-top: 28px;
+    padding-top: 24px;
   }
 
   .auth-card {
