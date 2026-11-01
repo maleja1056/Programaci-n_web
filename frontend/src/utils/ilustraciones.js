@@ -3,6 +3,11 @@
 // producto nuevo creado desde el panel), se usa el dibujo de su categoría.
 
 const POR_NOMBRE = [
+  [/omega/, "perlas"],
+  [/multivitam/, "multivitaminico"],
+  [/curita/, "curita"],
+  [/protector|bloqueador/, "protector"],
+  [/alcohol/, "alcohol"],
   [/acetaminof|paracetamol|tableta|naproxeno|loratadina/, "blister"],
   [/amoxicil|capsula|omeprazol|antibiotico/, "capsulas"],
   [/ibuprofen|aspirina|jarabe/, "frasco"],

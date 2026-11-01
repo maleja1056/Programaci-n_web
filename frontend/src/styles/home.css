@@ -423,19 +423,21 @@
 }
 
 /* Diapositiva de vitaminas: tarjetas de los productos de la categoría */
+/* Hasta 3 tarjetas en una sola fila, para no hacer más alto el carrusel */
 .promo-tarjetas {
   display: flex;
-  flex-wrap: wrap;
   justify-content: center;
-  gap: 16px;
+  gap: 12px;
 }
 
 .promo-tarjeta {
   display: grid;
-  width: 200px;
+  flex: 0 1 170px;
+  min-width: 0;
   justify-items: center;
+  align-content: start;
   gap: 4px;
-  padding: 16px;
+  padding: 12px;
   border-radius: 16px;
   background: #fff;
   box-shadow: var(--sombra-2);
@@ -453,7 +455,8 @@
 
 .promo-tarjeta strong {
   color: var(--color-texto);
-  font-size: 15px;
+  font-size: 14px;
+  line-height: 1.3;
 }
 
 .promo-tarjeta-precio {
@@ -463,7 +466,9 @@
 
 .boton-agregar.promo-tarjeta-boton {
   width: 100%;
-  margin-top: 8px;
+  margin-top: auto;
+  padding-inline: 8px;
+  font-size: 12px;
 }
 
 /* Imagen de respaldo de vitaminas (si el catálogo no carga) */
@@ -759,6 +764,7 @@
   }
 
   .promo-tarjeta {
+    flex-basis: 100%;
     width: 100%;
     grid-template-columns: 72px 1fr;
     justify-items: start;

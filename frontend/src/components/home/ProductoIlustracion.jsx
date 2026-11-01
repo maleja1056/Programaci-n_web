@@ -173,6 +173,100 @@ function Vitaminas() {
   );
 }
 
+// Cápsula blanda (perla) de Omega 3
+function Perla({ x, y, giro, escala = 1 }) {
+  return (
+    <g transform={`translate(${x} ${y}) rotate(${giro}) scale(${escala})`}>
+      <ellipse rx="22" ry="13" fill={BLANCO} {...trazo} />
+      <ellipse rx="22" ry="13" fill="currentColor" opacity="0.3" />
+      <ellipse cx="-8" cy="-5" rx="7" ry="2.6" fill={BLANCO} opacity="0.85" />
+    </g>
+  );
+}
+
+function Perlas() {
+  return (
+    <>
+      <Perla x={86} y={46} giro={-8} escala={0.82} />
+      <Perla x={60} y={78} giro={-22} />
+      <Perla x={106} y={78} giro={16} escala={0.92} />
+    </>
+  );
+}
+
+// Frasco de multivitamínico: tabletas de varias formas en la etiqueta
+function Multivitaminico() {
+  return (
+    <>
+      <rect x="48" y="46" width="62" height="56" rx="13" fill={BLANCO} {...trazo} />
+      <rect x="52" y="30" width="54" height="18" rx="5" fill="currentColor" />
+      <path d="M58 38h42" stroke={BLANCO} strokeWidth="1.6" opacity="0.4" />
+      <rect x="58" y="60" width="42" height="28" rx="6" fill="currentColor" opacity="0.14" />
+      <circle cx="68" cy="74" r="5" fill="currentColor" opacity="0.7" />
+      <rect x="75" y="69" width="9" height="10" rx="2" fill="currentColor" opacity="0.45" />
+      <ellipse cx="92" cy="74" rx="5.5" ry="3.5" fill="currentColor" opacity="0.85" />
+      <Reflejo x="53" y="52" width="3" height="36" />
+      <g transform="translate(126 92) rotate(-20)">
+        <ellipse rx="10" ry="6" fill={BLANCO} {...trazo} />
+        <path d="M-6 0h12" stroke="currentColor" strokeWidth="1.4" opacity="0.5" />
+      </g>
+    </>
+  );
+}
+
+// Curita: tira adhesiva con almohadilla en el centro
+function Curita() {
+  const puntos = [];
+  for (const x of [36, 46, 112, 122]) for (const y of [-5, 5]) puntos.push([x, y]);
+  return (
+    <g transform="rotate(-18 80 66)">
+      <rect x="26" y="52" width="108" height="30" rx="15" fill={BLANCO} {...trazo} />
+      <rect x="26" y="52" width="108" height="30" rx="15" fill="currentColor" opacity="0.18" />
+      <rect x="62" y="55" width="36" height="24" rx="5" fill={BLANCO} {...trazo} />
+      <path d="M68 62h24M68 67h24M68 72h24" stroke="currentColor" strokeWidth="1" opacity="0.3" />
+      {puntos.map(([x, y]) => (
+        <circle key={`${x}${y}`} cx={x} cy={67 + y} r="1.4" fill="currentColor" opacity="0.6" />
+      ))}
+    </g>
+  );
+}
+
+// Protector solar: frasco con tapa y un sol en la etiqueta
+function Protector() {
+  const rayos = [];
+  for (let i = 0; i < 8; i += 1) {
+    const a = (i * Math.PI) / 4;
+    rayos.push(`M${80 + Math.cos(a) * 11} ${70 + Math.sin(a) * 11}L${80 + Math.cos(a) * 16} ${70 + Math.sin(a) * 16}`);
+  }
+  return (
+    <>
+      <rect x="66" y="20" width="28" height="16" rx="4" fill="currentColor" />
+      <rect x="58" y="34" width="44" height="70" rx="12" fill={BLANCO} {...trazo} />
+      <circle cx="80" cy="70" r="7" fill="currentColor" opacity="0.75" />
+      <path d={rayos.join("")} stroke="currentColor" strokeWidth="2" strokeLinecap="round" opacity="0.75" />
+      <path d="M68 92h24" stroke="currentColor" strokeWidth="2" opacity="0.3" strokeLinecap="round" />
+      <Reflejo x="63" y="42" width="3" height="50" />
+    </>
+  );
+}
+
+// Botella de alcohol antiséptico: cuello angosto y etiqueta con una cruz
+function Alcohol() {
+  return (
+    <>
+      <rect x="71" y="18" width="18" height="12" rx="3" fill="currentColor" />
+      <path
+        d="M73 30h14v10c0 4 15 8 15 18v38a8 8 0 0 1-8 8H66a8 8 0 0 1-8-8V58c0-10 15-14 15-18z"
+        fill={BLANCO}
+        {...trazo}
+      />
+      <rect x="62" y="64" width="36" height="28" rx="4" fill="currentColor" opacity="0.16" />
+      <path d="M80 70v16M72 78h16" stroke="currentColor" strokeWidth="4" strokeLinecap="round" />
+      <Reflejo x="63" y="60" width="3" height="34" />
+    </>
+  );
+}
+
 const DIBUJOS = {
   blister: Blister,
   capsulas: Capsulas,
@@ -183,6 +277,11 @@ const DIBUJOS = {
   gasas: Gasas,
   termometro: Termometro,
   vitaminas: Vitaminas,
+  perlas: Perlas,
+  multivitaminico: Multivitaminico,
+  curita: Curita,
+  protector: Protector,
+  alcohol: Alcohol,
 };
 
 function ProductoIlustracion({ tipo, className = "" }) {

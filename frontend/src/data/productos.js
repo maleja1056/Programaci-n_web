@@ -1,8 +1,8 @@
 // Catálogo local del modo demostración (ver api/config.js).
 // Tiene la misma forma que devuelven GET /api/categorias y GET /api/productos,
 // así useCatalog.js lo adapta igual que los datos del backend.
-// Los seis primeros productos son los de la base de datos del equipo; el 7 y
-// el 8 requieren fórmula (para mostrar el popover "Con fórmula") y el 9 está
+// Son los mismos 20 productos de database/datos.sql: el 7, el 8 y el 13
+// requieren fórmula (para mostrar el popover "Con fórmula") y el 9 está
 // agotado (stock 0) para mostrar ese estado.
 
 export const categorias = [
@@ -118,6 +118,105 @@ export const productos = [
     descripcion: "Termómetro de lectura rápida con alarma de fiebre",
     precio: 22000,
     stock: 0,
+    requiere_formula: false,
+  },
+  {
+    id: 10,
+    categoria_id: 1,
+    nombre: "Loratadina 10 mg",
+    descripcion: "Antihistamínico para alergias y rinitis",
+    precio: 9000,
+    stock: 40,
+    requiere_formula: false,
+  },
+  {
+    id: 11,
+    categoria_id: 1,
+    nombre: "Omeprazol 20 mg",
+    descripcion: "Protector gástrico para la acidez",
+    precio: 11000,
+    stock: 30,
+    requiere_formula: false,
+  },
+  {
+    id: 12,
+    categoria_id: 1,
+    nombre: "Jarabe para la tos",
+    descripcion: "Jarabe expectorante con miel, frasco de 120 ml",
+    precio: 13500,
+    stock: 22,
+    requiere_formula: false,
+  },
+  {
+    id: 13,
+    categoria_id: 1,
+    nombre: "Metformina 850 mg",
+    descripcion: "Antidiabético para el control de la glucosa",
+    precio: 12500,
+    stock: 25,
+    requiere_formula: true,
+  },
+  {
+    id: 14,
+    categoria_id: 2,
+    nombre: "Protector solar FPS 50",
+    descripcion: "Protección solar diaria para piel expuesta al sol",
+    precio: 32000,
+    stock: 15,
+    requiere_formula: false,
+  },
+  {
+    id: 15,
+    categoria_id: 2,
+    nombre: "Jabón antibacterial líquido",
+    descripcion: "Jabón líquido para manos, frasco de 400 ml",
+    precio: 9500,
+    stock: 35,
+    requiere_formula: false,
+  },
+  {
+    id: 16,
+    categoria_id: 3,
+    nombre: "Multivitamínico",
+    descripcion: "Vitaminas y minerales para el día a día, 30 tabletas",
+    precio: 28000,
+    stock: 20,
+    requiere_formula: false,
+  },
+  {
+    id: 17,
+    categoria_id: 3,
+    nombre: "Omega 3",
+    descripcion: "Suplemento de aceite de pescado, 60 cápsulas blandas",
+    precio: 35000,
+    stock: 12,
+    requiere_formula: false,
+  },
+  {
+    id: 18,
+    categoria_id: 4,
+    nombre: "Alcohol antiséptico",
+    descripcion: "Alcohol al 70 % para desinfección, 350 ml",
+    precio: 6500,
+    stock: 45,
+    requiere_formula: false,
+  },
+  {
+    id: 19,
+    categoria_id: 4,
+    nombre: "Curitas",
+    descripcion: "Caja de 20 curitas de tela adhesivas",
+    precio: 4500,
+    stock: 70,
+    requiere_formula: false,
+  },
+  {
+    id: 20,
+    categoria_id: 4,
+    nombre: "Venda elástica",
+    descripcion: "Venda de 5 cm para sujeción y soporte",
+    precio: 7000,
+    stock: 30,
     requiere_formula: false,
   },
 ].map(crearProducto);

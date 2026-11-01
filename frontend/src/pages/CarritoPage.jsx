@@ -7,18 +7,23 @@
 //   con la dirección y los productos. El servidor pone el precio de cada
 //   producto y descuenta el stock; luego se vacía el carrito y se va a
 //   "Mis pedidos".
+// - Debajo va el catálogo completo (#catalogo), con los mismos filtros de la
+//   portada, para seguir agregando productos. "Ver más" de la portada llega
+//   aquí con el filtro que se tenía (?categoria=...&ver=...).
 import { useCallback, useEffect, useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
 import { FaCartShopping, FaMinus, FaPlus, FaTrashCan } from "react-icons/fa6";
-import { Link, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { crearCrud } from "../api/crud.js";
 import LoginModal from "../components/auth/LoginModal.jsx";
+import CatalogSection from "../components/home/CatalogSection.jsx";
 import SiteFooter from "../components/layout/SiteFooter.jsx";
 import ProductoIlustracion from "../components/home/ProductoIlustracion.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";
 import { useAuth } from "../context/auth-context.js";
 import { useCart } from "../context/cart-context.js";
+import useCatalog from "../hooks/useCatalog.js";
 import { formatPrice, plural } from "../utils/format.js";
 import { ilustracionDe } from "../utils/ilustraciones.js";
 
@@ -30,6 +35,8 @@ function CarritoPage() {
   const { items, unidades, total, cambiarCantidad, quitar, vaciar, actualizarProductos } =
     useCart();
   const navigate = useNavigate();
+  const catalog = useCatalog();
+  const { hash, key } = useLocation();
 
   const [direccion, setDireccion] = useState("");
   const [errorDireccion, setErrorDireccion] = useState("");
@@ -51,6 +58,12 @@ function CarritoPage() {
   useEffect(() => {
     refrescar();
   }, [refrescar]);
+
+  // Salto al catálogo (#catalogo) cuando ya cargó y la página tiene su alto
+  useEffect(() => {
+    if (catalog.loading || !hash) return;
+    document.getElementById(hash.slice(1))?.scrollIntoView();
+  }, [catalog.loading, hash, key]);
 
   const sinStock = items.filter((item) => item.disponible === false);
   const conFormula = items.some((item) => item.requiereFormula);
@@ -120,9 +133,9 @@ function CarritoPage() {
             <FaCartShopping className="empty-state-icon" aria-hidden="true" />
             <h3>Tu carrito está vacío</h3>
             <p>Busca lo que necesitas en el catálogo y usa "Agregar al carrito".</p>
-            <Link className="crud-button is-primary" to="/#productos">
-              Ir al catálogo
-            </Link>
+            <a className="crud-button is-primary" href="#catalogo">
+              Ver el catálogo
+            </a>
           </div>
         ) : (
           <div className="carrito">
@@ -262,6 +275,26 @@ function CarritoPage() {
             </Form>
           </div>
         )}
+
+        <CatalogSection
+          id="catalogo"
+          etiqueta="TODO EL CATÁLOGO"
+          titulo="Sigue agregando productos"
+          descripcion="Todos los productos de la farmacia, con los mismos filtros de la portada."
+          categories={catalog.categories}
+          products={catalog.filteredProducts}
+          loading={catalog.loading}
+          error={catalog.error}
+          search={catalog.search}
+          onSearchChange={catalog.setSearch}
+          selectedCategory={catalog.selectedCategory}
+          onSelectCategory={catalog.setSelectedCategory}
+          productView={catalog.productView}
+          onProductViewChange={catalog.setProductView}
+          sortBy={catalog.sortBy}
+          onSortChange={catalog.setSortBy}
+          onResetFilters={catalog.resetFilters}
+        />
       </main>
 
       {/* Login sin salir del carrito */}

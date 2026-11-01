@@ -17,7 +17,7 @@ import useCatalog from "../hooks/useCatalog.js";
 
 function HomePage() {
   const catalog = useCatalog();
-  const { hash, key } = useLocation();
+  const { hash, key, search } = useLocation();
 
   // Salto a la sección del ancla (#productos, #preguntas...) en cada
   // navegación que la incluya: al llegar desde otra página y al elegir una
@@ -53,6 +53,9 @@ function HomePage() {
           sortBy={catalog.sortBy}
           onSortChange={catalog.setSortBy}
           onResetFilters={catalog.resetFilters}
+          // Dos filas de 5; el resto se ve en el carrito, con el mismo filtro
+          limite={10}
+          enlaceVerMas={`/carrito${search}#catalogo`}
         />
 
         <AboutSection />

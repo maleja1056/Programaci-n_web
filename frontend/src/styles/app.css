@@ -492,6 +492,32 @@ select:focus-visible {
   margin: 78px auto 0;
 }
 
+/* Dentro de una página interna (carrito) ya está en el ancho de la página */
+.panel-page .products-section {
+  width: 100%;
+  margin-top: 64px;
+}
+
+/* "Ver más" debajo de las dos filas de productos de la portada */
+.catalog-ver-mas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 12px 20px;
+  margin-top: 28px;
+  padding: 20px;
+  border: 1px dashed #cfe4d2;
+  border-radius: 14px;
+  background: #f6fbf7;
+}
+
+.catalog-ver-mas p {
+  margin: 0;
+  color: var(--color-texto-suave);
+  font-size: 14px;
+}
+
 .section-heading,
 .products-heading {
   display: flex;

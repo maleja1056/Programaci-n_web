@@ -1,10 +1,13 @@
-// Sección "Productos para ti" (#productos): buscador, menú "Ordenar por"
-// (Dropdown), filtro por tipo de producto ("Mostrar"), una fila de chips
-// para filtrar por categoría (con su número de productos) y la cuadrícula
-// de productos, con los estados
+// Sección del catálogo: buscador, menú "Ordenar por" (Dropdown), filtro por
+// tipo de producto ("Mostrar"), una fila de chips para filtrar por categoría
+// (con su número de productos) y la cuadrícula de productos, con los estados
 // de carga, error y sin resultados. No guarda estado propio: todo llega por
-// props desde HomePage (hook useCatalog).
+// props (hook useCatalog).
+// La usan la portada (#productos), que muestra como máximo "limite"
+// productos (2 filas de 5) y un enlace "Ver más", y el carrito (#catalogo),
+// que muestra todos.
 import Dropdown from "react-bootstrap/Dropdown";
+import { Link } from "react-router-dom";
 import { PRODUCT_VIEWS, SORT_OPTIONS } from "../../hooks/useCatalog.js";
 import ProductCard from "./ProductCard.jsx";
 
@@ -22,14 +25,23 @@ function CatalogSection({
   sortBy,
   onSortChange,
   onResetFilters,
+  id = "productos",
+  etiqueta = "NUESTRO CATÁLOGO",
+  titulo = "Qué hay hoy en la farmacia",
+  descripcion = "Precios en pesos colombianos y unidades disponibles en este momento.",
+  limite, // sin límite se muestran todos
+  enlaceVerMas, // a dónde lleva "Ver más" cuando hay más que el límite
 }) {
+  const visibles = limite ? products.slice(0, limite) : products;
+  const hayMas = visibles.length < products.length;
+
   return (
-    <section className="products-section" id="productos">
+    <section className="products-section" id={id}>
       <div className="products-heading">
         <div>
-          <span className="section-kicker">NUESTRO CATÁLOGO</span>
-          <h2>Qué hay hoy en la farmacia</h2>
-          <p>Precios en pesos colombianos y unidades disponibles en este momento.</p>
+          <span className="section-kicker">{etiqueta}</span>
+          <h2>{titulo}</h2>
+          <p>{descripcion}</p>
         </div>
         <span className="results-count">
           {loading
@@ -141,11 +153,23 @@ function CatalogSection({
           </button>
         </div>
       ) : products.length > 0 ? (
-        <div className="product-grid">
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        <>
+          <div className="product-grid">
+            {visibles.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+          {hayMas && enlaceVerMas && (
+            <div className="catalog-ver-mas">
+              <p>
+                Estás viendo {visibles.length} de {products.length} productos.
+              </p>
+              <Link className="primary-button" to={enlaceVerMas}>
+                Ver más productos
+              </Link>
+            </div>
+          )}
+        </>
       ) : (
         <div className="empty-state">
           <span className="empty-state-icon" aria-hidden="true">⌕</span>
