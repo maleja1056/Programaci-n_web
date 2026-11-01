@@ -1,4 +1,4 @@
-// Datos compartidos por la pestaña Pedidos del panel y su modal.
+// Datos de los pedidos compartidos por el panel, su modal y Mis pedidos.
 // Los estados y las reglas son los mismos del backend (backend/src/lib/pedidos.js).
 
 // Estados de un pedido, en el orden en que avanza. "clase" es el color de la

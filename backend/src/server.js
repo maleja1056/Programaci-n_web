@@ -1,11 +1,10 @@
-// Servidor Express de FarmaUIS. Registra los middlewares (CORS, JSON y
-// sesión), las rutas /api/* (un express.Router por tabla, con su CRUD, y
-// /api/archivos para subir y bajar archivos), el servidor de contenidos
-// /publico (express.static) y un manejador final que convierte los errores
-// en respuestas JSON.
+// Servidor Express de FarmaUIS. Registra los middlewares (JSON y sesión),
+// las rutas /api/* (un express.Router por tabla, con su CRUD, y /api/archivos
+// para subir y bajar archivos), el servidor de contenidos /publico
+// (express.static) y un manejador final que convierte los errores en
+// respuestas JSON.
 const path = require('path');
 const express = require('express');
-const cors = require('cors');
 const pool = require('./config/db');
 const { sessionMiddleware } = require('./config/session');
 const categoriasRoutes = require('./routes/categorias');
@@ -20,7 +19,6 @@ const archivosRoutes = require('./routes/archivos');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
 app.use(express.json());
 app.use(sessionMiddleware);
 app.use('/api/categorias', categoriasRoutes);

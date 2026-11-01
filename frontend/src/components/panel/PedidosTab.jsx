@@ -7,30 +7,25 @@
 //   Un pedido cancelado no se reactiva y uno entregado no se cancela.
 // - Los pedidos no se borran: quedan como historial de ventas.
 import { useCallback, useMemo, useState } from "react";
-import Form from "react-bootstrap/Form";
 import { crearCrud } from "../../api/crud.js";
-import { formatFecha, formatPrice } from "../../utils/format.js";
-import { ESTADOS_PEDIDO, estadoDe } from "../../utils/pedidos.js";
 import CrudTable from "./CrudTable.jsx";
 import PedidoModal from "./PedidoModal.jsx";
+import {
+  COLUMNA_ESTADO,
+  COLUMNA_PEDIDO,
+  COLUMNA_PRODUCTOS,
+  COLUMNA_TOTAL,
+  nombrePedido,
+  pedidoActivo,
+} from "./columnasPedido.jsx";
+import FiltroEstado from "./FiltroEstado.jsx";
 
 // Se crea una sola vez (fuera del componente) para que CrudTable no vuelva a
 // pedir la lista en cada render
 const api = crearCrud("pedidos");
 
-const plural = (n, uno, varios) => `${n} ${n === 1 ? uno : varios}`;
-
 const columnas = [
-  {
-    clave: "id",
-    titulo: "Pedido",
-    render: (fila) => (
-      <>
-        <span className="crud-cell-strong">Pedido #{fila.id}</span>
-        <span className="crud-cell-sub">{formatFecha(fila.creado_en)}</span>
-      </>
-    ),
-  },
+  COLUMNA_PEDIDO,
   {
     clave: "cliente",
     titulo: "Cliente",
@@ -41,29 +36,10 @@ const columnas = [
       </>
     ),
   },
-  {
-    clave: "unidades",
-    titulo: "Productos",
-    render: (fila) =>
-      `${plural(Number(fila.unidades), "unidad", "unidades")} · ${plural(Number(fila.lineas), "producto", "productos")}`,
-  },
-  {
-    clave: "total",
-    titulo: "Total",
-    className: "crud-cell-number",
-    render: (fila) => formatPrice(Number(fila.total)),
-  },
-  {
-    clave: "estado",
-    titulo: "Estado",
-    render: (fila) => {
-      const estado = estadoDe(fila.estado);
-      return <span className={`crud-badge ${estado.clase}`}>{estado.texto}</span>;
-    },
-  },
+  COLUMNA_PRODUCTOS,
+  COLUMNA_TOTAL,
+  COLUMNA_ESTADO,
 ];
-
-const nombreFila = (fila) => `Pedido #${fila.id}`;
 
 // Un pedido entregado o cancelado ya no se puede cancelar
 const filaProtegida = (fila) => fila.estado === "entregado" || fila.estado === "cancelado";
@@ -73,12 +49,7 @@ function PedidosTab({ alGuardar }) {
 
   const filtros = useMemo(() => (estadoFiltro ? { estado: estadoFiltro } : {}), [estadoFiltro]);
 
-  // "Activo" es todo pedido que no está cancelado. Si se filtra por
-  // "Cancelado", se muestran sin tener que activar "Mostrar cancelados".
-  const estaActivo = useCallback(
-    (fila) => fila.estado !== "cancelado" || estadoFiltro === "cancelado",
-    [estadoFiltro]
-  );
+  const estaActivo = useMemo(() => pedidoActivo(estadoFiltro), [estadoFiltro]);
 
   const formularioPropio = useCallback((props) => <PedidoModal {...props} />, []);
 
@@ -94,25 +65,12 @@ function PedidosTab({ alGuardar }) {
       permitirBorrar={false}
       filaProtegida={filaProtegida}
       filtros={filtros}
-      nombreFila={nombreFila}
+      nombreFila={nombrePedido}
       formularioPropio={formularioPropio}
       textoBusqueda="Buscar por cliente, correo o dirección..."
       avisoCancelar='pasará a "cancelado" y sus productos volverán al inventario'
       alGuardar={alGuardar}
-      herramientas={
-        <Form.Select
-          aria-label="Filtrar por estado"
-          value={estadoFiltro}
-          onChange={(e) => setEstadoFiltro(e.target.value)}
-        >
-          <option value="">Todos los estados</option>
-          {ESTADOS_PEDIDO.map(({ valor, texto }) => (
-            <option key={valor} value={valor}>
-              {texto}
-            </option>
-          ))}
-        </Form.Select>
-      }
+      herramientas={<FiltroEstado valor={estadoFiltro} alCambiar={setEstadoFiltro} />}
     />
   );
 }

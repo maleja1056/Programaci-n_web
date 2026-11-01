@@ -19,7 +19,7 @@ import { ApiError, apiRequest } from "./client.js";
 import { USAR_BACKEND } from "./config.js";
 
 // Ruta de la API de cada tabla
-export const RUTAS = {
+const RUTAS = {
   categorias: "/api/categorias",
   productos: "/api/productos",
   usuarios: "/api/usuarios",
@@ -67,22 +67,22 @@ async function escribir(tabla, path, opciones) {
 }
 
 // GET /api/<tabla>?filtros → arreglo de filas
-export function listar(tabla, filtros) {
+function listar(tabla, filtros) {
   return pedir(`${rutaDe(tabla)}${aQueryString(filtros)}`);
 }
 
 // GET /api/<tabla>/:id → una fila
-export function obtener(tabla, id) {
+function obtener(tabla, id) {
   return pedir(`${rutaDe(tabla)}/${encodeURIComponent(id)}`);
 }
 
 // POST /api/<tabla> → la fila creada
-export function crear(tabla, datos) {
+function crear(tabla, datos) {
   return escribir(tabla, rutaDe(tabla), { method: "POST", body: datos });
 }
 
 // PUT /api/<tabla>/:id → la fila modificada (solo cambian los campos enviados)
-export function actualizar(tabla, id, datos) {
+function actualizar(tabla, id, datos) {
   return escribir(tabla, `${rutaDe(tabla)}/${encodeURIComponent(id)}`, {
     method: "PUT",
     body: datos,
@@ -92,7 +92,7 @@ export function actualizar(tabla, id, datos) {
 // DELETE /api/<tabla>/:id → { success, message, ... }
 // Por defecto cancela (desactiva o pone el pedido en "cancelado");
 // con { definitivo: true } borra la fila de la base de datos.
-export function cancelar(tabla, id, { definitivo = false } = {}) {
+function cancelar(tabla, id, { definitivo = false } = {}) {
   const query = definitivo ? aQueryString({ definitivo: true }) : "";
   return escribir(tabla, `${rutaDe(tabla)}/${encodeURIComponent(id)}${query}`, {
     method: "DELETE",

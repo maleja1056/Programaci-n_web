@@ -90,27 +90,33 @@ En la Fase I el profesor bajó la nota por tres cosas. Revísalas antes de abrir
 
 ```
 frontend/src/
-├── main.jsx                 Punto de entrada: Bootstrap, estilos globales, router y sesión
+├── main.jsx                 Punto de entrada: Bootstrap, estilos globales, router, sesión y carrito
 ├── App.jsx                  Rutas públicas y privadas
 ├── api/                     Comunicación con el backend (fetch a /api) y modo demostración
 │   ├── config.js            Interruptor VITE_MODO_DEMO (backend por defecto)
-│   ├── demo.js              Login, sesión, panel y catálogo simulados
+│   ├── client.js            Cliente HTTP común
+│   ├── crud.js              Listar, obtener, crear, modificar y cancelar en las 5 tablas
+│   ├── archivos.js          Subir, listar, ver, descargar y borrar archivos
 │   ├── auth.js / catalog.js Funciones que usa la app (backend o demo)
-│   └── client.js            Cliente HTTP común
-├── context/                 Estado global de la sesión (AuthContext)
+│   └── demo.js              Login, sesión, panel y catálogo simulados
+├── context/                 Estado global: sesión (AuthContext) y carrito (CartContext)
 ├── data/                    Equipo, contacto y redes, carrusel, preguntas y catálogo de la demo (productos.js)
 ├── hooks/
 │   ├── useActiveSection.js  Sección visible de la portada (enlace activo de la cabecera)
 │   ├── useCategoryMenu.js   Categorías del submenú de la cabecera
-│   └── useCatalog.js        Carga, búsqueda y filtro del catálogo
+│   ├── useCatalog.js        Carga, búsqueda y filtro del catálogo
+│   └── useInView.js         Aparición de secciones al hacer scroll
 ├── utils/
-│   └── format.js            Formato de precios
+│   ├── format.js            Formato de precios, stock, fechas y plurales
+│   └── pedidos.js           Estados de un pedido (los mismos del backend)
 ├── components/
 │   ├── auth/                Login (modal y formulario) y protección de rutas
 │   ├── layout/              Cabecera (con menú Collapse en móvil), pie de página y modal del equipo
-│   └── home/                Secciones de la portada (hero, categorías, catálogo, banner)
-├── pages/                   Páginas: inicio, login, panel, perfil y 404
-└── styles/                  Hojas de estilo (app, index, bootstrap, cabecera, pie, auth)
+│   ├── home/                Secciones de la portada (hero, categorías, catálogo, Bucaramanga, preguntas)
+│   ├── carrito/             Botón "Agregar al carrito"
+│   └── panel/               CRUD del panel: tabla genérica (CrudTable), una pestaña por tabla y el modal de pedidos
+├── pages/                   Inicio, login, panel, perfil, carrito, mis pedidos, archivos y 404
+└── styles/                  Hojas de estilo (tokens de color, app, cabecera, pie, auth, inicio, panel)
 ```
 
 Archivos de cada integrante, para no editar los mismos a la vez:
