@@ -22,6 +22,10 @@
 //   alGuardar     se llama después de crear, editar o cancelar (opcional)
 //   avisoBorrar   texto extra al confirmar el borrado (qué pasa con los datos
 //                 relacionados; depende de la tabla)
+//   avisoCancelar qué pasa al cancelar una fila (por defecto, que deja de
+//                 mostrarse en la tienda)
+//   filaProtegida (fila) => true si la fila no se puede cancelar ni borrar
+//                 (por ejemplo, la cuenta del propio administrador)
 import { useCallback, useEffect, useId, useMemo, useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
@@ -236,6 +240,8 @@ function CrudTable({
   textoBusqueda = "Buscar...",
   permitirBorrar = true,
   avisoBorrar = "",
+  avisoCancelar = "dejará de mostrarse en la tienda",
+  filaProtegida = () => false,
   alGuardar,
 }) {
   const { handleUnauthorized } = useAuth();
@@ -409,7 +415,7 @@ function CrudTable({
   const textosConfirmacion = confirmacion && {
     cancelar: {
       titulo: `¿Cancelar ${singular}?`,
-      texto: `"${nombreFila(confirmacion.fila)}" dejará de mostrarse en la tienda, pero sus datos se conservan. Puedes reactivarl${femenino ? "a" : "o"} después.`,
+      texto: `"${nombreFila(confirmacion.fila)}" ${avisoCancelar}, pero sus datos se conservan. Puedes reactivarl${femenino ? "a" : "o"} después.`,
       boton: "Sí, cancelar",
       peligro: false,
     },
@@ -537,6 +543,7 @@ function CrudTable({
             <tbody>
               {filasVisibles.map((fila) => {
                 const activa = estaActiva(fila, campoActivo);
+                const protegida = filaProtegida(fila);
                 return (
                   <tr key={fila.id} className={activa ? undefined : "is-inactive"}>
                     {/* data-label: en celulares cada fila se muestra como una
@@ -570,7 +577,7 @@ function CrudTable({
                         >
                           <FaPen aria-hidden="true" />
                         </button>
-                        {campoActivo &&
+                        {campoActivo && !protegida &&
                           (activa ? (
                             <button
                               type="button"
@@ -592,7 +599,7 @@ function CrudTable({
                               <FaRotateLeft aria-hidden="true" />
                             </button>
                           ))}
-                        {permitirBorrar && (
+                        {permitirBorrar && !protegida && (
                           <button
                             type="button"
                             className="crud-icon-button is-danger"

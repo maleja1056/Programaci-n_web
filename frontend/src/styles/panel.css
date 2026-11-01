@@ -620,8 +620,10 @@
     min-width: 0;
   }
 
-  /* Primera columna (nombre): encabeza la tarjeta, sin título */
-  .crud-table tbody td.is-main {
+  /* Primera columna (nombre): encabeza la tarjeta, sin título.
+     "tr td" iguala la especificidad de "tr:last-child td" de arriba, para
+     que la última tarjeta no quede alineada distinto a las demás. */
+  .crud-table tbody tr td.is-main {
     padding-top: 10px;
     padding-bottom: 10px;
     border-bottom: 1px solid #edf1ee;
@@ -633,7 +635,7 @@
     display: none;
   }
 
-  .crud-table tbody td.crud-actions-col {
+  .crud-table tbody tr td.crud-actions-col {
     justify-content: flex-end;
     padding-top: 10px;
     border-top: 1px solid #edf1ee;
