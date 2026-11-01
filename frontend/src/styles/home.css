@@ -831,62 +831,50 @@
 }
 
 /* ---------- Conoce Bucaramanga (TurismoSection.jsx) ----------
-   Las imágenes llegan del servidor de contenidos del backend (/publico). */
-.turismo-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-  margin-top: 25px;
+   Las imágenes llegan del servidor de contenidos del backend (/publico).
+   Las tres fotos forman una franja de borde a borde de la pantalla (el
+   encabezado sigue en el ancho normal). Cada foto se monta sobre la
+   anterior y su borde se desvanece con una máscara, así que se funden sin
+   línea de corte. .app-shell recorta el desborde (no hay scroll lateral). */
+.turismo-franja {
+  --fundido: 90px;
+  display: flex;
+  margin: 28px calc(50% - 50vw) 0;
+  background: #16362a;
 }
 
 .turismo-card {
-  display: flex;
-  flex-direction: column;
+  position: relative;
   overflow: hidden;
   margin: 0;
-  border: 1px solid var(--borde-suave);
-  border-radius: 16px;
-  background: #fff;
-  box-shadow: var(--sombra-1);
-  transition:
-    transform var(--duracion) var(--curva),
-    box-shadow var(--duracion) var(--curva);
+  background: #16362a;
 }
 
-.turismo-card:hover,
-.turismo-card:focus-within {
-  transform: translateY(-4px);
-  box-shadow: var(--sombra-3);
-}
-
-/* La foto se acerca un poco al pasar el mouse (el marco la recorta) */
 .turismo-card img {
-  transition: transform 600ms var(--curva);
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: scale 900ms var(--curva);
 }
 
 .turismo-card:hover img,
 .turismo-card:focus-within img {
-  transform: scale(1.04);
+  scale: 1.04;
 }
 
-.turismo-card img {
-  display: block;
-  width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
-  object-fit: cover;
-  background: #e7f6e8;
-}
-
+/* Texto sobre la foto, con un degradado oscuro para que se lea */
 .turismo-card figcaption {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  padding: 16px 18px 18px;
+  position: absolute;
+  inset: auto 0 0;
+  padding: 80px 28px 20px;
+  background: linear-gradient(to bottom, transparent, rgba(9, 32, 23, 0.6) 35%, rgba(9, 32, 23, 0.9));
 }
 
 .turismo-municipio {
-  color: var(--color-marca);
+  color: var(--color-sobre-oscuro-suave);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.8px;
@@ -895,33 +883,57 @@
 
 .turismo-card h3 {
   margin: 4px 0 6px;
-  color: var(--color-texto);
-  font-size: 17px;
+  color: var(--color-sobre-marca);
+  font-size: 19px;
 }
 
 .turismo-card p {
+  max-width: 52ch;
   margin: 0 0 12px;
-  color: var(--color-texto-suave);
-  font-size: 13px;
+  color: var(--color-sobre-marca);
+  font-size: 14px;
   line-height: 1.55;
 }
 
 /* Crédito de la foto (licencia Creative Commons) */
-.turismo-card small {
-  margin-top: auto;
-  color: var(--color-texto-suave);
+.turismo-card small,
+.turismo-card small a {
+  color: var(--color-sobre-oscuro-suave);
   font-size: 11px;
   line-height: 1.5;
 }
 
-.turismo-card small a {
-  color: var(--color-marca);
-}
+/* Celular y pantallas sin mouse: las fotos en columna, cada una fundida
+   con la de arriba; todo el texto visible */
+@media (max-width: 900px), (hover: none) {
+  .turismo-franja {
+    flex-direction: column;
+  }
 
-@media (max-width: 900px) {
-  .turismo-grid {
-    grid-template-columns: 1fr;
-    max-width: 560px;
+  .turismo-card {
+    min-height: 340px;
+  }
+
+  .turismo-card + .turismo-card {
+    margin-top: calc(var(--fundido) * -1);
+    mask-image: linear-gradient(to bottom, transparent, #000 var(--fundido));
+  }
+
+  .turismo-card + .turismo-card figcaption {
+    padding-top: calc(var(--fundido) + 60px);
+  }
+
+  /* El texto termina antes de la zona que tapa el fundido de la siguiente */
+  .turismo-card:not(:last-child) figcaption {
+    padding-bottom: calc(var(--fundido) + 16px);
+  }
+
+  .turismo-card:not(:last-child) {
+    min-height: calc(340px + var(--fundido));
+  }
+
+  .turismo-card figcaption {
+    padding-inline: 16px;
   }
 }
 
@@ -932,57 +944,45 @@
    ve siempre, salvo en las fotos angostas mientras otra está abierta.
    Con "reducir movimiento" el cambio es inmediato (regla de app.css). */
 @media (min-width: 901px) and (hover: hover) {
-  .turismo-grid {
-    display: flex;
-    height: 440px;
-    gap: 12px;
+  .turismo-franja {
+    height: 460px;
   }
 
   .turismo-card {
-    position: relative;
     flex: 1 1 0;
     min-width: 0;
-    transition:
-      flex-grow 550ms var(--curva),
-      box-shadow var(--duracion) var(--curva);
+    transition: flex-grow 550ms var(--curva);
+  }
+
+  /* Fundido horizontal: cada foto entra sobre la anterior */
+  .turismo-card + .turismo-card {
+    margin-left: calc(var(--fundido) * -1);
+    mask-image: linear-gradient(to right, transparent, #000 var(--fundido));
+  }
+
+  .turismo-card + .turismo-card figcaption {
+    padding-left: calc(var(--fundido) + 12px);
+  }
+
+  /* El texto no entra en la zona que tapa el fundido de la siguiente, y el
+     de la primera foto se alinea con el encabezado de la sección */
+  .turismo-card:not(:last-child) figcaption {
+    padding-right: calc(var(--fundido) + 12px);
+  }
+
+  .turismo-card:first-child figcaption {
+    padding-left: max(32px, calc(50vw - 590px));
   }
 
   .turismo-card:hover,
   .turismo-card:focus-within {
     flex-grow: 3;
-    transform: none;
-  }
-
-  .turismo-card img {
-    position: absolute;
-    inset: 0;
-    height: 100%;
-    aspect-ratio: auto;
-  }
-
-  /* Texto sobre la foto, con un degradado oscuro para que se lea */
-  .turismo-card figcaption {
-    position: absolute;
-    inset: auto 0 0;
-    padding: 70px 22px 18px;
-    background: linear-gradient(to bottom, transparent, rgba(9, 32, 23, 0.6) 35%, rgba(9, 32, 23, 0.88));
-  }
-
-  .turismo-municipio {
-    color: var(--color-sobre-oscuro-suave);
   }
 
   .turismo-card h3 {
     overflow: hidden;
-    color: var(--color-sobre-marca);
-    font-size: 19px;
     text-overflow: ellipsis;
     white-space: nowrap;
-  }
-
-  .turismo-card small,
-  .turismo-card small a {
-    color: var(--color-sobre-oscuro-suave);
   }
 
   /* Descripción plegada: la fila de la grilla pasa de 0 a su alto real */
@@ -999,12 +999,6 @@
     overflow: hidden;
   }
 
-  .turismo-card p {
-    max-width: 52ch;
-    color: var(--color-sobre-marca);
-    font-size: 14px;
-  }
-
   .turismo-card:hover .turismo-detalle,
   .turismo-card:focus-within .turismo-detalle {
     grid-template-rows: 1fr;
@@ -1013,7 +1007,7 @@
   }
 
   /* Fotos angostas mientras otra está abierta: solo el nombre */
-  .turismo-grid:has(.turismo-card:is(:hover, :focus-within))
+  .turismo-franja:has(.turismo-card:is(:hover, :focus-within))
     .turismo-card:not(:hover, :focus-within) small {
     opacity: 0;
   }
@@ -1022,3 +1016,4 @@
     transition: opacity 200ms var(--curva);
   }
 }
+

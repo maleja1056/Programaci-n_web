@@ -5,9 +5,10 @@
 // Primero se lee /publico/turismo/imagenes.json y luego cada imagen se carga
 // desde /publico/turismo/<archivo>. Si el backend no responde (por ejemplo,
 // en el modo demostración), la sección no se muestra.
-// En computador las tres fotos forman un panel: la que tiene el mouse o el
-// foco del teclado se ensancha y muestra su descripción (home.css). En
-// celular se ven como tarjetas con toda la información.
+// Las tres fotos forman una franja de borde a borde, fundidas entre sí con
+// un degradado. En computador, la que tiene el mouse o el foco del teclado
+// se ensancha y muestra su descripción (home.css). En celular van en
+// columna, con toda la información.
 import { useEffect, useState } from "react";
 
 const CARPETA = "/publico/turismo";
@@ -40,7 +41,7 @@ function TurismoSection() {
         </div>
       </div>
 
-      <div className="turismo-grid">
+      <div className="turismo-franja">
         {lugares.map((lugar) => (
           <figure className="turismo-card" key={lugar.archivo}>
             <img
