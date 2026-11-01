@@ -22,6 +22,7 @@ import SiteHeader from "../components/layout/SiteHeader.jsx";
 import CategoriasTab from "../components/panel/CategoriasTab.jsx";
 import PestanaPendiente from "../components/panel/PestanaPendiente.jsx";
 import ProductosTab from "../components/panel/ProductosTab.jsx";
+import UsuariosTab from "../components/panel/UsuariosTab.jsx";
 import { useAuth } from "../context/auth-context.js";
 
 // Pestañas del panel, en orden. "Componente" es el contenido de cada una;
@@ -43,7 +44,7 @@ const PESTANAS = [
     clave: "usuarios",
     titulo: "Usuarios",
     Icono: FaUsers,
-    Componente: () => <PestanaPendiente tabla="usuarios" />,
+    Componente: UsuariosTab,
   },
   {
     clave: "pedidos",
