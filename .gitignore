@@ -20,3 +20,7 @@ pnpm-debug.log*
 .vscode/
 .idea/
 
+
+# Archivos que suben los usuarios (/api/archivos). Solo se versiona la carpeta.
+backend/uploads/*
+!backend/uploads/.gitkeep

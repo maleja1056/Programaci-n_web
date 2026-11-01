@@ -1,4 +1,4 @@
-// Datos y formatos compartidos por la pestaña Pedidos del panel y su modal.
+// Datos compartidos por la pestaña Pedidos del panel y su modal.
 // Los estados y las reglas son los mismos del backend (backend/src/lib/pedidos.js).
 
 // Estados de un pedido, en el orden en que avanza. "clase" es el color de la
@@ -24,11 +24,3 @@ export const estadoDe = (valor) =>
     texto: valor,
     clase: "is-off",
   };
-
-// Fecha y hora cortas en español de Colombia, por ejemplo "1 nov 2026, 12:08 a. m."
-export const formatFecha = (fecha) =>
-  fecha
-    ? new Intl.DateTimeFormat("es-CO", { dateStyle: "medium", timeStyle: "short" }).format(
-        new Date(fecha)
-      )
-    : "";

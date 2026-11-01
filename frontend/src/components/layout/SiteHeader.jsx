@@ -19,7 +19,7 @@ import useCategoryMenu from "../../hooks/useCategoryMenu.js";
 import LoginModal from "../auth/LoginModal.jsx";
 
 // Secciones de la portada que marcan como activo su enlace de la cabecera
-const sectionIds = ["inicio", "categorias", "productos", "nosotros", "preguntas"];
+const sectionIds = ["inicio", "categorias", "productos", "nosotros", "bucaramanga", "preguntas"];
 
 // Enlace a la portada con filtros del catálogo en la URL y salto a una sección
 const homeLink = (sectionId, params = {}) => {
@@ -32,6 +32,7 @@ const homeLink = (sectionId, params = {}) => {
 const privateRoutes = [
   { to: "/panel", label: "Panel de administración", soloAdmin: true },
   { to: "/perfil", label: "Mi perfil" },
+  { to: "/archivos", label: "Archivos" },
 ];
 
 // Enlace de la barra con submenú desplegable. En escritorio el menú flota
@@ -151,14 +152,17 @@ function SiteHeader() {
               ))}
             </NavMenu>
 
-            {/* Submenú Nosotros: equipo y preguntas frecuentes */}
+            {/* Submenú Nosotros: equipo, Bucaramanga, preguntas y contacto */}
             <NavMenu
               id="menu-nosotros"
               label="Nosotros"
-              active={activeSection === "nosotros" || activeSection === "preguntas"}
+              active={["nosotros", "bucaramanga", "preguntas"].includes(activeSection)}
             >
               <Dropdown.Item as={Link} to={homeLink("nosotros")} onClick={closeMenu}>
                 Quiénes somos
+              </Dropdown.Item>
+              <Dropdown.Item as={Link} to={homeLink("bucaramanga")} onClick={closeMenu}>
+                Conoce Bucaramanga
               </Dropdown.Item>
               <Dropdown.Item as={Link} to={homeLink("preguntas")} onClick={closeMenu}>
                 Preguntas frecuentes

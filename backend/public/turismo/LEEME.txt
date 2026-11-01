@@ -1,0 +1,8 @@
+Imágenes turísticas de Bucaramanga y su área metropolitana.
+Las sirve el backend con express.static en http://localhost:3000/publico/turismo/
+(server.js). imagenes.json tiene el título, la descripción y los créditos de cada
+una; la portada lo lee para mostrar la sección "Conoce Bucaramanga".
+
+Todas vienen de Wikimedia Commons con licencia Creative Commons (ver
+imagenes.json): se puede usar citando al autor y la licencia. Las CC BY-SA
+obligan a compartir las versiones modificadas con la misma licencia.

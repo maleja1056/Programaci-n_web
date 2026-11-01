@@ -12,6 +12,7 @@ import FaqSection from "../components/home/FaqSection.jsx";
 import FeaturesSection from "../components/home/FeaturesSection.jsx";
 import HeroSection from "../components/home/HeroSection.jsx";
 import PromoCarousel from "../components/home/PromoCarousel.jsx";
+import TurismoSection from "../components/home/TurismoSection.jsx";
 import SiteFooter from "../components/layout/SiteFooter.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";
 import useCatalog from "../hooks/useCatalog.js";
@@ -64,6 +65,7 @@ function HomePage() {
         />
 
         <AboutSection />
+        <TurismoSection />
         <FaqSection />
         <CareBanner />
       </main>

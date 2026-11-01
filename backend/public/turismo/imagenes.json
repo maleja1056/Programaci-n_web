@@ -1,0 +1,38 @@
+[
+  {
+    "archivo": "catedral-sagrada-familia.jpg",
+    "titulo": "Catedral de la Sagrada Familia",
+    "municipio": "Bucaramanga",
+    "descripcion": "En el centro de Bucaramanga. Sus dos torres blancas son una de las imágenes más reconocidas de la ciudad.",
+    "autor": "Juan Sebastián Echeverry Grisales",
+    "anio": 2008,
+    "licencia": "CC BY 3.0",
+    "licencia_url": "https://creativecommons.org/licenses/by/3.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Catedral_de_la_Sagrada_Familia_Bucaramanga.jpg",
+    "cambios": "Redimensionada a 1200 × 900 px."
+  },
+  {
+    "archivo": "basilica-giron.jpg",
+    "titulo": "Basílica de San Juan Bautista",
+    "municipio": "Girón",
+    "descripcion": "Frente a la plaza principal del centro histórico de Girón, con calles empedradas y casas de arquitectura colonial.",
+    "autor": "Kamilokardona",
+    "anio": 2013,
+    "licencia": "CC BY-SA 3.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:Bas%C3%ADlica_de_Gir%C3%B3n,_Santander.jpg",
+    "cambios": "Redimensionada a 1200 × 900 px."
+  },
+  {
+    "archivo": "cerro-del-santisimo.jpg",
+    "titulo": "Cerro del Santísimo",
+    "municipio": "Floridablanca",
+    "descripcion": "Ecoparque en la montaña con una gran escultura de Cristo y vista sobre el área metropolitana. Se sube en teleférico.",
+    "autor": "Juanjopbernal",
+    "anio": 2019,
+    "licencia": "CC BY-SA 4.0",
+    "licencia_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "fuente": "https://commons.wikimedia.org/wiki/File:EL_Sant%C3%ADsimo.jpg",
+    "cambios": "Recortada a 4:3 y redimensionada a 1200 × 900 px."
+  }
+]

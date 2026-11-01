@@ -9,8 +9,8 @@
 import { useCallback, useMemo, useState } from "react";
 import Form from "react-bootstrap/Form";
 import { crearCrud } from "../../api/crud.js";
-import { formatPrice } from "../../utils/format.js";
-import { ESTADOS_PEDIDO, estadoDe, formatFecha } from "../../utils/pedidos.js";
+import { formatFecha, formatPrice } from "../../utils/format.js";
+import { ESTADOS_PEDIDO, estadoDe } from "../../utils/pedidos.js";
 import CrudTable from "./CrudTable.jsx";
 import PedidoModal from "./PedidoModal.jsx";
 

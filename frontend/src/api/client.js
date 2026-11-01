@@ -9,7 +9,7 @@ export class ApiError extends Error {
   }
 }
 
-const SERVER_UNAVAILABLE =
+export const SERVER_UNAVAILABLE =
   "No fue posible conectar con el servidor. Comprueba que el backend esté funcionando e inténtalo de nuevo.";
 
 export async function apiRequest(path, { method = "GET", body } = {}) {

@@ -787,3 +787,97 @@
     grid-column: 1 / -1;
   }
 }
+
+/* ---------- Página de archivos (ArchivosPage.jsx) ---------- */
+
+/* Formulario de subida: campo de archivo y botón en una fila */
+.archivos-subir {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 10px 14px;
+  margin: 26px 0 18px;
+  padding: 18px;
+  border: 1px dashed #c9dccd;
+  border-radius: 14px;
+  background: #f7fbf8;
+}
+
+.archivos-subir .form-label {
+  margin-bottom: 6px;
+  color: var(--color-texto);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.archivos-subir .crud-button {
+  height: 38px;
+  margin-bottom: 22px; /* alineado con el campo, no con el texto de ayuda */
+}
+
+.archivos-elegido,
+.archivos-progreso {
+  grid-column: 1 / -1;
+  margin: 0;
+}
+
+.archivos-elegido {
+  color: var(--color-texto-suave);
+  font-size: 13px;
+}
+
+.archivos-progreso {
+  height: 18px;
+}
+
+.archivos-progreso .progress-bar {
+  background-color: var(--color-marca-fondo);
+}
+
+.archivos-toolbar .form-select {
+  max-width: 220px;
+}
+
+/* Nombre del archivo con el icono de su tipo */
+.archivos-nombre {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.archivos-icono {
+  flex-shrink: 0;
+  color: var(--color-marca);
+  font-size: 20px;
+}
+
+/* Visor de imágenes, videos y audio */
+.archivos-visor {
+  display: grid;
+  place-items: center;
+}
+
+.archivos-visor img,
+.archivos-visor video {
+  max-width: 100%;
+  max-height: 70vh;
+  border-radius: 10px;
+}
+
+.archivos-visor audio {
+  width: 100%;
+}
+
+@media (max-width: 650px) {
+  .archivos-subir {
+    grid-template-columns: 1fr;
+  }
+
+  .archivos-subir .crud-button {
+    margin-bottom: 0;
+  }
+
+  .archivos-toolbar .form-select {
+    max-width: none;
+  }
+}

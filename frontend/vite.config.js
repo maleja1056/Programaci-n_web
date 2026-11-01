@@ -11,6 +11,12 @@ export default defineConfig({
         target: 'http://localhost:3000',
         changeOrigin: true,
       },
+      // Servidor de contenidos del backend (express.static): imágenes de
+      // turismo de la portada
+      '/publico': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+      },
     },
   },
 })
