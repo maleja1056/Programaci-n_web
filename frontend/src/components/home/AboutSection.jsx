@@ -10,20 +10,19 @@ function AboutSection() {
     <section className="home-section about-section" id="nosotros">
       <div className="about-text">
         <span className="section-kicker">SOBRE NOSOTROS</span>
-        <h2>Una farmacia pensada para tu bienestar</h2>
+        <h2>Hecha en la UIS, para Bucaramanga</h2>
 
         {/* La clase drop-cap agranda y colorea la primera letra */}
         <p className="drop-cap">
-          En FarmaUIS creemos que cuidar la salud debe ser sencillo. Por eso
-          reunimos en un solo lugar medicamentos, vitaminas y productos de
-          cuidado personal, con información clara sobre su precio y sobre
-          cuáles requieren fórmula médica.
+          FarmaUIS nació de una pregunta sencilla: ¿por qué hay que ir de
+          farmacia en farmacia para saber si tienen un medicamento y cuánto
+          cuesta? Aquí ves el precio, las unidades disponibles y si necesitas
+          fórmula médica antes de salir de casa.
         </p>
         <p>
-          Somos un proyecto académico de la Universidad Industrial de
-          Santander que busca acercar la farmacia a las personas con una
-          experiencia en línea fácil de usar desde el celular, la tableta o el
-          computador.
+          Somos un proyecto académico de estudiantes de la Universidad
+          Industrial de Santander. La tienda funciona igual desde el celular,
+          la tableta o el computador.
         </p>
 
         <div className="audio-card">

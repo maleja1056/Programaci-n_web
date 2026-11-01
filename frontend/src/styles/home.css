@@ -9,103 +9,605 @@
   margin: 68px auto 0;
 }
 
-/* ---------- Carrusel de promociones ---------- */
+/* ---------- Carrusel (PromoCarousel.jsx) ----------
+   Cada diapositiva: texto a la izquierda y dibujo a la derecha, con su
+   propio color de fondo (.tono-*). La transición es un fundido (fade). */
+/* El carrusel también es una franja de borde a borde. Arriba y abajo se
+   desvanece (máscara): arriba se funde con el hero, sobre el que se monta,
+   y abajo con el blanco de la página. El contenido se alinea con el logo,
+   igual que el hero. */
+.promo-section {
+  --fundido: 72px;
+  --margen-lateral: max(32px, calc(50% - 590px));
+  position: relative;
+  z-index: 1;
+  width: 100%;
+}
+
+.hero + .promo-section {
+  margin-top: calc(var(--fundido) * -1);
+}
+
+/* Más específico que .home-section (que en celular cambia el ancho) */
+.home-section.promo-section {
+  width: 100%;
+}
+
+@media (max-width: 1000px) {
+  .promo-section {
+    --margen-lateral: 20px;
+  }
+}
+
+@media (max-width: 650px) {
+  .promo-section {
+    --fundido: 56px;
+    --margen-lateral: 16px;
+  }
+}
+
 .promo-carousel {
   overflow: hidden;
-  border-radius: 16px;
-  background: #e7f6e8;
+  mask-image: linear-gradient(
+    to bottom,
+    transparent,
+    #000 var(--fundido),
+    #000 calc(100% - var(--fundido)),
+    transparent
+  );
 }
 
-.promo-image {
-  display: block;
-  width: 100%;
-  height: 340px;
-  object-fit: cover;
-  object-position: right center;
+/* Todas las diapositivas en la misma celda de una grilla: el carrusel mide
+   lo que la más alta y no cambia de alto al pasar de una a otra. Las que no
+   se ven quedan ocultas (visibility), sin poder recibir el foco. */
+.promo-carousel .carousel-inner {
+  display: grid;
 }
 
-/* El texto va a la izquierda y la ilustración queda a la derecha */
-.promo-caption {
-  right: auto;
-  bottom: 50%;
-  left: 11%;
-  max-width: 400px;
-  padding: 0;
-  transform: translateY(50%);
-  text-align: left;
+.promo-carousel .carousel-item.promo-slide {
+  display: grid;
+  grid-area: 1 / 1;
+  float: none;
+  margin-right: 0;
+  visibility: hidden;
 }
 
-.promo-caption .section-kicker {
-  color: var(--color-marca);
+.promo-carousel .promo-slide.active,
+.promo-carousel .promo-slide.carousel-item-next,
+.promo-carousel .promo-slide.carousel-item-prev {
+  visibility: visible;
 }
 
-.promo-caption h3 {
+.promo-slide {
+  position: relative;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 40px;
+  min-height: calc(320px + 2 * var(--fundido));
+  padding: var(--fundido) var(--margen-lateral) calc(var(--fundido) + 44px);
+}
+
+.tono-verde {
+  background: linear-gradient(120deg, #eef8f0, #e1f2e5);
+}
+
+.tono-menta {
+  background: linear-gradient(120deg, #edf9f4, #dcf1e8);
+}
+
+.tono-naranja {
+  background: linear-gradient(120deg, #fff7ec, #ffecd6);
+}
+
+.tono-azul {
+  background: linear-gradient(120deg, #f1f6ff, #e1ebfb);
+}
+
+.promo-texto h3 {
   margin: 8px 0;
   color: var(--color-texto);
   font-family: "Manrope", sans-serif;
   font-size: 28px;
+  font-weight: 800;
   line-height: 1.2;
+  letter-spacing: -0.6px;
+  text-wrap: balance;
 }
 
-.promo-caption p {
-  margin: 0 0 18px;
+.promo-texto > p {
+  max-width: 46ch;
+  margin: 0;
+  color: var(--color-texto-suave);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.promo-texto .primary-button {
+  gap: 10px;
+}
+
+/* El texto de la diapositiva que entra aparece en secuencia y el dibujo
+   se acerca un poco. Empieza junto con el fundido (.carousel-item-next o
+   -prev), no al terminar. Los @keyframes "aparecer" están en app.css. */
+.promo-slide:is(.active, .carousel-item-next, .carousel-item-prev) .promo-texto > * {
+  animation: aparecer 520ms var(--curva) backwards;
+}
+
+/* Para que los textos no se encimen: el contenido de la diapositiva que
+   sale se desvanece en 200 ms y el de la que entra empieza después */
+.promo-slide .promo-texto > :first-child { animation-delay: 220ms; }
+.promo-slide .promo-texto > :nth-child(2) { animation-delay: 300ms; }
+.promo-slide .promo-texto > :nth-child(3) { animation-delay: 380ms; }
+.promo-slide .promo-texto > :nth-child(4) { animation-delay: 460ms; }
+.promo-slide .promo-texto > :nth-child(n + 5) { animation-delay: 520ms; }
+
+.promo-slide:is(.active, .carousel-item-next, .carousel-item-prev) .promo-visual {
+  animation: acercar 700ms var(--curva) 220ms backwards;
+}
+
+.promo-carousel .promo-slide.active:is(.carousel-item-start, .carousel-item-end) > * {
+  opacity: 0;
+  transition: opacity 200ms var(--curva);
+}
+
+/* Fila de datos cortos al final del texto */
+.promo-datos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.promo-datos li {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.75);
+  color: var(--color-texto);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.promo-datos svg {
+  color: var(--color-marca);
+  font-size: 12px;
+}
+
+@keyframes acercar {
+  from {
+    opacity: 0;
+    scale: 0.94;
+  }
+}
+
+/* Diapositiva "Cómo pedir": los tres pasos unidos por una línea punteada */
+.promo-pasos {
+  position: relative;
+  display: grid;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.promo-pasos::before {
+  position: absolute;
+  top: 26px;
+  bottom: 26px;
+  left: 25px;
+  border-left: 2px dashed #a9d3b5;
+  content: "";
+}
+
+.promo-pasos li {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px 12px 12px;
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: var(--sombra-1);
+}
+
+.promo-paso-icono {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 9px;
+  background: var(--color-marca-fondo);
+  color: var(--color-sobre-marca);
+  font-size: 14px;
+}
+
+.promo-pasos li > span:last-child {
+  display: grid;
+  gap: 1px;
+  color: var(--color-texto-suave);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.promo-pasos small {
+  color: var(--color-marca);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.promo-pasos strong {
+  color: var(--color-texto);
+  font-size: 14px;
+}
+
+/* Diapositiva "Destacado de hoy": dibujo grande y, debajo, otros
+   productos de la misma categoría */
+.promo-destacado-visual {
+  display: grid;
+  justify-items: center;
+  gap: 18px;
+}
+
+.promo-otros {
+  width: min(320px, 100%);
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: var(--sombra-1);
+}
+
+.promo-otros > span {
+  color: var(--color-texto-suave);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.promo-otros ul {
+  display: grid;
+  gap: 6px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.promo-otros li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px;
+}
+
+.promo-otros a {
+  flex: 1;
+  color: var(--color-texto);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.promo-otros a:hover {
+  color: var(--color-marca);
+  text-decoration: underline;
+}
+
+.promo-otros strong {
+  color: var(--color-texto);
+}
+
+.promo-otro-art {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 9px;
+}
+
+.promo-otro-art .producto-ilustracion,
+.promo-tarjeta-art .producto-ilustracion {
+  width: 100%;
+  height: auto;
+}
+
+.promo-destacado {
+  display: grid;
+  width: min(220px, 100%);
+  aspect-ratio: 1;
+  justify-self: center;
+  place-items: center;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 10px rgba(255, 255, 255, 0.55), var(--sombra-2);
+}
+
+.promo-destacado .producto-ilustracion {
+  width: 82%;
+  height: auto;
+  overflow: visible;
+}
+
+.promo-precio {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+  margin: 14px 0 0;
+  color: var(--color-texto-suave);
+  font-size: 13px;
+}
+
+.promo-precio strong {
+  color: var(--color-texto);
+  font-size: 24px;
+}
+
+.promo-acciones {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 18px;
+  margin-top: 16px;
+}
+
+.boton-agregar.promo-agregar {
+  min-height: 46px;
+  padding: 0 20px;
+  font-size: 14px;
+}
+
+.promo-enlace {
+  color: var(--color-marca);
+  font-size: 14px;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* Diapositiva "Consejo de salud": tres recomendaciones y un sol de adorno */
+.promo-consejo {
+  position: relative;
+  padding-top: 40px;
+}
+
+.promo-sol {
+  position: absolute;
+  top: -10px;
+  right: 6%;
+  display: grid;
+  width: 76px;
+  height: 76px;
+  place-items: center;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffe2a8, #ffd07a);
+  box-shadow: 0 0 0 12px rgba(255, 208, 122, 0.25), 0 0 0 26px rgba(255, 208, 122, 0.12);
+  color: var(--color-aviso);
+  font-size: 32px;
+}
+
+.promo-consejos {
+  position: relative;
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.promo-consejos li {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 16px 12px 12px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: var(--sombra-1);
+  color: var(--color-texto);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.promo-consejos .promo-paso-icono {
+  background: var(--color-info);
+}
+
+.promo-fuente {
+  display: block;
+  max-width: 46ch;
+  margin-top: 12px;
+  color: var(--color-texto-suave);
+  font-size: 11px;
+}
+
+/* Diapositiva de vitaminas: tarjetas de los productos de la categoría */
+/* Hasta 3 tarjetas en una sola fila, para no hacer más alto el carrusel */
+.promo-tarjetas {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+}
+
+.promo-tarjeta {
+  display: grid;
+  flex: 0 1 170px;
+  min-width: 0;
+  justify-items: center;
+  align-content: start;
+  gap: 4px;
+  padding: 12px;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow: var(--sombra-2);
+  text-align: center;
+}
+
+.promo-tarjeta-art {
+  display: grid;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  margin-bottom: 6px;
+  place-items: center;
+  border-radius: 12px;
+}
+
+.promo-tarjeta strong {
+  color: var(--color-texto);
+  font-size: 14px;
+  line-height: 1.3;
+}
+
+.promo-tarjeta-precio {
   color: var(--color-texto-suave);
   font-size: 14px;
 }
 
-/* Flechas e indicadores oscuros para verse sobre el fondo claro */
-.promo-carousel .carousel-control-prev-icon,
-.promo-carousel .carousel-control-next-icon {
-  filter: invert(1) grayscale(1);
+.boton-agregar.promo-tarjeta-boton {
+  width: 100%;
+  margin-top: auto;
+  padding-inline: 8px;
+  font-size: 12px;
 }
 
+/* Imagen de respaldo de vitaminas (si el catálogo no carga) */
+.promo-imagen {
+  width: 100%;
+  max-height: 280px;
+  object-fit: contain;
+}
+
+/* ---------- Carrusel: flechas ----------
+   Botones redondos que aparecen al pasar el mouse o con el foco del
+   teclado. En pantallas táctiles no se muestran: se desliza con el dedo. */
 .promo-carousel .carousel-control-prev,
 .promo-carousel .carousel-control-next {
-  width: 8%;
-}
-
-.promo-carousel .carousel-indicators [data-bs-target] {
-  background-color: #1d6b43;
-}
-
-/* ---------- Tres columnas ---------- */
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 21px;
-  margin-top: 26px;
-}
-
-.feature-card {
-  padding: 26px 22px;
-  border: 1px solid #e8eee9;
-  border-radius: 13px;
+  top: 50%;
+  bottom: auto;
+  width: 44px;
+  height: 44px;
+  margin: 0 16px;
+  border-radius: 50%;
   background: #fff;
-}
-
-.feature-icon {
-  display: grid;
-  width: 48px;
-  height: 48px;
-  margin-bottom: 14px;
-  place-items: center;
-  border-radius: 14px;
-  background: #dff2e2;
+  box-shadow: var(--sombra-2);
   color: var(--color-marca);
-  font-size: 22px;
+  font-size: 16px;
+  opacity: 0;
+  translate: 0 -50%;
+  transition:
+    opacity var(--duracion) var(--curva),
+    scale var(--duracion) var(--curva);
 }
 
-.feature-card h3 {
-  margin: 0 0 6px;
-  color: var(--color-texto);
-  font-size: 17px;
+.promo-carousel:hover .carousel-control-prev,
+.promo-carousel:hover .carousel-control-next,
+.promo-carousel .carousel-control-prev:focus-visible,
+.promo-carousel .carousel-control-next:focus-visible {
+  opacity: 1;
 }
 
-.feature-card p {
-  margin: 0;
-  color: var(--color-texto-suave);
-  font-size: 13px;
-  line-height: 1.55;
+.promo-carousel .carousel-control-prev:hover,
+.promo-carousel .carousel-control-next:hover {
+  scale: 1.08;
+}
+
+/* Sin mouse (pantallas táctiles) o en pantallas angostas, donde taparían el
+   texto, no hay flechas: se cambia deslizando o con las barras */
+@media (hover: none), (max-width: 900px) {
+  .promo-carousel .carousel-control-prev,
+  .promo-carousel .carousel-control-next {
+    display: none;
+  }
+}
+
+/* ---------- Carrusel: barras de progreso y pausa ---------- */
+/* z-index: encima de las diapositivas (el fade de Bootstrap les pone 1) */
+.promo-controles {
+  position: absolute;
+  z-index: 3;
+  bottom: calc(var(--fundido) + 10px);
+  left: 50%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  translate: -50% 0;
+}
+
+.promo-barras {
+  display: flex;
+  gap: 8px;
+}
+
+/* Cada barra es un botón: el área para hacer clic es más alta que la línea */
+.promo-barra {
+  position: relative;
+  width: 40px;
+  height: 20px;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+}
+
+.promo-barra::before,
+.promo-barra-relleno {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  height: 4px;
+  border-radius: 4px;
+  translate: 0 -50%;
+}
+
+.promo-barra::before {
+  right: 0;
+  background: rgba(23, 78, 59, 0.2);
+  content: "";
+}
+
+/* Barra activa: sin animación (reducir movimiento) se ve llena */
+.promo-barra-relleno {
+  width: 100%;
+  background: var(--color-marca-fondo);
+}
+
+.promo-barra-relleno.is-animada {
+  animation: llenar 6s linear forwards;
+}
+
+/* En pausa la barra se detiene donde va */
+.promo-section.is-pausado .promo-barra-relleno {
+  animation-play-state: paused;
+}
+
+@keyframes llenar {
+  from {
+    width: 0;
+  }
+}
+
+.promo-pausa {
+  display: grid;
+  width: 28px;
+  height: 28px;
+  place-items: center;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  box-shadow: var(--sombra-1);
+  color: var(--color-marca);
+  font-size: 10px;
+  cursor: pointer;
+}
+
+.promo-pausa:disabled {
+  display: none;
+}
+
+.promo-carousel {
+  cursor: default;
 }
 
 /* ---------- Sobre nosotros ---------- */
@@ -156,7 +658,9 @@
 }
 
 .audio-card audio {
+  display: block;
   width: 100%;
+  height: 40px;
 }
 
 .audio-card small,
@@ -173,6 +677,8 @@
 .video-card video {
   display: block;
   width: 100%;
+  max-height: 340px;
+  object-fit: cover;
   border-radius: 14px;
   background: #000;
 }
@@ -192,8 +698,22 @@
   --bs-accordion-border-color: #e1eae2;
 }
 
+/* Cada pregunta es una tarjeta separada */
+.faq-accordion .accordion-item {
+  margin-bottom: 10px;
+  overflow: hidden;
+  border: 1px solid var(--borde-suave);
+  border-radius: 14px;
+  box-shadow: var(--sombra-1);
+}
+
 .faq-accordion .accordion-button {
   font-weight: 600;
+}
+
+.faq-accordion .accordion-item:first-of-type .accordion-button,
+.faq-accordion .accordion-item:last-of-type .accordion-button.collapsed {
+  border-radius: 0;
 }
 
 .faq-accordion .accordion-body {
@@ -231,26 +751,85 @@
 
 /* ---------- Adaptable ---------- */
 @media (max-width: 900px) {
-  /* En tableta y móvil la ilustración va arriba y el texto debajo, sin superponerse */
-  .promo-image {
-    height: 220px;
-    object-position: 80% center;
-  }
-
-  .promo-carousel .carousel-control-prev,
-  .promo-carousel .carousel-control-next {
-    height: 220px;
-  }
-
-  .promo-caption {
-    position: static;
-    max-width: none;
-    padding: 18px 56px 44px;
-    transform: none;
-  }
-
-  .features-grid {
+  /* Carrusel en tableta y celular: dibujo arriba, más pequeño, y texto
+     debajo; las barras quedan al final */
+  .promo-slide {
+    min-height: 0;
     grid-template-columns: 1fr;
+    align-content: start;
+    gap: 18px;
+    padding: var(--fundido) var(--margen-lateral) calc(var(--fundido) + 44px);
+  }
+
+  /* En celular solo lo principal: sin "También en" ni tarjetas extra */
+  .promo-otros,
+  .promo-tarjeta:nth-child(n + 2) {
+    display: none;
+  }
+
+  .promo-tarjeta {
+    flex-basis: 100%;
+    width: 100%;
+    grid-template-columns: 72px 1fr;
+    justify-items: start;
+    align-items: center;
+    column-gap: 14px;
+    padding: 12px;
+    text-align: left;
+  }
+
+  .promo-tarjeta-art {
+    grid-row: span 3;
+    margin: 0;
+  }
+
+  .boton-agregar.promo-tarjeta-boton {
+    margin-top: 4px;
+  }
+
+  .promo-consejo {
+    padding-top: 0;
+  }
+
+  .promo-consejos {
+    gap: 8px;
+  }
+
+  .promo-consejos li {
+    padding: 8px 12px 8px 10px;
+    font-size: 12px;
+  }
+
+  .promo-visual {
+    order: -1;
+  }
+
+  .promo-texto h3 {
+    font-size: 22px;
+  }
+
+  .promo-pasos {
+    gap: 8px;
+  }
+
+  .promo-pasos li {
+    padding: 8px 12px 8px 10px;
+  }
+
+  .promo-pasos li > span:last-child > span {
+    display: none;
+  }
+
+  .promo-destacado {
+    width: 150px;
+  }
+
+  .promo-sol {
+    display: none;
+  }
+
+  .promo-imagen {
+    max-height: 150px;
   }
 
   .about-section {
@@ -297,42 +876,60 @@
 }
 
 /* ---------- Conoce Bucaramanga (TurismoSection.jsx) ----------
-   Las imágenes llegan del servidor de contenidos del backend (/publico). */
-.turismo-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 18px;
-  margin-top: 25px;
+   Las imágenes llegan del servidor de contenidos del backend (/publico).
+   Las tres fotos forman una franja de borde a borde de la pantalla (el
+   encabezado sigue en el ancho normal). Cada foto se monta sobre la
+   anterior y su borde se desvanece con una máscara, así que se funden sin
+   línea de corte. .app-shell recorta el desborde (no hay scroll lateral). */
+/* Bordes inclinados 5° (bajan de izquierda a derecha): se recortan con
+   clip-path, así las fotos y los textos siguen derechos. La caída en todo
+   el ancho es tan(5°) × 100vw ≈ 8.75vw. */
+.turismo-franja {
+  --fundido: 90px;
+  --inclinacion: 8.75vw;
+  display: flex;
+  margin: 28px calc(50% - 50vw) 0;
+  background: #16362a;
+  clip-path: polygon(
+    0 0,
+    100% var(--inclinacion),
+    100% 100%,
+    0 calc(100% - var(--inclinacion))
+  );
 }
 
 .turismo-card {
-  display: flex;
-  flex-direction: column;
+  position: relative;
   overflow: hidden;
   margin: 0;
-  border: 1px solid #e8eee9;
-  border-radius: 13px;
-  background: #fff;
+  background: #16362a;
 }
 
 .turismo-card img {
+  position: absolute;
+  inset: 0;
   display: block;
   width: 100%;
-  height: auto;
-  aspect-ratio: 4 / 3;
+  height: 100%;
   object-fit: cover;
-  background: #e7f6e8;
+  transition: scale 900ms var(--curva);
 }
 
+.turismo-card:hover img,
+.turismo-card:focus-within img {
+  scale: 1.04;
+}
+
+/* Texto sobre la foto, con un degradado oscuro para que se lea */
 .turismo-card figcaption {
-  display: flex;
-  flex: 1;
-  flex-direction: column;
-  padding: 16px 18px 18px;
+  position: absolute;
+  inset: auto 0 0;
+  padding: 80px 28px 20px;
+  background: linear-gradient(to bottom, transparent, rgba(9, 32, 23, 0.6) 35%, rgba(9, 32, 23, 0.9));
 }
 
 .turismo-municipio {
-  color: var(--color-marca);
+  color: var(--color-sobre-oscuro-suave);
   font-size: 11px;
   font-weight: 800;
   letter-spacing: 0.8px;
@@ -341,32 +938,179 @@
 
 .turismo-card h3 {
   margin: 4px 0 6px;
-  color: var(--color-texto);
-  font-size: 17px;
+  color: var(--color-sobre-marca);
+  font-size: 19px;
 }
 
 .turismo-card p {
+  max-width: 52ch;
   margin: 0 0 12px;
-  color: var(--color-texto-suave);
-  font-size: 13px;
+  color: var(--color-sobre-marca);
+  font-size: 14px;
   line-height: 1.55;
 }
 
 /* Crédito de la foto (licencia Creative Commons) */
-.turismo-card small {
-  margin-top: auto;
-  color: var(--color-texto-suave);
+.turismo-card small,
+.turismo-card small a {
+  color: var(--color-sobre-oscuro-suave);
   font-size: 11px;
   line-height: 1.5;
 }
 
-.turismo-card small a {
-  color: var(--color-marca);
+/* Celular y pantallas sin mouse: las fotos en columna, cada una fundida
+   con la de arriba; todo el texto visible */
+@media (max-width: 900px), (hover: none) {
+  .turismo-franja {
+    flex-direction: column;
+  }
+
+  .turismo-card {
+    min-height: 250px;
+  }
+
+  .turismo-card + .turismo-card {
+    margin-top: calc(var(--fundido) * -1);
+    mask-image: linear-gradient(to bottom, transparent, #000 var(--fundido));
+  }
+
+  .turismo-card + .turismo-card figcaption {
+    padding-top: calc(var(--fundido) + 60px);
+  }
+
+  /* El texto termina antes de la zona que tapa el fundido de la siguiente */
+  .turismo-card:not(:last-child) figcaption {
+    padding-bottom: calc(var(--fundido) + 16px);
+  }
+
+  .turismo-card:not(:last-child) {
+    min-height: calc(250px + var(--fundido));
+  }
+
+  .turismo-card figcaption {
+    padding-inline: 16px;
+  }
+
+  /* El borde inclinado de abajo solo recorta la última foto */
+  .turismo-card:last-child figcaption {
+    padding-bottom: calc(var(--inclinacion) + 16px);
+  }
+
+  .turismo-card:last-child {
+    min-height: calc(250px + var(--inclinacion));
+  }
 }
 
-@media (max-width: 900px) {
-  .turismo-grid {
-    grid-template-columns: 1fr;
+/* ---------- Bucaramanga como panel que se expande (computador) ----------
+   Solo con mouse y pantalla ancha. Las tres fotos tienen el mismo ancho;
+   la que tiene el mouse o el foco (Tab llega a los enlaces del crédito) se
+   ensancha 3 a 1 y despliega su descripción. El crédito de la licencia se
+   ve siempre, salvo en las fotos angostas mientras otra está abierta.
+   Con "reducir movimiento" el cambio es inmediato (regla de app.css). */
+@media (min-width: 901px) and (hover: hover) {
+  .turismo-franja {
+    height: calc(460px + var(--inclinacion));
+  }
+
+  /* El texto de cada foto sube por encima del borde inclinado de abajo */
+  .turismo-card figcaption {
+    padding-bottom: calc(var(--inclinacion) + 18px);
+  }
+
+  .turismo-card {
+    flex: 1 1 0;
+    min-width: 0;
+    transition: flex-grow 550ms var(--curva);
+  }
+
+  /* Fundido horizontal: cada foto entra sobre la anterior */
+  .turismo-card + .turismo-card {
+    margin-left: calc(var(--fundido) * -1);
+    mask-image: linear-gradient(to right, transparent, #000 var(--fundido));
+  }
+
+  .turismo-card + .turismo-card figcaption {
+    padding-left: calc(var(--fundido) + 12px);
+  }
+
+  /* El texto no entra en la zona que tapa el fundido de la siguiente, y el
+     de la primera foto se alinea con el encabezado de la sección */
+  .turismo-card:not(:last-child) figcaption {
+    padding-right: calc(var(--fundido) + 12px);
+  }
+
+  .turismo-card:first-child figcaption {
+    padding-left: max(32px, calc(50vw - 590px));
+  }
+
+  .turismo-card:hover,
+  .turismo-card:focus-within {
+    flex-grow: 3;
+  }
+
+  .turismo-card h3 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Descripción plegada: la fila de la grilla pasa de 0 a su alto real */
+  .turismo-detalle {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition:
+      grid-template-rows 450ms var(--curva),
+      opacity 250ms var(--curva);
+  }
+
+  .turismo-detalle > div {
+    overflow: hidden;
+  }
+
+  .turismo-card:hover .turismo-detalle,
+  .turismo-card:focus-within .turismo-detalle {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition-delay: 150ms;
+  }
+
+  /* Fotos angostas mientras otra está abierta: solo el nombre */
+  .turismo-franja:has(.turismo-card:is(:hover, :focus-within))
+    .turismo-card:not(:hover, :focus-within) small {
+    opacity: 0;
+  }
+
+  .turismo-card small {
+    transition: opacity 200ms var(--curva);
+  }
+}
+
+/* ---------- Bucaramanga: encabezado arriba a la derecha (computador) ----------
+   El encabezado y la franja comparten la celda de una grilla: el encabezado
+   queda en el triángulo libre que deja el borde inclinado arriba a la
+   derecha. La franja baja 56 px para que ese triángulo sea más alto que el
+   encabezado. En pantallas angostas el encabezado va encima, como antes. */
+@media (min-width: 1001px) {
+  .turismo-section {
+    display: grid;
+  }
+
+  .turismo-section > .section-heading,
+  .turismo-section > .turismo-franja {
+    grid-area: 1 / 1;
+  }
+
+  .turismo-section > .section-heading {
+    position: relative;
+    z-index: 2;
+    align-self: start;
+    justify-self: end;
     max-width: 560px;
+    text-align: right;
+  }
+
+  .turismo-section > .turismo-franja {
+    margin-top: 56px;
   }
 }

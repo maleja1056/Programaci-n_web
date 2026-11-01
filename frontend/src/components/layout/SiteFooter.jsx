@@ -11,6 +11,7 @@ import {
 } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import logo from "../../assets/img/logo.svg";
+import { subirAlInicio } from "../../utils/inicio.js";
 import { equipo, iniciales } from "../../data/equipo.js";
 import { contacto, redesSociales } from "../../data/sitio.js";
 import TeamMemberModal from "./TeamMemberModal.jsx";
@@ -26,7 +27,7 @@ function SiteFooter() {
       <div className="footer-main">
         {/* Marca, descripción y redes sociales */}
         <div className="footer-about">
-          <Link className="brand footer-brand" to="/" aria-label="FarmaUIS, inicio">
+          <Link className="brand footer-brand" to="/" onClick={subirAlInicio} aria-label="FarmaUIS, inicio">
             <img className="brand-mark" src={logo} alt="" />
             <span className="brand-name">
               Farma<span>UIS</span>
@@ -59,7 +60,6 @@ function SiteFooter() {
           <h2 className="footer-title" id="footer-nav-title">Navegación</h2>
           <ul className="footer-links">
             <li><a href="/#inicio">Inicio</a></li>
-            <li><a href="/#categorias">Categorías</a></li>
             <li><a href="/#productos">Productos</a></li>
             <li><a href="/#nosotros">Nosotros</a></li>
             <li><a href="/#preguntas">Preguntas frecuentes</a></li>

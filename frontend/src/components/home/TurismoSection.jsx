@@ -5,6 +5,11 @@
 // Primero se lee /publico/turismo/imagenes.json y luego cada imagen se carga
 // desde /publico/turismo/<archivo>. Si el backend no responde (por ejemplo,
 // en el modo demostración), la sección no se muestra.
+// Las tres fotos forman una franja de borde a borde, inclinada 5° y fundidas
+// entre sí con un degradado. En computador el encabezado va arriba a la
+// derecha, en el espacio que deja la inclinación. En computador, la que tiene el mouse o el foco del teclado
+// se ensancha y muestra su descripción (home.css). En celular van en
+// columna, con toda la información.
 import { useEffect, useState } from "react";
 
 const CARPETA = "/publico/turismo";
@@ -37,7 +42,7 @@ function TurismoSection() {
         </div>
       </div>
 
-      <div className="turismo-grid">
+      <div className="turismo-franja">
         {lugares.map((lugar) => (
           <figure className="turismo-card" key={lugar.archivo}>
             <img
@@ -50,7 +55,12 @@ function TurismoSection() {
             <figcaption>
               <span className="turismo-municipio">{lugar.municipio}</span>
               <h3>{lugar.titulo}</h3>
-              <p>{lugar.descripcion}</p>
+              {/* La descripción se despliega en la foto activa */}
+              <div className="turismo-detalle">
+                <div>
+                  <p>{lugar.descripcion}</p>
+                </div>
+              </div>
               {/* Crédito obligatorio por la licencia Creative Commons */}
               <small>
                 Foto:{" "}

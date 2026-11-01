@@ -7,12 +7,13 @@
 // sesión muestra el botón que abre el modal de login; con sesión muestra el
 // menú desplegable de rutas privadas. Ocultar el menú no protege nada por
 // sí solo: las rutas usan ProtectedRoute y, con backend, el servidor exige sesión.
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Collapse from "react-bootstrap/Collapse";
 import Dropdown from "react-bootstrap/Dropdown";
 import { FaBars, FaCartShopping, FaXmark } from "react-icons/fa6";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/img/logo.svg";
+import { subirAlInicio } from "../../utils/inicio.js";
 import { useAuth } from "../../context/auth-context.js";
 import { useCart } from "../../context/cart-context.js";
 import useActiveSection from "../../hooks/useActiveSection.js";
@@ -21,7 +22,7 @@ import useCategoryMenu from "../../hooks/useCategoryMenu.js";
 import LoginModal from "../auth/LoginModal.jsx";
 
 // Secciones de la portada que marcan como activo su enlace de la cabecera
-const sectionIds = ["inicio", "categorias", "productos", "nosotros", "bucaramanga", "preguntas"];
+const sectionIds = ["inicio", "productos", "nosotros", "bucaramanga", "preguntas"];
 
 // Enlace a la portada con filtros del catálogo en la URL y salto a una sección
 const homeLink = (sectionId, params = {}) => {
@@ -59,11 +60,22 @@ function NavMenu({ id, label, active, children }) {
 function SiteHeader() {
   const { user, status, logout } = useAuth();
   const { unidades } = useCart();
+  // El contador "salta" cuando se agrega algo al carrito (no al cargar la
+  // página). La key reinicia la animación en cada salto.
+  const [saltos, setSaltos] = useState(0);
+  const unidadesAntes = useRef(unidades);
+  useEffect(() => {
+    if (unidades > unidadesAntes.current) setSaltos((n) => n + 1);
+    unidadesAntes.current = unidades;
+  }, [unidades]);
   const categories = useCategoryMenu();
   const navigate = useNavigate();
   const location = useLocation();
   // Enlace marcado según la sección visible (solo en la portada)
   const activeSection = useActiveSection(sectionIds, location.pathname === "/");
+  // En el catálogo se marca "Categorías" si hay una categoría elegida y
+  // "Productos" si no
+  const filtraCategoria = new URLSearchParams(location.search).has("categoria");
   const [showLogin, setShowLogin] = useState(false);
   // Menú de navegación desplegable en móvil (en escritorio siempre visible)
   const [menuOpen, setMenuOpen] = useState(false);
@@ -91,7 +103,7 @@ function SiteHeader() {
 
   return (
     <header className="site-header">
-      <Link className="brand" to="/" aria-label="FarmaUIS, inicio">
+      <Link className="brand" to="/" onClick={subirAlInicio} aria-label="FarmaUIS, inicio">
         {/* Logo: imagen en src/assets/img/logo.svg (el nombre del sitio va en el texto) */}
         <img className="brand-mark" src={logo} alt="" />
         <span className="brand-name">
@@ -117,7 +129,7 @@ function SiteHeader() {
             <NavMenu
               id="menu-categorias"
               label="Categorías"
-              active={activeSection === "categorias"}
+              active={activeSection === "productos" && filtraCategoria}
             >
               <Dropdown.Header>Comprar por categoría</Dropdown.Header>
               {categories.map((category) => (
@@ -132,8 +144,8 @@ function SiteHeader() {
                 </Dropdown.Item>
               ))}
               <Dropdown.Divider />
-              <Dropdown.Item as={Link} to={homeLink("categorias")} onClick={closeMenu}>
-                Ver todas las categorías
+              <Dropdown.Item as={Link} to={homeLink("productos")} onClick={closeMenu}>
+                Ver todo el catálogo
               </Dropdown.Item>
             </NavMenu>
 
@@ -141,7 +153,7 @@ function SiteHeader() {
             <NavMenu
               id="menu-productos"
               label="Productos"
-              active={activeSection === "productos"}
+              active={activeSection === "productos" && !filtraCategoria}
             >
               <Dropdown.Header>Ver productos</Dropdown.Header>
               {Object.entries(PRODUCT_VIEWS).map(([key, view]) => (
@@ -193,7 +205,11 @@ function SiteHeader() {
           <FaCartShopping aria-hidden="true" />
           <span className="header-cart-text">Carrito</span>
           {unidades > 0 && (
-            <span className="header-cart-count" aria-hidden="true">
+            <span
+              key={saltos}
+              className={`header-cart-count${saltos ? " is-salto" : ""}`}
+              aria-hidden="true"
+            >
               {unidades > 99 ? "99+" : unidades}
             </span>
           )}

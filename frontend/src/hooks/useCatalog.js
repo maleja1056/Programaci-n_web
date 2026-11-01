@@ -11,22 +11,25 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import { getCatalog } from "../api/catalog.js";
 import { USAR_BACKEND } from "../api/config.js";
+import { ilustracionDe } from "../utils/ilustraciones.js";
 
-// Símbolo y estilo de cada categoría en las tarjetas de categorías
-const categoryVisuals = {
-  "Medicamentos": { symbol: "+", style: "medicines" },
-  "Cuidado personal": { symbol: "◇", style: "care" },
-  "Vitaminas y suplementos": { symbol: "✳", style: "vitamins" },
-  "Primeros auxilios": { symbol: "+", style: "first-aid" },
+// Color del punto de cada categoría en los filtros del catálogo (mismo color
+// que el fondo de sus productos: clases .art-* en app.css)
+const categoryColors = {
+  "Medicamentos": "blue",
+  "Cuidado personal": "mint",
+  "Vitaminas y suplementos": "orange",
+  "Primeros auxilios": "green",
 };
 
-// Color y símbolo de la ilustración de cada producto, según el id de su
-// categoría (clases .art-blue, .art-mint... en app.css)
-const productVisuals = {
-  1: { color: "blue", symbol: "+" },
-  2: { color: "mint", symbol: "◇" },
-  3: { color: "orange", symbol: "C" },
-  4: { color: "green", symbol: "+" },
+// Color de fondo de la ilustración de cada producto, según el id de su
+// categoría (clases .art-blue, .art-mint... en app.css). El dibujo lo elige
+// utils/ilustraciones.js.
+const productColors = {
+  1: "blue",
+  2: "mint",
+  3: "orange",
+  4: "green",
 };
 
 export const ALL_CATEGORIES = "Todos";
@@ -114,13 +117,9 @@ function useCatalog() {
           await getCatalog();
 
         // Se pasan los campos de la API (en español) a los nombres que usan
-        // los componentes, y se añaden el color y el símbolo de la tarjeta
+        // los componentes, y se añaden el color y el dibujo de la tarjeta
         const normalizedProducts = productsData.map((product) => {
           const categoryId = Number(product.categoria_id);
-          const visual = productVisuals[categoryId] || {
-            color: "green",
-            symbol: "+",
-          };
           const stock = Number(product.stock);
           const soldOut = !(stock > 0);
           const requiereFormula = Boolean(product.requiere_formula);
@@ -134,36 +133,30 @@ function useCatalog() {
             price: Number(product.precio),
             stock,
             soldOut,
-            color: visual.color,
-            symbol: visual.symbol,
+            color: productColors[categoryId] || "green",
+            ilustracion: ilustracionDe(product.nombre, product.categoria),
             label: productLabel(soldOut, requiereFormula),
             requiereFormula,
           };
         });
 
-        // "Todos" va primero: es la opción que quita el filtro
+        // "Todos" va primero: es la opción que quita el filtro. Cada
+        // categoría lleva cuántos productos tiene.
         const normalizedCategories = [
           {
             id: ALL_CATEGORIES,
             name: ALL_CATEGORIES,
-            symbol: "▦",
-            description: "Todo el catálogo",
+            color: null,
+            count: normalizedProducts.length,
           },
-          ...categoriesData.map((category) => {
-            const visual = categoryVisuals[category.nombre] || {
-              symbol: "+",
-              style: "care",
-            };
-
-            return {
-              id: category.id,
-              name: category.nombre,
-              symbol: visual.symbol,
-              style: visual.style,
-              description:
-                category.descripcion || "Descubre nuestros productos",
-            };
-          }),
+          ...categoriesData.map((category) => ({
+            id: category.id,
+            name: category.nombre,
+            color: categoryColors[category.nombre] || "green",
+            count: normalizedProducts.filter(
+              (product) => product.categoryId === Number(category.id)
+            ).length,
+          })),
         ];
 
         setProducts(normalizedProducts);
@@ -216,6 +209,7 @@ function useCatalog() {
 
   return {
     categories,
+    products,
     filteredProducts,
     loading,
     error,

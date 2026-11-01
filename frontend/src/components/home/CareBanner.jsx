@@ -1,18 +1,39 @@
-// Banner final de la portada que invita a volver al catálogo.
+// Banner final de la portada: lleva al carrito (con cuántas unidades tiene)
+// o, si está vacío, al catálogo.
+import { FaCartShopping } from "react-icons/fa6";
+import { Link } from "react-router-dom";
+import { useCart } from "../../context/cart-context.js";
+import { plural } from "../../utils/format.js";
+
 function CareBanner() {
+  const { unidades } = useCart();
+
   return (
     <section className="care-banner">
-      <div className="care-banner-icon">+</div>
+      <div className="care-banner-icon" aria-hidden="true">
+        <FaCartShopping />
+      </div>
       <div>
-        <span className="section-kicker">FARMAUIS</span>
-        <h2>Tu bienestar comienza con pequeños cuidados.</h2>
+        <h2>
+          {unidades
+            ? `Tienes ${plural(unidades, "unidad", "unidades")} en el carrito`
+            : "¿Ya sabes qué necesitas?"}
+        </h2>
         <p>
-          Explora nuestro catálogo y descubre opciones para tu rutina diaria.
+          {unidades
+            ? "Confirma el pedido cuando quieras; tu carrito se guarda en este navegador."
+            : "Agrega productos desde el catálogo y confirma el pedido cuando estés listo."}
         </p>
       </div>
-      <a className="secondary-button" href="#productos">
-        Ver catálogo <span aria-hidden="true">→</span>
-      </a>
+      {unidades ? (
+        <Link className="secondary-button" to="/carrito">
+          Ir al carrito
+        </Link>
+      ) : (
+        <a className="secondary-button" href="#productos">
+          Ver el catálogo
+        </a>
+      )}
     </section>
   );
 }

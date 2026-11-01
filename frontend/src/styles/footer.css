@@ -20,7 +20,7 @@
   display: grid;
   grid-template-columns: 1.3fr 0.8fr 1.2fr 1.3fr;
   gap: 40px;
-  padding: 44px 0 36px;
+  padding: 36px 0 28px;
 }
 
 /* ---------- Marca y redes ---------- */
@@ -203,73 +203,225 @@
   color: var(--color-marca);
 }
 
-/* ---------- Modal de integrante ---------- */
+/* ---------- Carnet del integrante (modal) ----------
+   El borde izquierdo es un semicírculo de radio H/2 y la foto es un círculo
+   con el mismo centro (H/2, H/2), separada del borde por --aro. El carnet
+   se inclina hacia el mouse con --rx/--ry (TeamMemberModal.jsx) y la foto y
+   el texto flotan a distinta profundidad (translateZ). */
+
+.team-modal {
+  max-width: 560px;
+  perspective: 1000px;
+}
 
 .team-modal .modal-content {
-  border: 1px solid #e1eee2;
-  border-radius: 18px;
-  box-shadow: 0 18px 45px rgba(23, 78, 59, 0.15);
+  border: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
-.team-modal .modal-header {
-  align-items: flex-start;
-  padding: 24px 26px 8px;
-  border-bottom: 0;
+.carnet-escena {
+  animation: carnet-entrar 700ms var(--curva-rebote) both;
+  transform-style: preserve-3d;
 }
 
-.team-modal-heading {
+.carnet {
+  --alto: 200px;
+  --aro: 16px;
+  --rx: 0deg;
+  --ry: 0deg;
+  --mx: 50%;
+  --my: 50%;
+  position: relative;
   display: flex;
+  /* Alto fijo: si creciera con el texto, el borde izquierdo dejaría de ser
+     un semicírculo concéntrico con la foto */
+  height: var(--alto);
   align-items: center;
-  gap: 16px;
+  padding: 22px 52px 22px calc(var(--alto) + 6px);
+  border-radius: calc(var(--alto) / 2) 22px 22px calc(var(--alto) / 2);
+  background:
+    radial-gradient(circle at calc(var(--alto) / 2) 50%, rgba(255, 255, 255, 0.1) 0, transparent 60%),
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0 2px, transparent 2px 9px),
+    linear-gradient(120deg, var(--color-marca-fondo), var(--color-oscuro-fondo));
+  box-shadow:
+    0 2px 6px rgba(23, 54, 42, 0.2),
+    0 30px 60px rgba(23, 78, 59, 0.35);
+  color: var(--color-sobre-marca);
+  transform: rotateX(var(--rx)) rotateY(var(--ry));
+  transform-style: preserve-3d;
+  transition: transform 500ms var(--curva);
+  touch-action: none;
 }
 
-.team-avatar-lg {
-  width: 64px;
-  height: 64px;
-  font-size: 22px;
+/* Mientras sigue al puntero responde rápido; al salir vuelve despacio */
+.carnet.is-activo {
+  transition: transform 90ms linear;
 }
 
-.team-modal .modal-title {
-  margin-top: 4px;
-  color: var(--color-texto);
+.carnet-foto {
+  position: absolute;
+  top: var(--aro);
+  left: var(--aro);
+  display: grid;
+  width: calc(var(--alto) - 2 * var(--aro));
+  height: calc(var(--alto) - 2 * var(--aro));
+  place-items: center;
+  overflow: hidden;
+  border: 5px solid rgba(255, 255, 255, 0.92);
+  border-radius: 50%;
+  background: var(--color-marca-fondo-hover);
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.25),
+    0 12px 26px rgba(9, 32, 23, 0.4);
+  transform: translateZ(40px);
+  animation: carnet-foto 520ms var(--curva-rebote) 260ms both;
+}
+
+.carnet-foto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+}
+
+.carnet-foto span {
   font-family: "Manrope", sans-serif;
-  font-size: 22px;
+  font-size: 48px;
   font-weight: 800;
 }
 
-.team-modal .modal-body {
-  padding: 8px 26px 26px;
+.carnet-datos {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+  transform: translateZ(28px);
 }
 
-.team-details {
+.carnet-datos > * {
+  animation: carnet-texto 420ms var(--curva) both;
+}
+
+.carnet-datos > :nth-child(1) { animation-delay: 380ms; }
+.carnet-datos > :nth-child(2) { animation-delay: 450ms; }
+.carnet-datos > :nth-child(3) { animation-delay: 520ms; }
+.carnet-datos > :nth-child(4) { animation-delay: 590ms; }
+
+.carnet-marca {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  margin-bottom: 6px;
+  color: var(--color-sobre-oscuro-suave);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
+
+.carnet-marca img {
+  width: 18px;
+  height: 18px;
+  border-radius: 5px;
+}
+
+.carnet .carnet-nombre {
   margin: 0;
-  border: 1px solid #e1eee2;
-  border-radius: 12px;
+  color: var(--color-sobre-marca);
+  font-family: "Manrope", sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1.2;
 }
 
-.team-details > div {
-  display: grid;
-  grid-template-columns: 100px 1fr;
-  gap: 12px;
-  padding: 12px 16px;
-  border-bottom: 1px solid #edf1ee;
-}
-
-.team-details > div:last-child {
-  border-bottom: 0;
-}
-
-.team-details dt {
-  color: var(--color-texto-suave);
+.carnet-rol {
+  align-self: flex-start;
+  margin-top: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.16);
+  color: var(--color-sobre-marca);
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
-.team-details dd {
-  margin: 0;
-  color: var(--color-texto);
-  font-size: 13px;
-  font-weight: 600;
+.carnet-programa {
+  color: var(--color-sobre-oscuro-suave);
+  font-size: 12px;
+}
+
+/* Brillo holográfico: una luz en la posición del puntero y un velo irisado */
+.carnet-brillo {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(circle at var(--mx) var(--my), rgba(255, 255, 255, 0.32), transparent 42%),
+    linear-gradient(
+      115deg,
+      transparent 20%,
+      rgba(120, 255, 210, 0.18) calc(var(--mx) - 10%),
+      rgba(255, 230, 140, 0.16) var(--mx),
+      rgba(150, 190, 255, 0.18) calc(var(--mx) + 10%),
+      transparent 80%
+    );
+  mix-blend-mode: soft-light;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateZ(1px);
+  transition: opacity 300ms var(--curva);
+}
+
+.carnet.is-activo .carnet-brillo {
+  opacity: 1;
+}
+
+.carnet-cerrar {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  transform: translateZ(30px);
+}
+
+@keyframes carnet-entrar {
+  from {
+    opacity: 0;
+    transform: rotateY(-65deg) rotateX(12deg) scale(0.8);
+  }
+  40% {
+    opacity: 1;
+  }
+}
+
+@keyframes carnet-foto {
+  from {
+    opacity: 0;
+    transform: translateZ(40px) scale(0.6);
+  }
+}
+
+@keyframes carnet-texto {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .carnet-escena,
+  .carnet-foto,
+  .carnet-datos > * {
+    animation: none;
+  }
+
+  .carnet {
+    transform: none;
+    transition: none;
+  }
+
+  .carnet-brillo {
+    display: none;
+  }
 }
 
 /* ---------- Tabletas y móviles ---------- */
@@ -292,20 +444,109 @@
     width: calc(100% - 32px);
   }
 
+  /* Celular: marca y redes en una fila, los enlaces en línea y el equipo
+     en dos columnas */
   .footer-main {
     grid-template-columns: 1fr;
-    gap: 28px;
-    padding: 36px 0 28px;
+    gap: 20px;
+    padding: 24px 0 18px;
   }
 
-  .footer-bottom {
-    flex-direction: column;
-    align-items: flex-start;
+  .footer-about {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px 16px;
+  }
+
+  .footer-about p {
+    order: 3;
+    max-width: none;
+    flex-basis: 100%;
+    margin: 0;
+  }
+
+  .footer-social {
     gap: 8px;
   }
 
-  .team-details > div {
-    grid-template-columns: 1fr;
-    gap: 2px;
+  .footer-social a {
+    width: 32px;
+    height: 32px;
+    font-size: 14px;
+  }
+
+  .footer-title {
+    margin-bottom: 10px;
+  }
+
+  .footer-links {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 6px 18px;
+  }
+
+  .footer-contact {
+    gap: 7px;
+  }
+
+  .footer-team {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 8px;
+  }
+
+  .team-member {
+    align-items: flex-start;
+    gap: 8px;
+    padding: 4px 8px;
+  }
+
+  .team-avatar {
+    width: 28px;
+    height: 28px;
+  }
+
+  .footer-bottom {
+    padding: 12px 0;
+  }
+
+  .team-modal {
+    margin-inline: 8px;
+  }
+
+  .carnet {
+    --alto: 176px;
+    --aro: 12px;
+    padding: 12px 34px 12px calc(var(--alto) + 2px);
+  }
+
+  .carnet-marca {
+    margin-bottom: 2px;
+    font-size: 10px;
+  }
+
+  .carnet .carnet-nombre {
+    font-size: 15px;
+  }
+
+  .carnet-rol {
+    margin-top: 4px;
+    padding: 3px 8px;
+    font-size: 11px;
+  }
+
+  .carnet-programa {
+    font-size: 11px;
+  }
+
+  .carnet-foto span {
+    font-size: 36px;
+  }
+
+  .carnet-cerrar {
+    top: 10px;
+    right: 10px;
   }
 }

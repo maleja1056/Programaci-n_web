@@ -6,7 +6,7 @@ export const preguntas = [
     id: "pedido",
     pregunta: "¿Cómo encuentro un producto?",
     respuesta:
-      "Usa el buscador del catálogo o elige una categoría. Cada tarjeta muestra el precio y si el producto requiere fórmula médica. La compra en línea llegará en la siguiente fase del proyecto.",
+      "Usa el buscador del catálogo o elige una categoría. Cada tarjeta muestra el precio, las unidades disponibles y si el producto requiere fórmula médica. Con el botón del carrito lo agregas a tu compra.",
   },
   {
     id: "formula",
@@ -18,7 +18,7 @@ export const preguntas = [
     id: "cuenta",
     pregunta: "¿Necesito una cuenta para usar el sitio?",
     respuesta:
-      "No para ver el catálogo. Las páginas privadas, como el panel y el perfil, solo están disponibles después de iniciar sesión.",
+      "No para ver el catálogo ni para armar tu carrito. Para confirmar el pedido sí debes iniciar sesión; después puedes seguirlo en «Mis pedidos».",
   },
   {
     id: "pagos",

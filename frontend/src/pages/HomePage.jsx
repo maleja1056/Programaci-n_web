@@ -7,9 +7,7 @@ import AboutSection from "../components/home/AboutSection.jsx";
 import AnnouncementBar from "../components/home/AnnouncementBar.jsx";
 import CareBanner from "../components/home/CareBanner.jsx";
 import CatalogSection from "../components/home/CatalogSection.jsx";
-import CategoriesSection from "../components/home/CategoriesSection.jsx";
 import FaqSection from "../components/home/FaqSection.jsx";
-import FeaturesSection from "../components/home/FeaturesSection.jsx";
 import HeroSection from "../components/home/HeroSection.jsx";
 import PromoCarousel from "../components/home/PromoCarousel.jsx";
 import TurismoSection from "../components/home/TurismoSection.jsx";
@@ -19,7 +17,7 @@ import useCatalog from "../hooks/useCatalog.js";
 
 function HomePage() {
   const catalog = useCatalog();
-  const { hash, key } = useLocation();
+  const { hash, key, search } = useLocation();
 
   // Salto a la sección del ancla (#productos, #preguntas...) en cada
   // navegación que la incluya: al llegar desde otra página y al elegir una
@@ -39,14 +37,7 @@ function HomePage() {
 
       <main>
         <HeroSection />
-        <PromoCarousel />
-        <FeaturesSection />
-
-        <CategoriesSection
-          categories={catalog.categories}
-          selectedCategory={catalog.selectedCategory}
-          onSelectCategory={catalog.setSelectedCategory}
-        />
+        <PromoCarousel productos={catalog.products} />
 
         <CatalogSection
           categories={catalog.categories}
@@ -62,6 +53,9 @@ function HomePage() {
           sortBy={catalog.sortBy}
           onSortChange={catalog.setSortBy}
           onResetFilters={catalog.resetFilters}
+          // Dos filas de 5; el resto se ve en el carrito, con el mismo filtro
+          limite={10}
+          enlaceVerMas={`/carrito${search}#catalogo`}
         />
 
         <AboutSection />
