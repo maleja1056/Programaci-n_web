@@ -11,6 +11,10 @@
 //   guardan al momento, porque cada uno mueve el stock en el servidor.
 //   Solo se pueden cambiar los productos en "pendiente", "confirmado" o
 //   "preparando".
+// paraCliente (lo usa "Mis pedidos" en /perfil): el pedido es siempre del
+//   usuario con sesión, así que no se elige cliente; el estado no se puede
+//   cambiar, y la dirección y los productos solo mientras está "pendiente"
+//   (las mismas reglas del backend, lib/pedidos.js).
 import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
 import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
@@ -125,7 +129,15 @@ function AgregarProducto({ productos, excluir, onAgregar, ocupado, idBase }) {
 
 // Contenido del modal. Se monta de nuevo cada vez que el modal se abre, así
 // el formulario siempre empieza limpio.
-function ContenidoPedido({ modo, fila, tituloId, pedirCierre, alTerminar, alCambiarProductos }) {
+function ContenidoPedido({
+  modo,
+  fila,
+  paraCliente,
+  tituloId,
+  pedirCierre,
+  alTerminar,
+  alCambiarProductos,
+}) {
   const { handleUnauthorized } = useAuth();
   const idBase = useId();
   const esNuevo = modo === "crear";
@@ -176,13 +188,13 @@ function ContenidoPedido({ modo, fila, tituloId, pedirCierre, alTerminar, alCamb
   useEffect(() => {
     let activo = true;
     const tareas = [cargarProductos()];
-    if (esNuevo) {
+    if (esNuevo && !paraCliente) {
       tareas.push(
         usuariosApi.listar().then((datos) => {
           if (activo) setClientes(datos.filter((usuario) => Number(usuario.activo)));
         })
       );
-    } else {
+    } else if (!esNuevo) {
       tareas.push(cargarPedido());
     }
     Promise.all(tareas)
@@ -191,7 +203,7 @@ function ContenidoPedido({ modo, fila, tituloId, pedirCierre, alTerminar, alCamb
     return () => {
       activo = false;
     };
-  }, [esNuevo, cargarProductos, cargarPedido, manejarError]);
+  }, [esNuevo, paraCliente, cargarProductos, cargarPedido, manejarError]);
 
   const lineasActuales = useMemo(
     () => (esNuevo ? [] : pedido?.detalle || []),
@@ -199,8 +211,14 @@ function ContenidoPedido({ modo, fila, tituloId, pedirCierre, alTerminar, alCamb
   );
   const estadoGuardado = pedido?.estado || fila?.estado;
   const productosEditables =
-    esNuevo || ESTADOS_CON_PRODUCTOS_EDITABLES.includes(estadoGuardado);
+    esNuevo ||
+    (paraCliente
+      ? estadoGuardado === "pendiente"
+      : ESTADOS_CON_PRODUCTOS_EDITABLES.includes(estadoGuardado));
   const cancelado = estadoGuardado === "cancelado";
+  // Sin nada que guardar: cancelado, o un pedido del cliente ya en camino
+  const soloLectura =
+    !esNuevo && (cancelado || (paraCliente && estadoGuardado !== "pendiente"));
 
   const total = esNuevo
     ? lineasNuevas.reduce((suma, linea) => suma + Number(linea.producto.precio) * linea.cantidad, 0)
@@ -259,7 +277,7 @@ function ContenidoPedido({ modo, fila, tituloId, pedirCierre, alTerminar, alCamb
   // ----- Guardar -----
   const validar = () => {
     const nuevos = {};
-    if (esNuevo && !clienteId) nuevos.cliente = "Elige el cliente.";
+    if (esNuevo && !paraCliente && !clienteId) nuevos.cliente = "Elige el cliente.";
     if (!direccion.trim()) nuevos.direccion = "Escribe la dirección de entrega.";
     else if (direccion.trim().length > 255) nuevos.direccion = "Máximo 255 caracteres.";
     if (esNuevo) {
@@ -283,7 +301,8 @@ function ContenidoPedido({ modo, fila, tituloId, pedirCierre, alTerminar, alCamb
     try {
       if (esNuevo) {
         const creado = await pedidosApi.crear({
-          usuario_id: Number(clienteId),
+          // El cliente no lo envía: el servidor usa el de la sesión
+          ...(paraCliente ? {} : { usuario_id: Number(clienteId) }),
           direccion_entrega: direccion.trim(),
           lineas: lineasNuevas.map((linea) => ({
             producto_id: linea.producto.id,
@@ -325,7 +344,9 @@ function ContenidoPedido({ modo, fila, tituloId, pedirCierre, alTerminar, alCamb
           <Modal.Title id={tituloId}>{titulo}</Modal.Title>
           {!esNuevo && (
             <p className="pedido-meta">
-              {fila.cliente} · {fila.cliente_correo} · {formatFecha(fila.creado_en)}
+              {paraCliente
+                ? `Hecho el ${formatFecha(fila.creado_en)}`
+                : `${fila.cliente} · ${fila.cliente_correo} · ${formatFecha(fila.creado_en)}`}
             </p>
           )}
         </div>
@@ -350,7 +371,20 @@ function ContenidoPedido({ modo, fila, tituloId, pedirCierre, alTerminar, alCamb
         ) : (
           <>
             <div className="crud-form-grid">
-              {esNuevo ? (
+              {esNuevo && paraCliente ? null : paraCliente ? (
+                // El cliente ve el estado, pero no lo cambia
+                <div className="crud-field is-half">
+                  <span className="form-label d-block">Estado</span>
+                  <span className={`crud-badge ${estadoDe(estadoGuardado).clase}`}>
+                    {estadoDe(estadoGuardado).texto}
+                  </span>
+                  <Form.Text className="d-block">
+                    {estadoGuardado === "pendiente"
+                      ? "Puedes cambiarlo o cancelarlo mientras esté pendiente."
+                      : "Ya no se puede modificar."}
+                  </Form.Text>
+                </div>
+              ) : esNuevo ? (
                 <Form.Group controlId={`${idBase}-cliente`} className="crud-field">
                   <Form.Label>
                     Cliente <span className="crud-required" aria-hidden="true">*</span>
@@ -412,7 +446,7 @@ function ContenidoPedido({ modo, fila, tituloId, pedirCierre, alTerminar, alCamb
                     setErrores((actual) => ({ ...actual, direccion: undefined }));
                   }}
                   isInvalid={Boolean(errores.direccion)}
-                  disabled={cancelado || guardando}
+                  disabled={soloLectura || guardando}
                   required
                 />
                 <Form.Control.Feedback type="invalid">{errores.direccion}</Form.Control.Feedback>
@@ -579,7 +613,7 @@ function ContenidoPedido({ modo, fila, tituloId, pedirCierre, alTerminar, alCamb
         <button type="button" className="crud-button" onClick={cerrar} disabled={guardando}>
           Cerrar
         </button>
-        {!cancelado && !errorCarga && (
+        {!soloLectura && !errorCarga && (
           <button
             type="submit"
             className="crud-button is-primary"
@@ -593,7 +627,7 @@ function ContenidoPedido({ modo, fila, tituloId, pedirCierre, alTerminar, alCamb
   );
 }
 
-function PedidoModal({ abierto, modo, fila, alCerrar, alTerminar }) {
+function PedidoModal({ abierto, modo, fila, paraCliente = false, alCerrar, alTerminar }) {
   const tituloId = useId();
   // true si se agregaron, cambiaron o quitaron productos de un pedido
   // existente: esos cambios ya están guardados, así que al cerrar (con
@@ -626,6 +660,7 @@ function PedidoModal({ abierto, modo, fila, alCerrar, alTerminar }) {
           key={`${modo}-${fila?.id ?? "nuevo"}`}
           modo={modo}
           fila={fila}
+          paraCliente={paraCliente}
           tituloId={tituloId}
           pedirCierre={cerrar}
           alTerminar={terminar}

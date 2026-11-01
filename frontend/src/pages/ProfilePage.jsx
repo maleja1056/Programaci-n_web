@@ -1,8 +1,10 @@
-// Página privada /perfil: datos públicos del usuario con sesión iniciada.
+// Página privada /perfil: datos públicos del usuario con sesión iniciada y
+// sus pedidos (MisPedidos). Es la vista del usuario registrado.
 // Los datos vienen de la sesión del servidor (GET /api/auth/me) o, en el modo
 // demostración, del usuario simulado de api/demo.js.
 import SiteFooter from "../components/layout/SiteFooter.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";
+import MisPedidos from "../components/perfil/MisPedidos.jsx";
 import { useAuth } from "../context/auth-context.js";
 
 // Texto que se muestra para cada rol guardado en la sesión
@@ -40,6 +42,8 @@ function ProfilePage() {
             </div>
           ))}
         </dl>
+
+        <MisPedidos />
       </main>
 
       <SiteFooter />
