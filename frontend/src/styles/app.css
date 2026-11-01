@@ -1484,3 +1484,87 @@ select:focus-visible {
     animation-duration: 0.01ms !important;
   }
 }
+
+/* ---------- CARRITO: botón "Agregar al carrito" (BotonAgregar.jsx) ---------- */
+.boton-agregar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 34px;
+  padding: 0 12px;
+  border: 1px solid var(--color-marca-fondo);
+  border-radius: 9px;
+  background: var(--color-marca-fondo);
+  color: var(--color-sobre-marca);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 180ms ease;
+}
+
+.boton-agregar:hover:not(:disabled) {
+  background: var(--color-marca-fondo-hover);
+}
+
+.boton-agregar.is-done {
+  border-color: var(--color-marca);
+  background: #fff;
+  color: var(--color-marca);
+}
+
+.boton-agregar:disabled:not(.is-done) {
+  border-color: #dfe6e1;
+  background: #eef2ef;
+  color: var(--color-texto-suave);
+  cursor: default;
+}
+
+/* En la tarjeta solo va el icono, junto al botón "→" */
+.boton-agregar.product-cart {
+  width: 34px;
+  padding: 0;
+  margin-left: auto;
+}
+
+/* En el modal de detalle ocupa todo el ancho */
+.boton-agregar.product-modal-cart {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+/* ---------- CABECERA: carrito con número de unidades ---------- */
+.header-action.header-cart {
+  position: relative;
+  font-size: 14px;
+}
+
+.header-action.header-cart svg {
+  font-size: 18px;
+}
+
+.header-action.header-cart > .header-cart-count {
+  display: grid;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 5px;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--color-marca-fondo);
+  color: var(--color-sobre-marca);
+  font-size: 11px;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.header-action.header-cart > .header-cart-text {
+  font-size: 14px;
+}
+
+@media (max-width: 1100px) {
+  .header-action.header-cart > .header-cart-text {
+    display: none;
+  }
+}

@@ -1,8 +1,10 @@
 // Modal (React-Bootstrap) con el detalle de un producto: categoría, nombre,
 // descripción, precio, disponibilidad y aviso de fórmula médica.
-// Se abre con el botón "→" de cada tarjeta (ProductCard).
+// Se abre con el botón "→" de cada tarjeta (ProductCard). Abajo tiene el
+// botón "Agregar al carrito".
 import Modal from "react-bootstrap/Modal";
 import { formatPrice, formatStock } from "../../utils/format.js";
+import BotonAgregar from "../carrito/BotonAgregar.jsx";
 
 function ProductDetailModal({ product, show, onHide }) {
   return (
@@ -60,6 +62,8 @@ function ProductDetailModal({ product, show, onHide }) {
             a tu médico o farmacéutico si tienes dudas.
           </p>
         )}
+
+        <BotonAgregar product={product} className="product-modal-cart" />
       </Modal.Body>
     </Modal>
   );
