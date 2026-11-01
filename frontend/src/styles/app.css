@@ -1,5 +1,5 @@
-/* Estilos generales de FarmaUIS: base, anuncio, cabecera, hero, categorías,
-   catálogo y banner de cuidado. Cada sección empieza con un comentario
+/* Estilos generales de FarmaUIS: base, anuncio, cabecera, hero, catálogo
+   (con sus filtros por categoría) y banner de cuidado. Cada sección empieza con un comentario
    "---------- NOMBRE ----------". Los estilos de otras partes están en:
    header.css (menú fijo y móvil), footer.css (pie de página), home.css
    (carrusel, tres columnas, nosotros y preguntas) y auth.css (login y panel).
@@ -548,12 +548,10 @@ select:focus-visible {
   color: var(--color-marca);
 }
 
-.categories-section,
-
-/* ---------- ENCABEZADOS DE SECCIÓN: categorías y catálogo ---------- */
+/* ---------- ENCABEZADOS DE SECCIÓN ---------- */
 .products-section {
   width: min(1180px, calc(100% - 64px));
-  margin: 68px auto 0;
+  margin: 78px auto 0;
 }
 
 .section-heading,
@@ -580,104 +578,6 @@ select:focus-visible {
   color: var(--color-texto-suave);
   font-size: 12px;
   line-height: 1.8;
-}
-
-/* ---------- CATEGORÍAS: tarjetas para filtrar el catálogo ---------- */
-.category-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 15px;
-  margin-top: 25px;
-}
-
-.category-card {
-  display: flex;
-  min-height: 105px;
-  align-items: center;
-  gap: 13px;
-  padding: 17px 13px;
-  border: 1px solid var(--borde-suave);
-  border-radius: 16px;
-  background: white;
-  box-shadow: var(--sombra-1);
-  text-align: left;
-  cursor: pointer;
-  transition:
-    border-color var(--duracion) var(--curva),
-    background var(--duracion) var(--curva),
-    box-shadow var(--duracion) var(--curva),
-    transform var(--duracion) var(--curva);
-}
-
-.category-card:hover {
-  transform: translateY(-3px);
-  border-color: #b7dfc2;
-  box-shadow: var(--sombra-2);
-}
-
-.category-card.selected {
-  border-color: #8fcea2;
-  background: #f4fbf5;
-}
-
-.category-symbol {
-  display: grid;
-  width: 43px;
-  height: 43px;
-  flex-shrink: 0;
-  place-items: center;
-  border-radius: 12px;
-  font-size: 23px;
-}
-
-.symbol-all {
-  background: #e7f4e9;
-  color: var(--color-marca);
-}
-
-.symbol-vitamins {
-  background: #fff1dd;
-  color: var(--color-aviso);
-}
-
-.symbol-care {
-  background: #e6efff;
-  color: var(--color-info);
-}
-
-.symbol-first-aid {
-  background: #fce9e8;
-  color: var(--color-peligro);
-}
-
-.category-copy {
-  display: flex;
-  min-width: 0;
-  flex: 1;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.category-copy strong {
-  color: var(--color-texto);
-  font-size: 11px;
-  line-height: 1.4;
-}
-
-.category-copy small {
-  color: var(--color-texto-suave);
-  font-size: 12px;
-  line-height: 1.5;
-}
-
-.category-arrow {
-  align-self: flex-start;
-  color: var(--color-texto-suave);
-  font-size: 14px;
-}
-
-.products-section {
-  margin-top: 78px;
 }
 
 .products-heading {
@@ -774,10 +674,12 @@ select:focus-visible {
 }
 
 /* ---------- TARJETAS DE PRODUCTO: cuadrícula, ilustración, etiqueta y precio ---------- */
+/* 5 columnas en pantallas anchas; bajan según el ancho (ver el bloque
+   "CATÁLOGO: columnas" al final del archivo) */
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 21px;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 16px;
 }
 
 .product-card {
@@ -805,7 +707,7 @@ select:focus-visible {
 .product-art {
   position: relative;
   display: flex;
-  min-height: 186px;
+  min-height: 142px;
   align-items: center;
   justify-content: center;
   overflow: hidden;
@@ -816,9 +718,9 @@ select:focus-visible {
 }
 
 .product-art .producto-ilustracion {
-  width: min(210px, 78%);
+  width: min(150px, 74%);
   height: auto;
-  margin-top: 10px;
+  margin-top: 20px;
   overflow: visible;
 }
 
@@ -885,7 +787,7 @@ select:focus-visible {
 }
 
 .product-info {
-  padding: 17px 17px 15px;
+  padding: 14px 14px 13px;
 }
 
 .product-category {
@@ -903,27 +805,35 @@ select:focus-visible {
   letter-spacing: -0.3px;
 }
 
+/* Descripción de máximo 2 líneas; la altura fija alinea las tarjetas */
 .product-info p {
+  display: -webkit-box;
+  min-height: calc(2 * 1.55em);
   margin: 0;
+  overflow: hidden;
   color: var(--color-texto-suave);
   font-size: 12px;
-  line-height: 1.7;
+  line-height: 1.55;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
 }
 
 .product-bottom {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
-  margin-top: 17px;
-  padding-top: 13px;
+  gap: 6px;
+  margin-top: 12px;
+  padding-top: 11px;
   border-top: 1px solid #eff2ef;
 }
 
 .product-price {
   color: var(--color-texto);
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 800;
+  white-space: nowrap;
 }
 
 .view-product {
@@ -993,7 +903,7 @@ select:focus-visible {
   align-self: flex-start;
 }
 
-/* Cuadro de color con el símbolo de la categoría */
+/* Cuadro de color con el dibujo del producto */
 .product-modal-art {
   display: grid;
   width: 76px;
@@ -1203,7 +1113,6 @@ select:focus-visible {
 @media (max-width: 1000px) {
   .site-header,
   .hero,
-  .categories-section,
   .products-section,
   .care-banner {
     width: calc(100% - 40px);
@@ -1224,14 +1133,6 @@ select:focus-visible {
 
   .hero-bottom-label {
     left: 40px;
-  }
-
-  .category-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .product-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .hero-visual {
@@ -1312,7 +1213,6 @@ select:focus-visible {
     font-size: 11px;
   }
 
-  .categories-section,
   .products-section {
     width: calc(100% - 32px);
     margin-top: 48px;
@@ -1325,36 +1225,6 @@ select:focus-visible {
 
   .section-heading p,
   .products-heading p {
-    font-size: 11px;
-  }
-
-  .category-grid {
-    gap: 10px;
-    margin-top: 20px;
-  }
-
-  .category-card {
-    min-height: 90px;
-    gap: 9px;
-    padding: 12px 9px;
-  }
-
-  .category-symbol {
-    width: 34px;
-    height: 34px;
-    border-radius: 10px;
-    font-size: 19px;
-  }
-
-  .category-copy strong {
-    font-size: 12px;
-  }
-
-  .category-copy small {
-    font-size: 12px;
-  }
-
-  .category-arrow {
     font-size: 11px;
   }
 
@@ -1395,7 +1265,6 @@ select:focus-visible {
   .product-art {
     min-height: 140px;
   }
-
 
   .product-info {
     padding: 12px 10px;
@@ -1616,5 +1485,111 @@ select:focus-visible {
 @media (max-width: 1100px) {
   .header-action.header-cart > .header-cart-text {
     display: none;
+  }
+}
+
+/* ---------- CATÁLOGO: columnas según el ancho ---------- */
+@media (max-width: 1199px) {
+  .product-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 991px) {
+  .product-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 767px) {
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 359px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- CATÁLOGO: filtro por categoría (chips) ---------- */
+.category-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: -6px 0 22px;
+}
+
+.category-chip {
+  display: inline-flex;
+  min-height: 36px;
+  align-items: center;
+  gap: 8px;
+  padding: 0 8px 0 14px;
+  border: 1px solid var(--borde-suave);
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: var(--sombra-1);
+  color: var(--color-texto);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    background var(--duracion) var(--curva),
+    border-color var(--duracion) var(--curva),
+    color var(--duracion) var(--curva),
+    transform var(--duracion) var(--curva);
+}
+
+.category-chip:hover {
+  border-color: #b7dfc2;
+  transform: translateY(-1px);
+}
+
+.category-chip.is-active {
+  border-color: var(--color-marca-fondo);
+  background: var(--color-marca-fondo);
+  color: var(--color-sobre-marca);
+}
+
+/* Punto con el color de la categoría (mismo de sus productos) */
+.category-chip-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 0 2px currentColor;
+}
+
+.category-chip.is-active .category-chip-dot {
+  box-shadow: inset 0 0 0 2px #fff;
+}
+
+.category-chip-count {
+  min-width: 22px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: #eef6f0;
+  color: var(--color-marca);
+  font-size: 11px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.category-chip.is-active .category-chip-count {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--color-sobre-marca);
+}
+
+/* En celular los chips quedan en una fila que se desliza de lado */
+@media (max-width: 650px) {
+  .category-chips {
+    flex-wrap: nowrap;
+    margin-right: -16px;
+    margin-left: -16px;
+    padding: 2px 16px 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
   }
 }

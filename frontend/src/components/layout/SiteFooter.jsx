@@ -59,7 +59,6 @@ function SiteFooter() {
           <h2 className="footer-title" id="footer-nav-title">Navegación</h2>
           <ul className="footer-links">
             <li><a href="/#inicio">Inicio</a></li>
-            <li><a href="/#categorias">Categorías</a></li>
             <li><a href="/#productos">Productos</a></li>
             <li><a href="/#nosotros">Nosotros</a></li>
             <li><a href="/#preguntas">Preguntas frecuentes</a></li>

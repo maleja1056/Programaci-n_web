@@ -406,3 +406,101 @@
     max-width: 560px;
   }
 }
+
+/* ---------- Bucaramanga como panel que se expande (computador) ----------
+   Solo con mouse y pantalla ancha. Las tres fotos tienen el mismo ancho;
+   la que tiene el mouse o el foco (Tab llega a los enlaces del crédito) se
+   ensancha 3 a 1 y despliega su descripción. El crédito de la licencia se
+   ve siempre, salvo en las fotos angostas mientras otra está abierta.
+   Con "reducir movimiento" el cambio es inmediato (regla de app.css). */
+@media (min-width: 901px) and (hover: hover) {
+  .turismo-grid {
+    display: flex;
+    height: 440px;
+    gap: 12px;
+  }
+
+  .turismo-card {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    transition:
+      flex-grow 550ms var(--curva),
+      box-shadow var(--duracion) var(--curva);
+  }
+
+  .turismo-card:hover,
+  .turismo-card:focus-within {
+    flex-grow: 3;
+    transform: none;
+  }
+
+  .turismo-card img {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    aspect-ratio: auto;
+  }
+
+  /* Texto sobre la foto, con un degradado oscuro para que se lea */
+  .turismo-card figcaption {
+    position: absolute;
+    inset: auto 0 0;
+    padding: 70px 22px 18px;
+    background: linear-gradient(to bottom, transparent, rgba(9, 32, 23, 0.6) 35%, rgba(9, 32, 23, 0.88));
+  }
+
+  .turismo-municipio {
+    color: var(--color-sobre-oscuro-suave);
+  }
+
+  .turismo-card h3 {
+    overflow: hidden;
+    color: var(--color-sobre-marca);
+    font-size: 19px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .turismo-card small,
+  .turismo-card small a {
+    color: var(--color-sobre-oscuro-suave);
+  }
+
+  /* Descripción plegada: la fila de la grilla pasa de 0 a su alto real */
+  .turismo-detalle {
+    display: grid;
+    grid-template-rows: 0fr;
+    opacity: 0;
+    transition:
+      grid-template-rows 450ms var(--curva),
+      opacity 250ms var(--curva);
+  }
+
+  .turismo-detalle > div {
+    overflow: hidden;
+  }
+
+  .turismo-card p {
+    max-width: 52ch;
+    color: var(--color-sobre-marca);
+    font-size: 14px;
+  }
+
+  .turismo-card:hover .turismo-detalle,
+  .turismo-card:focus-within .turismo-detalle {
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transition-delay: 150ms;
+  }
+
+  /* Fotos angostas mientras otra está abierta: solo el nombre */
+  .turismo-grid:has(.turismo-card:is(:hover, :focus-within))
+    .turismo-card:not(:hover, :focus-within) small {
+    opacity: 0;
+  }
+
+  .turismo-card small {
+    transition: opacity 200ms var(--curva);
+  }
+}

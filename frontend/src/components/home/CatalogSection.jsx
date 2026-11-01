@@ -1,6 +1,7 @@
 // Sección "Productos para ti" (#productos): buscador, menú "Ordenar por"
-// (Dropdown), filtros por categoría y por tipo de producto ("Mostrar") y
-// cuadrícula de productos, con los estados
+// (Dropdown), filtro por tipo de producto ("Mostrar"), una fila de chips
+// para filtrar por categoría (con su número de productos) y la cuadrícula
+// de productos, con los estados
 // de carga, error y sin resultados. No guarda estado propio: todo llega por
 // props desde HomePage (hook useCatalog).
 import Dropdown from "react-bootstrap/Dropdown";
@@ -80,21 +81,6 @@ function CatalogSection({
           </div>
 
           <label className="category-select-label">
-            <span>Filtrar:</span>
-            <select
-              value={selectedCategory}
-              onChange={(event) => onSelectCategory(event.target.value)}
-              aria-label="Filtrar por categoría"
-            >
-              {categories.map((category) => (
-                <option key={category.id} value={category.name}>
-                  {category.name}
-                </option>
-              ))}
-            </select>
-          </label>
-
-          <label className="category-select-label">
             <span>Mostrar:</span>
             <select
               value={productView}
@@ -110,6 +96,31 @@ function CatalogSection({
           </label>
         </div>
       </div>
+
+      {/* Filtro por categoría: un chip por categoría. El elegido queda
+          marcado (aria-pressed). En celular la fila se desliza de lado. */}
+      {categories.length > 1 && (
+        <div className="category-chips" role="group" aria-label="Filtrar por categoría">
+          {categories.map((category) => {
+            const elegida = selectedCategory === category.name;
+            return (
+              <button
+                type="button"
+                key={category.id}
+                className={`category-chip${elegida ? " is-active" : ""}`}
+                aria-pressed={elegida}
+                onClick={() => onSelectCategory(category.name)}
+              >
+                {category.color && (
+                  <span className={`category-chip-dot art-${category.color}`} aria-hidden="true" />
+                )}
+                {category.name}
+                <span className="category-chip-count">{category.count}</span>
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       {/* Se muestra uno de cuatro estados: cargando, error, productos o vacío */}
       {loading ? (

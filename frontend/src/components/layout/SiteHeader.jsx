@@ -21,7 +21,7 @@ import useCategoryMenu from "../../hooks/useCategoryMenu.js";
 import LoginModal from "../auth/LoginModal.jsx";
 
 // Secciones de la portada que marcan como activo su enlace de la cabecera
-const sectionIds = ["inicio", "categorias", "productos", "nosotros", "bucaramanga", "preguntas"];
+const sectionIds = ["inicio", "productos", "nosotros", "bucaramanga", "preguntas"];
 
 // Enlace a la portada con filtros del catálogo en la URL y salto a una sección
 const homeLink = (sectionId, params = {}) => {
@@ -72,6 +72,9 @@ function SiteHeader() {
   const location = useLocation();
   // Enlace marcado según la sección visible (solo en la portada)
   const activeSection = useActiveSection(sectionIds, location.pathname === "/");
+  // En el catálogo se marca "Categorías" si hay una categoría elegida y
+  // "Productos" si no
+  const filtraCategoria = new URLSearchParams(location.search).has("categoria");
   const [showLogin, setShowLogin] = useState(false);
   // Menú de navegación desplegable en móvil (en escritorio siempre visible)
   const [menuOpen, setMenuOpen] = useState(false);
@@ -125,7 +128,7 @@ function SiteHeader() {
             <NavMenu
               id="menu-categorias"
               label="Categorías"
-              active={activeSection === "categorias"}
+              active={activeSection === "productos" && filtraCategoria}
             >
               <Dropdown.Header>Comprar por categoría</Dropdown.Header>
               {categories.map((category) => (
@@ -140,8 +143,8 @@ function SiteHeader() {
                 </Dropdown.Item>
               ))}
               <Dropdown.Divider />
-              <Dropdown.Item as={Link} to={homeLink("categorias")} onClick={closeMenu}>
-                Ver todas las categorías
+              <Dropdown.Item as={Link} to={homeLink("productos")} onClick={closeMenu}>
+                Ver todo el catálogo
               </Dropdown.Item>
             </NavMenu>
 
@@ -149,7 +152,7 @@ function SiteHeader() {
             <NavMenu
               id="menu-productos"
               label="Productos"
-              active={activeSection === "productos"}
+              active={activeSection === "productos" && !filtraCategoria}
             >
               <Dropdown.Header>Ver productos</Dropdown.Header>
               {Object.entries(PRODUCT_VIEWS).map(([key, view]) => (

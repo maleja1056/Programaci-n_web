@@ -13,12 +13,13 @@ import { getCatalog } from "../api/catalog.js";
 import { USAR_BACKEND } from "../api/config.js";
 import { ilustracionDe } from "../utils/ilustraciones.js";
 
-// Símbolo y estilo de cada categoría en las tarjetas de categorías
-const categoryVisuals = {
-  "Medicamentos": { symbol: "+", style: "medicines" },
-  "Cuidado personal": { symbol: "◇", style: "care" },
-  "Vitaminas y suplementos": { symbol: "✳", style: "vitamins" },
-  "Primeros auxilios": { symbol: "+", style: "first-aid" },
+// Color del punto de cada categoría en los filtros del catálogo (mismo color
+// que el fondo de sus productos: clases .art-* en app.css)
+const categoryColors = {
+  "Medicamentos": "blue",
+  "Cuidado personal": "mint",
+  "Vitaminas y suplementos": "orange",
+  "Primeros auxilios": "green",
 };
 
 // Color de fondo de la ilustración de cada producto, según el id de su
@@ -139,29 +140,23 @@ function useCatalog() {
           };
         });
 
-        // "Todos" va primero: es la opción que quita el filtro
+        // "Todos" va primero: es la opción que quita el filtro. Cada
+        // categoría lleva cuántos productos tiene.
         const normalizedCategories = [
           {
             id: ALL_CATEGORIES,
             name: ALL_CATEGORIES,
-            symbol: "▦",
-            description: "Todo el catálogo",
+            color: null,
+            count: normalizedProducts.length,
           },
-          ...categoriesData.map((category) => {
-            const visual = categoryVisuals[category.nombre] || {
-              symbol: "+",
-              style: "care",
-            };
-
-            return {
-              id: category.id,
-              name: category.nombre,
-              symbol: visual.symbol,
-              style: visual.style,
-              description:
-                category.descripcion || "Descubre nuestros productos",
-            };
-          }),
+          ...categoriesData.map((category) => ({
+            id: category.id,
+            name: category.nombre,
+            color: categoryColors[category.nombre] || "green",
+            count: normalizedProducts.filter(
+              (product) => product.categoryId === Number(category.id)
+            ).length,
+          })),
         ];
 
         setProducts(normalizedProducts);

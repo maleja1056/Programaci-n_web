@@ -5,6 +5,9 @@
 // Primero se lee /publico/turismo/imagenes.json y luego cada imagen se carga
 // desde /publico/turismo/<archivo>. Si el backend no responde (por ejemplo,
 // en el modo demostración), la sección no se muestra.
+// En computador las tres fotos forman un panel: la que tiene el mouse o el
+// foco del teclado se ensancha y muestra su descripción (home.css). En
+// celular se ven como tarjetas con toda la información.
 import { useEffect, useState } from "react";
 
 const CARPETA = "/publico/turismo";
@@ -50,7 +53,12 @@ function TurismoSection() {
             <figcaption>
               <span className="turismo-municipio">{lugar.municipio}</span>
               <h3>{lugar.titulo}</h3>
-              <p>{lugar.descripcion}</p>
+              {/* La descripción se despliega en la foto activa */}
+              <div className="turismo-detalle">
+                <div>
+                  <p>{lugar.descripcion}</p>
+                </div>
+              </div>
               {/* Crédito obligatorio por la licencia Creative Commons */}
               <small>
                 Foto:{" "}

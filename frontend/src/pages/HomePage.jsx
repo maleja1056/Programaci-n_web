@@ -7,7 +7,6 @@ import AboutSection from "../components/home/AboutSection.jsx";
 import AnnouncementBar from "../components/home/AnnouncementBar.jsx";
 import CareBanner from "../components/home/CareBanner.jsx";
 import CatalogSection from "../components/home/CatalogSection.jsx";
-import CategoriesSection from "../components/home/CategoriesSection.jsx";
 import FaqSection from "../components/home/FaqSection.jsx";
 import FeaturesSection from "../components/home/FeaturesSection.jsx";
 import HeroSection from "../components/home/HeroSection.jsx";
@@ -41,12 +40,6 @@ function HomePage() {
         <HeroSection />
         <PromoCarousel />
         <FeaturesSection />
-
-        <CategoriesSection
-          categories={catalog.categories}
-          selectedCategory={catalog.selectedCategory}
-          onSelectCategory={catalog.setSelectedCategory}
-        />
 
         <CatalogSection
           categories={catalog.categories}
