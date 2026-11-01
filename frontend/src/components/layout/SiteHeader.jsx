@@ -13,6 +13,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import { FaBars, FaCartShopping, FaXmark } from "react-icons/fa6";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/img/logo.svg";
+import { subirAlInicio } from "../../utils/inicio.js";
 import { useAuth } from "../../context/auth-context.js";
 import { useCart } from "../../context/cart-context.js";
 import useActiveSection from "../../hooks/useActiveSection.js";
@@ -102,7 +103,7 @@ function SiteHeader() {
 
   return (
     <header className="site-header">
-      <Link className="brand" to="/" aria-label="FarmaUIS, inicio">
+      <Link className="brand" to="/" onClick={subirAlInicio} aria-label="FarmaUIS, inicio">
         {/* Logo: imagen en src/assets/img/logo.svg (el nombre del sitio va en el texto) */}
         <img className="brand-mark" src={logo} alt="" />
         <span className="brand-name">
