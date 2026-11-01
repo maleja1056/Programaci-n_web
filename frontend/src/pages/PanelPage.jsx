@@ -20,13 +20,12 @@ import { getPanelSummary } from "../api/auth.js";
 import SiteFooter from "../components/layout/SiteFooter.jsx";
 import SiteHeader from "../components/layout/SiteHeader.jsx";
 import CategoriasTab from "../components/panel/CategoriasTab.jsx";
-import PestanaPendiente from "../components/panel/PestanaPendiente.jsx";
+import PedidosTab from "../components/panel/PedidosTab.jsx";
 import ProductosTab from "../components/panel/ProductosTab.jsx";
 import UsuariosTab from "../components/panel/UsuariosTab.jsx";
 import { useAuth } from "../context/auth-context.js";
 
-// Pestañas del panel, en orden. "Componente" es el contenido de cada una;
-// las que aún no están hechas muestran un aviso (PestanaPendiente).
+// Pestañas del panel, en orden. "Componente" es el contenido de cada una.
 const PESTANAS = [
   {
     clave: "categorias",
@@ -50,7 +49,7 @@ const PESTANAS = [
     clave: "pedidos",
     titulo: "Pedidos",
     Icono: FaReceipt,
-    Componente: () => <PestanaPendiente tabla="pedidos" />,
+    Componente: PedidosTab,
   },
 ];
 

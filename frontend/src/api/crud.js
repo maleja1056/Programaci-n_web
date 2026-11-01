@@ -27,9 +27,10 @@ export const RUTAS = {
   detalle: "/api/detalle-pedidos",
 };
 
-// Tablas que se muestran en la portada: al modificarlas se olvida el catálogo
-// guardado en memoria para que la portada y el menú se actualicen.
-const TABLAS_DEL_CATALOGO = new Set(["categorias", "productos"]);
+// Tablas que cambian lo que muestra la portada: al modificarlas se olvida el
+// catálogo guardado en memoria para que la portada y el menú se actualicen.
+// Pedidos y detalle también, porque mueven el stock de los productos.
+const TABLAS_DEL_CATALOGO = new Set(["categorias", "productos", "pedidos", "detalle"]);
 
 const SIN_BACKEND =
   "Esta función necesita el backend y la base de datos. Desactiva el modo demostración (VITE_MODO_DEMO) para usarla.";
