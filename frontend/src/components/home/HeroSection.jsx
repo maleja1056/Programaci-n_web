@@ -4,9 +4,10 @@
 // las tarjetas, ProductoIlustracion) y un ticket de pedido de ejemplo con
 // precios reales. Es decorativa (aria-hidden): al cargar, los productos
 // caen en la repisa uno a uno y al final aparece el ticket (app.css).
-// Al hacer clic en la vitrina la animación se repite: cambiar la "key"
-// vuelve a crear los elementos y el navegador reinicia sus animaciones.
-import { useState } from "react";
+// Al hacer clic en la vitrina, las repisas tiemblan un poco y los productos
+// se tambalean hasta volver a su lugar (clase is-temblando, app.css). La
+// clase se quita y se vuelve a poner para que cada clic empiece de nuevo.
+import { useRef } from "react";
 import { FaCheck, FaLocationDot, FaTruckFast } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { formatPrice } from "../../utils/format.js";
@@ -37,8 +38,16 @@ const totalEjemplo = pedidoEjemplo.reduce((suma, l) => suma + l.cantidad * l.pre
 const datos = ["Precio y stock al día", "Aviso de fórmula médica", "Pago contra entrega"];
 
 function HeroSection() {
-  const [repeticion, setRepeticion] = useState(0);
-  const repetir = () => setRepeticion((n) => n + 1);
+  const fin = useRef(0);
+
+  const temblar = (evento) => {
+    const vitrina = evento.currentTarget;
+    vitrina.classList.remove("is-temblando");
+    void vitrina.offsetWidth; // reinicia la animación si ya estaba temblando
+    vitrina.classList.add("is-temblando");
+    clearTimeout(fin.current);
+    fin.current = setTimeout(() => vitrina.classList.remove("is-temblando"), 1100);
+  };
 
   return (
     <section className="hero" id="inicio">
@@ -86,11 +95,11 @@ function HeroSection() {
           type="button"
           className="vitrina"
           tabIndex={-1}
-          onClick={repetir}
-          title="Toca la vitrina para repetir la animación"
+          onClick={temblar}
+          title="Toca la vitrina"
         >
           {repisas.map((repisa, fila) => (
-            <div className="vitrina-repisa" key={`${fila}-${repeticion}`}>
+            <div className="vitrina-repisa" key={fila}>
               {repisa.map((producto, columna) => (
                 <span
                   key={producto.tipo}
@@ -104,7 +113,7 @@ function HeroSection() {
           ))}
         </button>
 
-        <div className="hero-ticket" key={repeticion}>
+        <div className="hero-ticket">
           <span className="hero-ticket-titulo">Tu pedido</span>
           <ul>
             {pedidoEjemplo.map(({ nombre, cantidad, precio }) => (

@@ -362,7 +362,7 @@ select:focus-visible {
   place-items: start end;
 }
 
-/* Es un botón (al hacer clic repite la animación): se le quitan los
+/* Es un botón (al hacer clic tiembla y se reacomoda): se le quitan los
    estilos de botón y al pasar el mouse se levanta un poco */
 .vitrina {
   display: block;
@@ -1394,6 +1394,44 @@ select:focus-visible {
 
 .hero-ticket {
   animation: aparecer 500ms var(--curva) 850ms backwards;
+}
+
+/* Clic en la vitrina: las repisas se sacuden un poco y cada producto se
+   tambalea (unos a un lado y otros al otro) hasta quedar quieto. Va en el
+   dibujo y no en .vitrina-producto para no repetir la caída de entrada. */
+@keyframes repisa-temblar {
+  15% { rotate: -0.8deg; }
+  35% { rotate: 0.6deg; }
+  55% { rotate: -0.35deg; }
+  75% { rotate: 0.15deg; }
+}
+
+@keyframes producto-tambalear {
+  12% { rotate: calc(var(--lado) * 7deg); translate: 0 -5px; }
+  30% { rotate: calc(var(--lado) * -5deg); translate: 0 0; }
+  48% { rotate: calc(var(--lado) * 3deg); translate: 0 -2px; }
+  66% { rotate: calc(var(--lado) * -1.5deg); translate: 0 0; }
+  82% { rotate: calc(var(--lado) * 0.5deg); }
+}
+
+.vitrina-producto {
+  --lado: 1;
+}
+
+.vitrina-producto:nth-child(even) {
+  --lado: -1;
+}
+
+.vitrina.is-temblando .vitrina-repisa {
+  animation: repisa-temblar 650ms ease-in-out;
+}
+
+.vitrina.is-temblando .vitrina-producto .producto-ilustracion {
+  /* Gira apoyado en su base (en un SVG hace falta transform-box) */
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: producto-tambalear 900ms ease-in-out;
+  animation-delay: calc(var(--orden) * 30ms);
 }
 
 /* Contador del carrito al agregar un producto */
