@@ -96,7 +96,7 @@ select:focus-visible {
   color: var(--color-sobre-oscuro-suave);
 }
 
-/* ---------- CABECERA: logo, menú de navegación y botón "Explorar tienda" ---------- */
+/* ---------- CABECERA: logo, menú de navegación y acciones ---------- */
 .site-header {
   width: min(1180px, calc(100% - 64px));
   min-height: 82px;

@@ -47,14 +47,6 @@ html {
   }
 }
 
-/* "Explorar tienda" repite el submenú Productos; en pantallas medianas se
-   oculta para que la barra quepa en una sola fila. */
-@media (max-width: 1100px) {
-  .header-explore {
-    display: none;
-  }
-}
-
 /* Hasta 900px (móvil y tableta) la barra completa no cabe junto al logo y
    los botones: se usa el botón de menú (hamburguesa). */
 @media (max-width: 900px) {
