@@ -3,9 +3,10 @@
 
 > Implementación académica: no está pensada para producción.
 
-1. Instala XAMPP y enciende **MySQL** en su panel de control. Apache no hace falta, salvo para usar phpMyAdmin.
-2. Copia `.env.example` como `.env` en la raíz del proyecto. Con XAMPP recién instalado no hay que cambiar nada, porque `root` no tiene contraseña. Si le pusiste una, escríbela en `MYSQL_ROOT_PASSWORD`.
-3. Crea la base de datos:
+1. Instala **Node.js 20.19 o superior** (incluye npm). Se comprueba con `node -v`.
+2. Instala XAMPP y enciende **MySQL** en su panel de control. Apache no hace falta, salvo para usar phpMyAdmin.
+3. Copia `.env.example` como `.env` en la raíz del proyecto. Con XAMPP recién instalado no hay que cambiar nada, porque `root` no tiene contraseña. Si le pusiste una, escríbela en `MYSQL_ROOT_PASSWORD`.
+4. Crea la base de datos:
    ```
    cd backend
    npm install
@@ -18,8 +19,10 @@
    - carga los datos de ejemplo (`database/datos.sql`).
 
    Se puede ejecutar varias veces sin duplicar datos.
-4. Inicia el backend con `npm run dev` en `backend/` (puerto 3000) y el frontend con `npm install && npm run dev` en `frontend/`.
-5. Abre `http://localhost:5173`.
+5. Abre dos terminales y déjalas abiertas mientras usas el sitio:
+   - en `backend/`: `npm run dev` (API en el puerto 3000; debe responder `http://localhost:3000/api/health`);
+   - en `frontend/`: `npm install` y luego `npm run dev` (sitio en el puerto 5173).
+6. Abre `http://localhost:5173`.
 
 Usuarios para iniciar sesión (se puede usar el usuario o el correo):
 
@@ -29,7 +32,7 @@ Admin   | 1234        // administrador (admin@farmauis.local)
 cliente | cliente123  // cliente de prueba (cliente@farmauis.local), tiene un pedido
 ```
 
-**Alternativa sin XAMPP:** `docker compose up -d` levanta un MySQL 8.4 con `root` sin contraseña. Después se sigue desde el paso 3.
+**Alternativa sin XAMPP:** `docker compose up -d` levanta un MySQL 8.4 con `root` sin contraseña. Después se sigue desde el paso 4.
 
 ### Inicio de sesión
 
