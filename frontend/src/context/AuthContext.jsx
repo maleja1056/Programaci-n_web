@@ -1,3 +1,7 @@
+// Proveedor de la sesión del usuario (AuthProvider). Al cargar la app consulta
+// si hay una sesión iniciada y ofrece a toda la aplicación el usuario, el
+// estado de la sesión y las funciones para iniciar y cerrar sesión. El
+// contexto y el hook useAuth están en auth-context.js.
 import { useCallback, useEffect, useMemo, useState } from "react";
 import * as authApi from "../api/auth.js";
 import { AuthContext } from "./auth-context.js";
