@@ -415,10 +415,6 @@ button.header-login:hover {
 }
 
 @media (max-width: 650px) {
-  .header-explore {
-    display: none;
-  }
-
   .auth-page,
   .panel-page {
     width: calc(100% - 32px);

@@ -1,8 +1,10 @@
 // Cabecera del sitio: marca, navegación pública y acciones de sesión.
-// La navegación tiene submenús desplegables (Dropdown) para Categorías,
-// Productos y Nosotros: cada opción abre la portada en la sección indicada y,
-// en el catálogo, con el filtro ya aplicado (corrección de la Fase I: "faltó
-// un dropdown para los submenús de Productos y Categorías").
+// La navegación tiene submenús desplegables (Dropdown) para Categorías y
+// Nosotros: cada opción abre la portada en la sección indicada y, en el
+// catálogo, con la categoría ya elegida (corrección de la Fase I: "faltó un
+// dropdown para los submenús"). Categorías es la única entrada al catálogo
+// desde la barra, para no repetir opciones (los filtros por tipo de producto
+// están en el propio catálogo).
 // A la derecha está el carrito (para todos, con el número de unidades). Sin
 // sesión muestra el botón que abre el modal de login; con sesión muestra el
 // menú desplegable de rutas privadas. Ocultar el menú no protege nada por
@@ -17,7 +19,6 @@ import { subirAlInicio } from "../../utils/inicio.js";
 import { useAuth } from "../../context/auth-context.js";
 import { useCart } from "../../context/cart-context.js";
 import useActiveSection from "../../hooks/useActiveSection.js";
-import { PRODUCT_VIEWS } from "../../hooks/useCatalog.js";
 import useCategoryMenu from "../../hooks/useCategoryMenu.js";
 import LoginModal from "../auth/LoginModal.jsx";
 
@@ -73,9 +74,6 @@ function SiteHeader() {
   const location = useLocation();
   // Enlace marcado según la sección visible (solo en la portada)
   const activeSection = useActiveSection(sectionIds, location.pathname === "/");
-  // En el catálogo se marca "Categorías" si hay una categoría elegida y
-  // "Productos" si no
-  const filtraCategoria = new URLSearchParams(location.search).has("categoria");
   const [showLogin, setShowLogin] = useState(false);
   // Menú de navegación desplegable en móvil (en escritorio siempre visible)
   const [menuOpen, setMenuOpen] = useState(false);
@@ -129,7 +127,7 @@ function SiteHeader() {
             <NavMenu
               id="menu-categorias"
               label="Categorías"
-              active={activeSection === "productos" && filtraCategoria}
+              active={activeSection === "productos"}
             >
               <Dropdown.Header>Comprar por categoría</Dropdown.Header>
               {categories.map((category) => (
@@ -147,25 +145,6 @@ function SiteHeader() {
               <Dropdown.Item as={Link} to={homeLink("productos")} onClick={closeMenu}>
                 Ver todo el catálogo
               </Dropdown.Item>
-            </NavMenu>
-
-            {/* Submenú Productos: tipos de producto (PRODUCT_VIEWS de useCatalog) */}
-            <NavMenu
-              id="menu-productos"
-              label="Productos"
-              active={activeSection === "productos" && !filtraCategoria}
-            >
-              <Dropdown.Header>Ver productos</Dropdown.Header>
-              {Object.entries(PRODUCT_VIEWS).map(([key, view]) => (
-                <Dropdown.Item
-                  key={key}
-                  as={Link}
-                  to={homeLink("productos", key === "todos" ? {} : { ver: key })}
-                  onClick={closeMenu}
-                >
-                  {view.label}
-                </Dropdown.Item>
-              ))}
             </NavMenu>
 
             {/* Submenú Nosotros: equipo, Bucaramanga, preguntas y contacto */}
@@ -192,11 +171,6 @@ function SiteHeader() {
       </Collapse>
 
       <div className="header-actions">
-        <a className="header-action header-explore" href="/#productos">
-          <span aria-hidden="true">⌕</span>
-          Explorar tienda
-        </a>
-
         <NavLink
           className="header-action header-cart"
           to="/carrito"
