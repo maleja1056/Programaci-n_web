@@ -1,0 +1,7 @@
+{
+  "dependencies": ["."],
+  "graphs": {
+    "farmabot": "farmabot.grafo:grafo"
+  },
+  "env": "../.env"
+}

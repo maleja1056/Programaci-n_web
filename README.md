@@ -81,6 +81,65 @@ Para mostrar el frontend sin backend ni MySQL, crea `frontend/.env` con `VITE_MO
 - el login es simulado (`Admin` / `1234`, en `frontend/src/api/demo.js`);
 - el catálogo sale de `frontend/src/data/productos.js`.
 
+### Chatbot con agentes (LangGraph)
+
+El botón verde de abajo a la derecha abre el asistente. Cada mensaje lo atiende un grupo de agentes de LangGraph (carpeta `agentes/`), y debajo de cada respuesta se ve qué agentes trabajaron:
+
+```mermaid
+graph TD
+    inicio([mensaje]) --> recepcionista
+    recepcionista -->|productos, precios| agente_catalogo
+    recepcionista -->|mis pedidos| agente_pedidos
+    recepcionista -->|horarios, pagos, fórmula| agente_faq
+    recepcionista -->|síntomas o dosis| guardia_salud
+    agente_catalogo --> redactor
+    agente_pedidos --> redactor
+    agente_faq --> redactor
+    guardia_salud --> redactor
+    redactor --> fin([respuesta])
+```
+
+- **recepcionista**: decide qué agente atiende el mensaje.
+- **agente_catalogo**: busca productos, precios y disponibilidad en MySQL.
+- **agente_pedidos**: muestra los pedidos del usuario que inició sesión.
+- **agente_faq**: horarios, medios de pago, cuenta y fórmula médica.
+- **guardia_salud**: no diagnostica ni recomienda dosis; remite al médico o farmacéutico.
+- **redactor**: escribe la respuesta final con los datos reunidos.
+
+Los precios, existencias y pedidos salen siempre de MySQL. Con una API key de Google Gemini (gratis), el recepcionista y el redactor usan IA. Sin key, o si se acaba el límite gratis, responden con reglas y el chat sigue funcionando.
+
+**Instalación (una vez).** Requiere **Python 3.11, 3.12 o 3.13**:
+
+```
+cd agentes
+python3.11 -m venv .venv
+.venv/bin/pip install -r requirements.txt
+```
+
+En Windows se usa `py -3.11 -m venv .venv` y `.venv\Scripts\pip install -r requirements.txt`.
+
+Para usar IA, crea la key en https://aistudio.google.com ("Get API key"; empieza por `AIza`) y pégala en el `.env` de la raíz, en `GOOGLE_API_KEY=`. Nunca la subas al repositorio.
+
+**Iniciar.** Con XAMPP (MySQL) encendido y las dos terminales del paso 5, abre una tercera:
+
+```
+cd agentes
+.venv/bin/uvicorn servidor:app --port 8123
+```
+
+Si esta terminal está cerrada, el chat responde solo con búsquedas en el catálogo (lo indica como "respaldo sin IA").
+
+**Ver los agentes trabajando (LangGraph Studio).** En lugar del comando anterior, o en otra terminal:
+
+```
+cd agentes
+.venv/bin/langgraph dev
+```
+
+Se abre en el navegador el dibujo del grafo. Escribe un mensaje en el campo `mensaje` y pulsa *Submit*: cada agente se ilumina cuando trabaja y se puede ver lo que hizo en cada paso. Studio puede pedir iniciar sesión con una cuenta gratis de LangSmith.
+
+**Detener.** `Ctrl + C` en cada terminal (backend, frontend, agentes o Studio) y apagar MySQL en el panel de XAMPP.
+
 ## Estructura del proyecto
 
 No se incluyen `node_modules/` ni `.env`, que no se suben al repositorio. Tampoco los archivos que suben los usuarios en `backend/uploads/`.
@@ -91,6 +150,16 @@ Programaci-n_web/
 ├── .env.example                      Plantilla del .env (conexión a MySQL, usuarios de prueba, sesión)
 ├── .gitignore                        Lo que no se sube: node_modules, dist, .env, archivos subidos
 ├── docker-compose.yml                Alternativa a XAMPP: MySQL 8.4 en Docker
+│
+├── agentes/                          Chatbot con agentes de LangGraph (Python, puerto 8123)
+│   ├── requirements.txt              Dependencias de Python
+│   ├── langgraph.json                Configuración para ver el grafo en LangGraph Studio
+│   ├── servidor.py                   API FastAPI: POST /chat (la usa backend/src/routes/chat.js)
+│   ├── dibujar_grafo.py              Imprime el grafo en formato Mermaid
+│   └── farmabot/
+│       ├── configuracion.py          Lee el .env de la raíz (MySQL y GOOGLE_API_KEY)
+│       ├── herramientas.py           Consultas de solo lectura a MySQL (productos y pedidos)
+│       └── grafo.py                  Los agentes y cómo se conectan
 │
 ├── database/                         Scripts SQL que usa npm run init-db
 │   ├── schema.sql                    Crea la base farmauis y sus 5 tablas con llaves y restricciones
@@ -131,6 +200,7 @@ Programaci-n_web/
 │           ├── pedidos.js            CRUD de pedidos (crear descuenta stock, cancelar lo devuelve)
 │           ├── detalle-pedidos.js    CRUD de las líneas de cada pedido
 │           ├── archivos.js           Subir, listar, ver, descargar y borrar archivos (multer)
+│           ├── chat.js               Chatbot: reenvía a los agentes; si no responden, usa reglas
 │           └── panel.js              Totales del panel de administración
 │
 └── frontend/                         Sitio en React 19 + Vite + React-Bootstrap (puerto 5173)
@@ -155,6 +225,7 @@ Programaci-n_web/
         │   ├── archivos.js           Subir, listar, ver, descargar y borrar archivos
         │   ├── auth.js               Login, sesión y cierre de sesión
         │   ├── catalog.js            Catálogo de productos y categorías
+        │   ├── chat.js               Envía los mensajes del asistente a POST /api/chat
         │   └── demo.js               Login, sesión, panel y catálogo simulados (modo demostración)
         ├── assets/                   Archivos multimedia que empaqueta Vite
         │   ├── audio/
@@ -194,6 +265,8 @@ Programaci-n_web/
         │   │   └── ProtectedRoute.jsx    Protege las rutas privadas: sin sesión lleva al login
         │   ├── carrito/
         │   │   └── BotonAgregar.jsx      Botón "Agregar al carrito"
+        │   ├── chat/
+        │   │   └── ChatWidget.jsx        Asistente flotante: muestra qué agentes respondieron
         │   ├── layout/
         │   │   ├── SiteHeader.jsx        Cabecera fija con menú y submenús desplegables
         │   │   ├── SiteFooter.jsx        Pie de página: contacto, redes y equipo
@@ -237,5 +310,6 @@ Programaci-n_web/
             ├── home.css              Secciones de la portada
             ├── footer.css            Pie de página y carnet del equipo
             ├── auth.css              Login, perfil y páginas internas
-            └── panel.css             Panel de administración y tablas
+            ├── panel.css             Panel de administración y tablas
+            └── chat.css              Asistente virtual (botón flotante y conversación)
 ```
