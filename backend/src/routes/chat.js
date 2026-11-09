@@ -12,7 +12,10 @@ const { HttpError } = require('../lib/http');
 const router = express.Router();
 
 const GOOGLE_API_KEY = (process.env.GOOGLE_API_KEY || '').trim();
-const GEMINI_MODEL = (process.env.GEMINI_MODEL || 'gemini-2.5-flash').trim();
+const GEMINI_MODEL = (process.env.GEMINI_MODEL || 'gemini-flash-latest').trim();
+// Si el modelo principal está saturado (503) o tarda, se prueba este
+const GEMINI_RESPALDO = 'gemini-flash-lite-latest';
+const ESPERA_MS = 20000;
 const MAX_MENSAJE = 500;
 const MAX_HISTORIAL = 10;
 const MAX_VUELTAS = 3; // llamadas a herramientas por mensaje
@@ -78,7 +81,7 @@ async function gemini() {
   if (!GOOGLE_API_KEY) return null;
   if (!cliente) {
     const { GoogleGenAI } = await import('@google/genai');
-    cliente = new GoogleGenAI({ apiKey: GOOGLE_API_KEY });
+    cliente = new GoogleGenAI({ apiKey: GOOGLE_API_KEY, httpOptions: { timeout: ESPERA_MS } });
   }
   return cliente;
 }
@@ -161,7 +164,7 @@ async function pedidosDe(usuarioId) {
 
 // ---------- Conversación con Gemini ----------
 
-async function responderConGemini(ia, mensaje, historial, usuarioId) {
+async function responderConGemini(ia, modelo, mensaje, historial, usuarioId) {
   const contents = [
     ...historial.map((t) => ({
       role: t.rol === 'usuario' ? 'user' : 'model',
@@ -173,7 +176,7 @@ async function responderConGemini(ia, mensaje, historial, usuarioId) {
 
   for (let vuelta = 0; vuelta <= MAX_VUELTAS; vuelta += 1) {
     const resultado = await ia.models.generateContent({
-      model: GEMINI_MODEL,
+      model: modelo,
       contents,
       config: {
         systemInstruction: INSTRUCCIONES,
@@ -240,11 +243,13 @@ router.post('/', async (req, res) => {
 
   const ia = await gemini();
   if (ia) {
-    try {
-      const respuesta = await responderConGemini(ia, mensaje, historial, req.session.user?.id);
-      return res.json({ ...respuesta, fuente: 'ia' });
-    } catch (error) {
-      console.warn('Gemini no respondió, se usa el catálogo:', error.message);
+    for (const modelo of [...new Set([GEMINI_MODEL, GEMINI_RESPALDO])]) {
+      try {
+        const respuesta = await responderConGemini(ia, modelo, mensaje, historial, req.session.user?.id);
+        return res.json({ ...respuesta, fuente: 'ia' });
+      } catch (error) {
+        console.warn(`Gemini (${modelo}) no respondió:`, error.message.slice(0, 200));
+      }
     }
   }
 
