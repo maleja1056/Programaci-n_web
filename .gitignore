@@ -24,3 +24,6 @@ pnpm-debug.log*
 # Archivos que suben los usuarios (/api/archivos). Solo se versiona la carpeta.
 backend/uploads/*
 !backend/uploads/.gitkeep
+
+# Restos locales del chatbot anterior (LangGraph)
+agentes/
