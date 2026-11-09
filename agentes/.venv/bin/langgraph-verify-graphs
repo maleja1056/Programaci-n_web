@@ -1,0 +1,6 @@
+#!/home/rous/Proyectos/farmauis-chatbot/agentes/.venv/bin/python3.11
+import sys
+from langgraph_api.graph import verify_graphs
+if __name__ == '__main__':
+    sys.argv[0] = sys.argv[0].removesuffix('.exe')
+    sys.exit(verify_graphs())

@@ -1,7 +1,7 @@
 // Asistente virtual: botón flotante (abajo a la derecha) que abre el chat.
-// Cada respuesta muestra los agentes de LangGraph que la prepararon (por
-// ejemplo "recepcionista → catálogo → redactor") y, si encontró productos,
-// los lista con su botón para agregarlos al carrito.
+// Responde preguntas de salud y farmacia con Gemini (backend /api/chat) y, si
+// la respuesta incluye productos del catálogo, los lista con su botón para
+// agregarlos al carrito.
 // La conversación se guarda en sessionStorage para no perderla al cambiar de
 // página.
 import { useEffect, useRef, useState } from "react";
@@ -14,20 +14,15 @@ const CLAVE = "farmauis.chat";
 const BIENVENIDA = {
   rol: "bot",
   texto:
-    "¡Hola! Soy el asistente de FarmaUIS. Pregúntame por un producto, tus pedidos, horarios o medios de pago.",
+    "¡Hola! Soy el asistente de FarmaUIS. Puedes preguntarme sobre medicamentos, síntomas, cuidados de salud, productos del catálogo o tus pedidos.",
 };
-const SUGERENCIAS = ["¿Tienen acetaminofén?", "¿Cómo va mi pedido?", "¿Qué medios de pago aceptan?"];
+const SUGERENCIAS = [
+  "¿Para qué sirve el ibuprofeno?",
+  "¿Puedo tomar acetaminofén con alcohol?",
+  "¿Genérico o de marca?",
+  "Ver mis pedidos",
+];
 
-// Nombres cortos de los agentes del grafo (agentes/farmabot/grafo.py)
-const NOMBRES = {
-  recepcionista: "recepcionista",
-  agente_catalogo: "catálogo",
-  agente_pedidos: "pedidos",
-  agente_faq: "preguntas frecuentes",
-  guardia_salud: "guardia de salud",
-  redactor: "redactor",
-  respaldo: "respaldo sin IA",
-};
 
 const COLOR_CATEGORIA = {
   Medicamentos: "blue",
@@ -106,7 +101,6 @@ function ChatWidget() {
         {
           rol: "bot",
           texto: datos.respuesta,
-          agentes: datos.agentes || [],
           fuente: datos.fuente,
           productos: datos.productos || [],
         },
@@ -160,16 +154,15 @@ function ChatWidget() {
                     ))}
                   </ul>
                 )}
-                {m.agentes?.length > 0 && (
-                  <small className="chat-agentes">
-                    {m.agentes.map((a) => NOMBRES[a] || a).join(" → ")}
-                    {m.fuente === "ia" ? " · con IA" : " · con reglas"}
+                {m.fuente === "ia" && (
+                  <small className="chat-nota">
+                    Información general: no reemplaza la consulta médica.
                   </small>
                 )}
               </li>
             ))}
             {esperando && (
-              <li className="chat-burbuja es-bot chat-escribiendo">Los agentes están trabajando…</li>
+              <li className="chat-burbuja es-bot chat-escribiendo">Escribiendo…</li>
             )}
             <li ref={finRef} aria-hidden="true" />
           </ol>

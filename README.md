@@ -81,64 +81,17 @@ Para mostrar el frontend sin backend ni MySQL, crea `frontend/.env` con `VITE_MO
 - el login es simulado (`Admin` / `1234`, en `frontend/src/api/demo.js`);
 - el catálogo sale de `frontend/src/data/productos.js`.
 
-### Chatbot con agentes (LangGraph)
+### Chatbot de salud y farmacia (Gemini)
 
-El botón verde de abajo a la derecha abre el asistente. Cada mensaje lo atiende un grupo de agentes de LangGraph (carpeta `agentes/`), y debajo de cada respuesta se ve qué agentes trabajaron:
+El botón verde de abajo a la derecha abre el asistente. Es un solo chatbot dentro del backend (`backend/src/routes/chat.js`) que usa Google Gemini para responder preguntas de salud y farmacia: para qué sirve un medicamento, efectos secundarios, interacciones, genéricos frente a medicamentos de marca, síntomas comunes y cuándo ir al médico, cuidados en embarazo o en niños, y hábitos saludables. También responde sobre horarios, pagos y fórmula médica.
 
-```mermaid
-graph TD
-    inicio([mensaje]) --> recepcionista
-    recepcionista -->|productos, precios| agente_catalogo
-    recepcionista -->|mis pedidos| agente_pedidos
-    recepcionista -->|horarios, pagos, fórmula| agente_faq
-    recepcionista -->|síntomas o dosis| guardia_salud
-    agente_catalogo --> redactor
-    agente_pedidos --> redactor
-    agente_faq --> redactor
-    guardia_salud --> redactor
-    redactor --> fin([respuesta])
-```
+Cuando la pregunta es sobre productos o pedidos, Gemini usa dos herramientas que leen MySQL: `buscar_productos` y `mis_pedidos` (esta última solo funciona con la sesión iniciada). Por eso los precios, el stock y los pedidos nunca los inventa la IA. Los productos que encuentra aparecen en el chat con el botón para agregarlos al carrito.
 
-- **recepcionista**: decide qué agente atiende el mensaje.
-- **agente_catalogo**: busca productos, precios y disponibilidad en MySQL.
-- **agente_pedidos**: muestra los pedidos del usuario que inició sesión.
-- **agente_faq**: horarios, medios de pago, cuenta y fórmula médica.
-- **guardia_salud**: no diagnostica ni recomienda dosis; remite al médico o farmacéutico.
-- **redactor**: escribe la respuesta final con los datos reunidos.
+Límites: no diagnostica ni receta, y no da dosis para una persona concreta, sino que remite al prospecto o al profesional. Ante señales de alarma indica llamar a la línea 123 o ir a urgencias.
 
-Los precios, existencias y pedidos salen siempre de MySQL. Con una API key de Google Gemini (gratis), el recepcionista y el redactor usan IA. Sin key, o si se acaba el límite gratis, responden con reglas y el chat sigue funcionando.
+**Configurar.** Crea la key gratis en https://aistudio.google.com ("Get API key"; empieza por `AIza`) y pégala en el `.env` de la raíz, en `GOOGLE_API_KEY=`. Después reinicia el backend. Nunca subas la key al repositorio. Sin key, o si se acaba el límite gratis, el chat solo busca productos en el catálogo.
 
-**Instalación (una vez).** Requiere **Python 3.11, 3.12 o 3.13**:
-
-```
-cd agentes
-python3.11 -m venv .venv
-.venv/bin/pip install -r requirements.txt
-```
-
-En Windows se usa `py -3.11 -m venv .venv` y `.venv\Scripts\pip install -r requirements.txt`.
-
-Para usar IA, crea la key en https://aistudio.google.com ("Get API key"; empieza por `AIza`) y pégala en el `.env` de la raíz, en `GOOGLE_API_KEY=`. Nunca la subas al repositorio.
-
-**Iniciar.** Con XAMPP (MySQL) encendido y las dos terminales del paso 5, abre una tercera:
-
-```
-cd agentes
-.venv/bin/uvicorn servidor:app --port 8123
-```
-
-Si esta terminal está cerrada, el chat responde solo con búsquedas en el catálogo (lo indica como "respaldo sin IA").
-
-**Ver los agentes trabajando (LangGraph Studio).** En lugar del comando anterior, o en otra terminal:
-
-```
-cd agentes
-.venv/bin/langgraph dev
-```
-
-Se abre en el navegador el dibujo del grafo. Escribe un mensaje en el campo `mensaje` y pulsa *Submit*: cada agente se ilumina cuando trabaja y se puede ver lo que hizo en cada paso. Studio puede pedir iniciar sesión con una cuenta gratis de LangSmith.
-
-**Detener.** `Ctrl + C` en cada terminal (backend, frontend, agentes o Studio) y apagar MySQL en el panel de XAMPP.
+**Detener.** `Ctrl + C` en cada terminal (backend y frontend) y apagar MySQL en el panel de XAMPP.
 
 ## Estructura del proyecto
 
@@ -151,15 +104,6 @@ Programaci-n_web/
 ├── .gitignore                        Lo que no se sube: node_modules, dist, .env, archivos subidos
 ├── docker-compose.yml                Alternativa a XAMPP: MySQL 8.4 en Docker
 │
-├── agentes/                          Chatbot con agentes de LangGraph (Python, puerto 8123)
-│   ├── requirements.txt              Dependencias de Python
-│   ├── langgraph.json                Configuración para ver el grafo en LangGraph Studio
-│   ├── servidor.py                   API FastAPI: POST /chat (la usa backend/src/routes/chat.js)
-│   ├── dibujar_grafo.py              Imprime el grafo en formato Mermaid
-│   └── farmabot/
-│       ├── configuracion.py          Lee el .env de la raíz (MySQL y GOOGLE_API_KEY)
-│       ├── herramientas.py           Consultas de solo lectura a MySQL (productos y pedidos)
-│       └── grafo.py                  Los agentes y cómo se conectan
 │
 ├── database/                         Scripts SQL que usa npm run init-db
 │   ├── schema.sql                    Crea la base farmauis y sus 5 tablas con llaves y restricciones
@@ -200,7 +144,7 @@ Programaci-n_web/
 │           ├── pedidos.js            CRUD de pedidos (crear descuenta stock, cancelar lo devuelve)
 │           ├── detalle-pedidos.js    CRUD de las líneas de cada pedido
 │           ├── archivos.js           Subir, listar, ver, descargar y borrar archivos (multer)
-│           ├── chat.js               Chatbot: reenvía a los agentes; si no responden, usa reglas
+│           ├── chat.js               Chatbot con Gemini; sin key busca en el catálogo
 │           └── panel.js              Totales del panel de administración
 │
 └── frontend/                         Sitio en React 19 + Vite + React-Bootstrap (puerto 5173)
@@ -266,7 +210,7 @@ Programaci-n_web/
         │   ├── carrito/
         │   │   └── BotonAgregar.jsx      Botón "Agregar al carrito"
         │   ├── chat/
-        │   │   └── ChatWidget.jsx        Asistente flotante: muestra qué agentes respondieron
+        │   │   └── ChatWidget.jsx        Asistente flotante de salud y farmacia
         │   ├── layout/
         │   │   ├── SiteHeader.jsx        Cabecera fija con menú y submenús desplegables
         │   │   ├── SiteFooter.jsx        Pie de página: contacto, redes y equipo

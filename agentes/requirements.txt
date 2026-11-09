@@ -1,9 +1,0 @@
-# Servicio de agentes del chatbot (Python 3.11 a 3.13)
-langgraph>=1.0,<2
-langchain-google-genai>=2.1
-pymysql>=1.1
-fastapi>=0.115
-uvicorn>=0.30
-python-dotenv>=1.0
-# Solo para ver el grafo en LangGraph Studio (langgraph dev)
-langgraph-cli[inmem]>=0.3
