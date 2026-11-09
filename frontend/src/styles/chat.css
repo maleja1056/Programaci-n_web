@@ -1,0 +1,229 @@
+/* ---------- CHAT: asistente virtual (components/chat/ChatWidget.jsx) ----------
+   Botón flotante abajo a la derecha y panel de conversación. Los colores de
+   texto usan las variables de tokens.css (contraste AA). */
+.chat {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  z-index: 1050;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.chat-lanzador {
+  display: grid;
+  place-items: center;
+  width: 58px;
+  height: 58px;
+  border: 0;
+  border-radius: 50%;
+  color: var(--color-sobre-marca);
+  background: var(--color-marca-fondo);
+  box-shadow: var(--sombra-3);
+  font-size: 1.5rem;
+  transition: transform var(--duracion) var(--curva-rebote), background var(--duracion);
+}
+
+.chat-lanzador:hover {
+  background: var(--color-marca-fondo-hover);
+  transform: scale(1.06);
+}
+
+.chat-panel {
+  display: flex;
+  flex-direction: column;
+  width: min(380px, calc(100vw - 32px));
+  height: min(560px, calc(100vh - 110px));
+  overflow: hidden;
+  border: 1px solid var(--borde-suave);
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--sombra-3);
+}
+
+.chat-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  color: var(--color-sobre-marca);
+  background: var(--color-oscuro-fondo);
+}
+
+.chat-cabecera h2 {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.chat-cabecera p {
+  margin: 2px 0 0;
+  color: var(--color-sobre-oscuro-suave);
+  font-size: 0.8rem;
+}
+
+.chat-cerrar {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 50%;
+  color: var(--color-sobre-marca);
+  background: transparent;
+  font-size: 1.2rem;
+}
+
+.chat-cerrar:hover {
+  background: var(--color-marca-fondo-hover);
+}
+
+.chat-mensajes {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  padding: 16px;
+  overflow-y: auto;
+  list-style: none;
+  background: #fbfdfb;
+}
+
+.chat-burbuja {
+  max-width: 88%;
+  padding: 10px 13px;
+  border-radius: 14px;
+  color: var(--color-texto);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.chat-burbuja p {
+  margin: 0;
+  white-space: pre-line;
+}
+
+.chat-burbuja.es-bot {
+  align-self: flex-start;
+  border: 1px solid var(--borde-suave);
+  border-bottom-left-radius: 4px;
+  background: #fff;
+}
+
+.chat-burbuja.es-usuario {
+  align-self: flex-end;
+  border-bottom-right-radius: 4px;
+  background: #e5f5e6;
+}
+
+.chat-burbuja.es-error {
+  color: var(--color-peligro);
+  background: #fff1ef;
+}
+
+.chat-escribiendo {
+  color: var(--color-texto-suave);
+  font-style: italic;
+}
+
+.chat-nota {
+  display: block;
+  margin-top: 6px;
+  color: var(--color-texto-suave);
+  font-size: 0.75rem;
+}
+
+.chat-productos {
+  display: grid;
+  gap: 6px;
+  margin: 8px 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.chat-productos li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px;
+  border-radius: 10px;
+  background: #f0faf3;
+}
+
+.chat-productos span {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.82rem;
+}
+
+.chat-productos strong {
+  font-weight: 600;
+}
+
+.chat-sugerencias {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0 16px 10px;
+  background: #fbfdfb;
+}
+
+.chat-sugerencias button {
+  padding: 6px 11px;
+  border: 1px solid var(--borde-suave);
+  border-radius: 999px;
+  color: var(--color-marca);
+  background: #fff;
+  font-size: 0.82rem;
+}
+
+.chat-sugerencias button:hover {
+  background: #f0faf3;
+}
+
+.chat-formulario {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid var(--borde-suave);
+}
+
+.chat-formulario input {
+  flex: 1;
+  min-width: 0;
+  padding: 9px 12px;
+  border: 1px solid var(--borde-suave);
+  border-radius: 999px;
+  color: var(--color-texto);
+}
+
+.chat-formulario button {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 50%;
+  color: var(--color-sobre-marca);
+  background: var(--color-marca-fondo);
+}
+
+.chat-formulario button:disabled {
+  opacity: 0.55;
+}
+
+@media (max-width: 480px) {
+  .chat {
+    right: 12px;
+    bottom: 12px;
+  }
+
+  .chat-panel {
+    height: calc(100vh - 96px);
+  }
+}

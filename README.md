@@ -81,6 +81,18 @@ Para mostrar el frontend sin backend ni MySQL, crea `frontend/.env` con `VITE_MO
 - el login es simulado (`Admin` / `1234`, en `frontend/src/api/demo.js`);
 - el catálogo sale de `frontend/src/data/productos.js`.
 
+### Chatbot de salud y farmacia (Gemini)
+
+El botón verde de abajo a la derecha abre el asistente. Es un solo chatbot dentro del backend (`backend/src/routes/chat.js`) que usa Google Gemini para responder preguntas de salud y farmacia: para qué sirve un medicamento, efectos secundarios, interacciones, genéricos frente a medicamentos de marca, síntomas comunes y cuándo ir al médico, cuidados en embarazo o en niños, y hábitos saludables. También responde sobre horarios, pagos y fórmula médica.
+
+Cuando la pregunta es sobre productos o pedidos, Gemini usa dos herramientas que leen MySQL: `buscar_productos` y `mis_pedidos` (esta última solo funciona con la sesión iniciada). Por eso los precios, el stock y los pedidos nunca los inventa la IA. Los productos que encuentra aparecen en el chat con el botón para agregarlos al carrito.
+
+Límites: no diagnostica ni receta, y no da dosis para una persona concreta, sino que remite al prospecto o al profesional. Ante señales de alarma indica llamar a la línea 123 o ir a urgencias.
+
+**Configurar.** Crea la key gratis en https://aistudio.google.com ("Get API key"; empieza por `AIza`) y pégala en el `.env` de la raíz, en `GOOGLE_API_KEY=`. Después reinicia el backend. Nunca subas la key al repositorio. Sin key, o si se acaba el límite gratis, el chat solo busca productos en el catálogo.
+
+**Detener.** `Ctrl + C` en cada terminal (backend y frontend) y apagar MySQL en el panel de XAMPP.
+
 ## Estructura del proyecto
 
 No se incluyen `node_modules/` ni `.env`, que no se suben al repositorio. Tampoco los archivos que suben los usuarios en `backend/uploads/`.
@@ -91,6 +103,7 @@ Programaci-n_web/
 ├── .env.example                      Plantilla del .env (conexión a MySQL, usuarios de prueba, sesión)
 ├── .gitignore                        Lo que no se sube: node_modules, dist, .env, archivos subidos
 ├── docker-compose.yml                Alternativa a XAMPP: MySQL 8.4 en Docker
+│
 │
 ├── database/                         Scripts SQL que usa npm run init-db
 │   ├── schema.sql                    Crea la base farmauis y sus 5 tablas con llaves y restricciones
@@ -131,6 +144,7 @@ Programaci-n_web/
 │           ├── pedidos.js            CRUD de pedidos (crear descuenta stock, cancelar lo devuelve)
 │           ├── detalle-pedidos.js    CRUD de las líneas de cada pedido
 │           ├── archivos.js           Subir, listar, ver, descargar y borrar archivos (multer)
+│           ├── chat.js               Chatbot con Gemini; sin key busca en el catálogo
 │           └── panel.js              Totales del panel de administración
 │
 └── frontend/                         Sitio en React 19 + Vite + React-Bootstrap (puerto 5173)
@@ -155,6 +169,7 @@ Programaci-n_web/
         │   ├── archivos.js           Subir, listar, ver, descargar y borrar archivos
         │   ├── auth.js               Login, sesión y cierre de sesión
         │   ├── catalog.js            Catálogo de productos y categorías
+        │   ├── chat.js               Envía los mensajes del asistente a POST /api/chat
         │   └── demo.js               Login, sesión, panel y catálogo simulados (modo demostración)
         ├── assets/                   Archivos multimedia que empaqueta Vite
         │   ├── audio/
@@ -194,6 +209,8 @@ Programaci-n_web/
         │   │   └── ProtectedRoute.jsx    Protege las rutas privadas: sin sesión lleva al login
         │   ├── carrito/
         │   │   └── BotonAgregar.jsx      Botón "Agregar al carrito"
+        │   ├── chat/
+        │   │   └── ChatWidget.jsx        Asistente flotante de salud y farmacia
         │   ├── layout/
         │   │   ├── SiteHeader.jsx        Cabecera fija con menú y submenús desplegables
         │   │   ├── SiteFooter.jsx        Pie de página: contacto, redes y equipo
@@ -237,5 +254,6 @@ Programaci-n_web/
             ├── home.css              Secciones de la portada
             ├── footer.css            Pie de página y carnet del equipo
             ├── auth.css              Login, perfil y páginas internas
-            └── panel.css             Panel de administración y tablas
+            ├── panel.css             Panel de administración y tablas
+            └── chat.css              Asistente virtual (botón flotante y conversación)
 ```

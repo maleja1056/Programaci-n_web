@@ -6,6 +6,7 @@
 // Aquí también se cargan las hojas de estilo del proyecto.
 import { Route, Routes, useLocation } from "react-router-dom";
 import ProtectedRoute from "./components/auth/ProtectedRoute.jsx";
+import ChatWidget from "./components/chat/ChatWidget.jsx";
 import ArchivosPage from "./pages/ArchivosPage.jsx";
 import CarritoPage from "./pages/CarritoPage.jsx";
 import HomePage from "./pages/HomePage.jsx";
@@ -20,6 +21,7 @@ import "./styles/footer.css";
 import "./styles/home.css";
 import "./styles/auth.css";
 import "./styles/panel.css";
+import "./styles/chat.css";
 
 function App() {
   const { pathname } = useLocation();
@@ -27,47 +29,52 @@ function App() {
   // La key hace que el contenedor se vuelva a montar al cambiar de página, y
   // con eso se repite la transición de entrada (.pagina en app.css). Cambiar
   // solo el #hash o los filtros de la URL no la repite.
+  // El asistente (ChatWidget) va fuera del contenedor con key para que la
+  // conversación no se reinicie al cambiar de página.
   return (
-    <div className="pagina" key={pathname}>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/carrito" element={<CarritoPage />} />
-        <Route
-          path="/panel"
-          element={
-            <ProtectedRoute>
-              <PanelPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/perfil"
-          element={
-            <ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/mis-pedidos"
-          element={
-            <ProtectedRoute>
-              <MisPedidosPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/archivos"
-          element={
-            <ProtectedRoute>
-              <ArchivosPage />
-            </ProtectedRoute>
-          }
-        />
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
-    </div>
+    <>
+      <div className="pagina" key={pathname}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/carrito" element={<CarritoPage />} />
+          <Route
+            path="/panel"
+            element={
+              <ProtectedRoute>
+                <PanelPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/perfil"
+            element={
+              <ProtectedRoute>
+                <ProfilePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mis-pedidos"
+            element={
+              <ProtectedRoute>
+                <MisPedidosPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/archivos"
+            element={
+              <ProtectedRoute>
+                <ArchivosPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </div>
+      <ChatWidget />
+    </>
   );
 }
 

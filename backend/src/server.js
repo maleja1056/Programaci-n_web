@@ -1,6 +1,6 @@
 // Servidor Express de FarmaUIS. Registra los middlewares (JSON y sesión),
 // las rutas /api/* (un express.Router por tabla, con su CRUD, y /api/archivos
-// para subir y bajar archivos), el servidor de contenidos /publico
+// para subir y bajar archivos, y /api/chat para el chatbot), el servidor de contenidos /publico
 // (express.static) y un manejador final que convierte los errores en
 // respuestas JSON.
 const path = require('path');
@@ -15,6 +15,7 @@ const usuariosRoutes = require('./routes/usuarios');
 const pedidosRoutes = require('./routes/pedidos');
 const detallePedidosRoutes = require('./routes/detalle-pedidos');
 const archivosRoutes = require('./routes/archivos');
+const chatRoutes = require('./routes/chat');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -29,6 +30,7 @@ app.use('/api/usuarios', usuariosRoutes);
 app.use('/api/pedidos', pedidosRoutes);
 app.use('/api/detalle-pedidos', detallePedidosRoutes);
 app.use('/api/archivos', archivosRoutes);
+app.use('/api/chat', chatRoutes);
 
 // Servidor de contenidos: todo lo que está en backend/public se sirve tal
 // cual, sin sesión. Por ejemplo, las imágenes turísticas de Bucaramanga:
