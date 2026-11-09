@@ -89,7 +89,7 @@ Cuando la pregunta es sobre productos o pedidos, Gemini usa dos herramientas que
 
 Límites: no diagnostica ni receta, y no da dosis para una persona concreta, sino que remite al prospecto o al profesional. Ante señales de alarma indica llamar a la línea 123 o ir a urgencias.
 
-**Configurar.** Crea la key gratis en https://aistudio.google.com ("Get API key"; empieza por `AIza`) y pégala en el `.env` de la raíz, en `GOOGLE_API_KEY=`. Después reinicia el backend. Nunca subas la key al repositorio. Sin key, o si se acaba el límite gratis, el chat solo busca productos en el catálogo.
+**Configurar.** Crea la key gratis en https://aistudio.google.com ("Get API key") y pégala en el `.env` de la raíz, en `GOOGLE_API_KEY=`. Después reinicia el backend. Nunca subas la key al repositorio. Sin key, o si se acaba el límite gratis, el chat solo busca productos en el catálogo.
 
 **Detener.** `Ctrl + C` en cada terminal (backend y frontend) y apagar MySQL en el panel de XAMPP.
 
@@ -103,7 +103,6 @@ Programaci-n_web/
 ├── .env.example                      Plantilla del .env (conexión a MySQL, usuarios de prueba, sesión)
 ├── .gitignore                        Lo que no se sube: node_modules, dist, .env, archivos subidos
 ├── docker-compose.yml                Alternativa a XAMPP: MySQL 8.4 en Docker
-│
 │
 ├── database/                         Scripts SQL que usa npm run init-db
 │   ├── schema.sql                    Crea la base farmauis y sus 5 tablas con llaves y restricciones
